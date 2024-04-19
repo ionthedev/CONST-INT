@@ -6,6 +6,8 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/core/class_db.hpp>
 
+#define engine GODOT_CPP_ENGINE_HPP
+
 using namespace godot;
 
 void GDExample::_bind_methods() {
@@ -30,6 +32,11 @@ GDExample::~GDExample() {
 }
 
 void GDExample::_process(double delta) {
+	if(Engine::get_singleton()->is_editor_hint())
+	{
+		return;
+	}
+
 	time_passed += speed * delta;
 
 	Vector2 new_position = Vector2(amplitude + (amplitude * sin(time_passed * 2.0)), amplitude + (amplitude * cos(time_passed * 1.5)));
