@@ -22,18 +22,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9619930-0886-4d80-83f7-c5cd0a191929" name="Changes" comment="Removed test stuff from dev">
-      <change afterPath="$PROJECT_DIR$/.clang-format" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/android/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/ios/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/linux/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/macos/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/macos/macos.framework/Resources/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/windows/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/godot-cpp/extension_api.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.sconsign.dblite" beforeDir="false" afterPath="$PROJECT_DIR$/.sconsign.dblite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/SConstruct" beforeDir="false" afterPath="$PROJECT_DIR$/SConstruct" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/bin/constint.gdextension" beforeDir="false" afterPath="$PROJECT_DIR$/demo/bin/constint.gdextension" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo/main.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/demo/main.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/demo/project.godot" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/godot-cpp" beforeDir="false" afterPath="$PROJECT_DIR$/godot-cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/godot-cpp/CMakeLists.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gdexample.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gdexample.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,35 +86,45 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2fIqDO66amGDHYH8XuNx0f2D2xf" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showScratchesAndConsoles" value="false" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;CMake Application.CONST_INT.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cf.advertisement.text.has.clang-format&quot;: &quot;true&quot;,
-    &quot;cf.advertisement.text.overridden&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "CMake Application.CONST_INT.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.advertisement.text.has.clang-format": "true",
+    "cf.advertisement.text.overridden": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "dev",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "preferences.sourceCode",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/godot-cpp" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="CONSTINT" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CONST_INT" TARGET_NAME="GDExtension" CONFIG_NAME="GDExtension">
       <method v="2">
@@ -138,7 +150,7 @@
       <workItem from="1713503020332" duration="446000" />
       <workItem from="1713503470512" duration="647000" />
       <workItem from="1713504761552" duration="300000" />
-      <workItem from="1713505076782" duration="147000" />
+      <workItem from="1713505076782" duration="2144000" />
     </task>
     <task id="LOCAL-00001" summary="Setup CLion and GDExample from Godot Documentation.">
       <option name="closed" value="true" />
@@ -172,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713501795870</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Removed test stuff from dev">
+      <option name="closed" value="true" />
+      <created>1713505298114</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1713505298114</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,11 +242,23 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Setup CLion and GDExample from Godot Documentation." />
     <MESSAGE value="huh" />
     <MESSAGE value="Another test, learning clion commit GUI" />
     <MESSAGE value="Removed test stuff from dev" />
     <option name="LAST_COMMIT_MESSAGE" value="Removed test stuff from dev" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/register_types.cpp</url>
+          <line>29</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
