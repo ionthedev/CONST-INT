@@ -2,6 +2,8 @@
 // Created by brandon on 4/18/24.
 //
 
+
+//god git can be a headache
 #include "gdexample.h"
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/core/class_db.hpp>
