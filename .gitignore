@@ -5,6 +5,7 @@
 *.slo
 *.lo
 *.o
+*.os
 *.obj
 
 # Precompiled Headers
@@ -30,3 +31,5 @@
 *.exe
 *.out
 *.app
+/extension_api.json
+/cmake-build-debug/
