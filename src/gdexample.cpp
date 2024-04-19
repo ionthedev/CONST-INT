@@ -2,8 +2,6 @@
 // Created by brandon on 4/18/24.
 //
 
-// This is a test to make sure it's going to dev. Git in CLion is weird.
-//Another Test
 
 
 #include "gdexample.h"
