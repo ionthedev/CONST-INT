@@ -32,7 +32,6 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/animated_texture.hpp
         godot-cpp/gen/include/godot_cpp/classes/animation.hpp
         godot-cpp/gen/include/godot_cpp/classes/animation_library.hpp
-        godot-cpp/gen/include/godot_cpp/classes/animation_mixer.hpp
         godot-cpp/gen/include/godot_cpp/classes/animation_node.hpp
         godot-cpp/gen/include/godot_cpp/classes/animation_node_add2.hpp
         godot-cpp/gen/include/godot_cpp/classes/animation_node_add3.hpp
@@ -124,7 +123,6 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/box_shape3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/button.hpp
         godot-cpp/gen/include/godot_cpp/classes/button_group.hpp
-        godot-cpp/gen/include/godot_cpp/classes/c_sharp_script.hpp
         godot-cpp/gen/include/godot_cpp/classes/callback_tweener.hpp
         godot-cpp/gen/include/godot_cpp/classes/camera2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/camera3d.hpp
@@ -275,6 +273,8 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/gd_extension.hpp
         godot-cpp/gen/include/godot_cpp/classes/gd_extension_manager.hpp
         godot-cpp/gen/include/godot_cpp/classes/gd_script.hpp
+        godot-cpp/gen/include/godot_cpp/classes/gd_script_editor_translation_parser_plugin.hpp
+        godot-cpp/gen/include/godot_cpp/classes/gd_script_native_class.hpp
         godot-cpp/gen/include/godot_cpp/classes/generic6_dof_joint3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/geometry2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/geometry3d.hpp
@@ -288,6 +288,8 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/gltf_document.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_document_extension.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_document_extension_convert_importer_mesh.hpp
+        godot-cpp/gen/include/godot_cpp/classes/gltf_document_extension_physics.hpp
+        godot-cpp/gen/include/godot_cpp/classes/gltf_document_extension_texture_web_p.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_light.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_mesh.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_node.hpp
@@ -300,7 +302,8 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/gltf_texture.hpp
         godot-cpp/gen/include/godot_cpp/classes/gltf_texture_sampler.hpp
         godot-cpp/gen/include/godot_cpp/classes/glyph.hpp
-        godot-cpp/gen/include/godot_cpp/classes/godot_sharp.hpp
+        godot-cpp/gen/include/godot_cpp/classes/godot_physics_server2d.hpp
+        godot-cpp/gen/include/godot_cpp/classes/godot_physics_server3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/gpu_particles2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/gpu_particles3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/gpu_particles_attractor3d.hpp
@@ -316,7 +319,6 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/gradient_texture1_d.hpp
         godot-cpp/gen/include/godot_cpp/classes/gradient_texture2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/graph_edit.hpp
-        godot-cpp/gen/include/godot_cpp/classes/graph_element.hpp
         godot-cpp/gen/include/godot_cpp/classes/graph_node.hpp
         godot-cpp/gen/include/godot_cpp/classes/grid_container.hpp
         godot-cpp/gen/include/godot_cpp/classes/grid_map.hpp
@@ -364,6 +366,7 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/instance_placeholder.hpp
         godot-cpp/gen/include/godot_cpp/classes/interval_tweener.hpp
         godot-cpp/gen/include/godot_cpp/classes/ip.hpp
+        godot-cpp/gen/include/godot_cpp/classes/ip_unix.hpp
         godot-cpp/gen/include/godot_cpp/classes/item_list.hpp
         godot-cpp/gen/include/godot_cpp/classes/java_class.hpp
         godot-cpp/gen/include/godot_cpp/classes/java_class_wrapper.hpp
@@ -410,6 +413,8 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/missing_resource.hpp
         godot-cpp/gen/include/godot_cpp/classes/mobile_vr_interface.hpp
         godot-cpp/gen/include/godot_cpp/classes/movie_writer.hpp
+        godot-cpp/gen/include/godot_cpp/classes/movie_writer_mjpeg.hpp
+        godot-cpp/gen/include/godot_cpp/classes/movie_writer_pngwav.hpp
         godot-cpp/gen/include/godot_cpp/classes/multi_mesh.hpp
         godot-cpp/gen/include/godot_cpp/classes/multi_mesh_instance2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/multi_mesh_instance3d.hpp
@@ -426,7 +431,6 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/navigation_link3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/navigation_mesh.hpp
         godot-cpp/gen/include/godot_cpp/classes/navigation_mesh_generator.hpp
-        godot-cpp/gen/include/godot_cpp/classes/navigation_mesh_source_geometry_data2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/navigation_mesh_source_geometry_data3d.hpp
         godot-cpp/gen/include/godot_cpp/classes/navigation_obstacle2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/navigation_obstacle3d.hpp
@@ -459,12 +463,10 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/open_xr_action.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_action_map.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_action_set.hpp
-        godot-cpp/gen/include/godot_cpp/classes/open_xr_extension_wrapper_extension.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_hand.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_interaction_profile.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_interaction_profile_metadata.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xr_interface.hpp
-        godot-cpp/gen/include/godot_cpp/classes/open_xrapi_extension.hpp
         godot-cpp/gen/include/godot_cpp/classes/open_xrip_binding.hpp
         godot-cpp/gen/include/godot_cpp/classes/optimized_translation.hpp
         godot-cpp/gen/include/godot_cpp/classes/option_button.hpp
@@ -586,31 +588,13 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/reg_ex_match.hpp
         godot-cpp/gen/include/godot_cpp/classes/remote_transform2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/remote_transform3d.hpp
-        godot-cpp/gen/include/godot_cpp/classes/render_scene_buffers.hpp
-        godot-cpp/gen/include/godot_cpp/classes/render_scene_buffers_configuration.hpp
-        godot-cpp/gen/include/godot_cpp/classes/render_scene_buffers_extension.hpp
-        godot-cpp/gen/include/godot_cpp/classes/render_scene_buffers_rd.hpp
         godot-cpp/gen/include/godot_cpp/classes/rendering_device.hpp
         godot-cpp/gen/include/godot_cpp/classes/rendering_server.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource.hpp
+        godot-cpp/gen/include/godot_cpp/classes/resource_format_importer_saver.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_format_loader.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_format_saver.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_importer.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_bit_map.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_bm_font.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_csv_translation.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_dynamic_font.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_image.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_image_font.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_layered_texture.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_mp3.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_obj.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_ogg_vorbis.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_scene.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_shader_file.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_texture.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_texture_atlas.hpp
-        godot-cpp/gen/include/godot_cpp/classes/resource_importer_wav.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_loader.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_preloader.hpp
         godot-cpp/gen/include/godot_cpp/classes/resource_saver.hpp
@@ -715,15 +699,9 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/texture.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture2d.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture2d_array.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture2d_array_rd.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture2drd.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture3d.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture3drd.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture_button.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture_cubemap_array_rd.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture_cubemap_rd.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture_layered.hpp
-        godot-cpp/gen/include/godot_cpp/classes/texture_layered_rd.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture_progress_bar.hpp
         godot-cpp/gen/include/godot_cpp/classes/texture_rect.hpp
         godot-cpp/gen/include/godot_cpp/classes/theme.hpp
@@ -832,9 +810,7 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_random_range.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_remap.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_resizable_base.hpp
-        godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_rotation_by_axis.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_sample3d.hpp
-        godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_screen_normal_world_space.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_screen_uv_to_sdf.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_sdf_raymarch.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_sdf_to_screen_uv.hpp
@@ -881,7 +857,6 @@ add_executable(CONST_INT
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_vector_len.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_vector_op.hpp
         godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_vector_refract.hpp
-        godot-cpp/gen/include/godot_cpp/classes/visual_shader_node_world_position_from_depth.hpp
         godot-cpp/gen/include/godot_cpp/classes/voxel_gi.hpp
         godot-cpp/gen/include/godot_cpp/classes/voxel_gi_data.hpp
         godot-cpp/gen/include/godot_cpp/classes/weak_ref.hpp
@@ -948,7 +923,6 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/animated_texture.cpp
         godot-cpp/gen/src/classes/animation.cpp
         godot-cpp/gen/src/classes/animation_library.cpp
-        godot-cpp/gen/src/classes/animation_mixer.cpp
         godot-cpp/gen/src/classes/animation_node.cpp
         godot-cpp/gen/src/classes/animation_node_add2.cpp
         godot-cpp/gen/src/classes/animation_node_add3.cpp
@@ -1039,7 +1013,6 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/box_shape3d.cpp
         godot-cpp/gen/src/classes/button.cpp
         godot-cpp/gen/src/classes/button_group.cpp
-        godot-cpp/gen/src/classes/c_sharp_script.cpp
         godot-cpp/gen/src/classes/callback_tweener.cpp
         godot-cpp/gen/src/classes/camera2d.cpp
         godot-cpp/gen/src/classes/camera3d.cpp
@@ -1189,6 +1162,8 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/gd_extension.cpp
         godot-cpp/gen/src/classes/gd_extension_manager.cpp
         godot-cpp/gen/src/classes/gd_script.cpp
+        godot-cpp/gen/src/classes/gd_script_editor_translation_parser_plugin.cpp
+        godot-cpp/gen/src/classes/gd_script_native_class.cpp
         godot-cpp/gen/src/classes/generic6_dof_joint3d.cpp
         godot-cpp/gen/src/classes/geometry2d.cpp
         godot-cpp/gen/src/classes/geometry3d.cpp
@@ -1200,6 +1175,8 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/gltf_document.cpp
         godot-cpp/gen/src/classes/gltf_document_extension.cpp
         godot-cpp/gen/src/classes/gltf_document_extension_convert_importer_mesh.cpp
+        godot-cpp/gen/src/classes/gltf_document_extension_physics.cpp
+        godot-cpp/gen/src/classes/gltf_document_extension_texture_web_p.cpp
         godot-cpp/gen/src/classes/gltf_light.cpp
         godot-cpp/gen/src/classes/gltf_mesh.cpp
         godot-cpp/gen/src/classes/gltf_node.cpp
@@ -1211,7 +1188,8 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/gltf_state.cpp
         godot-cpp/gen/src/classes/gltf_texture.cpp
         godot-cpp/gen/src/classes/gltf_texture_sampler.cpp
-        godot-cpp/gen/src/classes/godot_sharp.cpp
+        godot-cpp/gen/src/classes/godot_physics_server2d.cpp
+        godot-cpp/gen/src/classes/godot_physics_server3d.cpp
         godot-cpp/gen/src/classes/gpu_particles2d.cpp
         godot-cpp/gen/src/classes/gpu_particles3d.cpp
         godot-cpp/gen/src/classes/gpu_particles_attractor3d.cpp
@@ -1227,7 +1205,6 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/gradient_texture1_d.cpp
         godot-cpp/gen/src/classes/gradient_texture2d.cpp
         godot-cpp/gen/src/classes/graph_edit.cpp
-        godot-cpp/gen/src/classes/graph_element.cpp
         godot-cpp/gen/src/classes/graph_node.cpp
         godot-cpp/gen/src/classes/grid_container.cpp
         godot-cpp/gen/src/classes/grid_map.cpp
@@ -1275,6 +1252,7 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/instance_placeholder.cpp
         godot-cpp/gen/src/classes/interval_tweener.cpp
         godot-cpp/gen/src/classes/ip.cpp
+        godot-cpp/gen/src/classes/ip_unix.cpp
         godot-cpp/gen/src/classes/item_list.cpp
         godot-cpp/gen/src/classes/java_class.cpp
         godot-cpp/gen/src/classes/java_class_wrapper.cpp
@@ -1321,6 +1299,8 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/missing_resource.cpp
         godot-cpp/gen/src/classes/mobile_vr_interface.cpp
         godot-cpp/gen/src/classes/movie_writer.cpp
+        godot-cpp/gen/src/classes/movie_writer_mjpeg.cpp
+        godot-cpp/gen/src/classes/movie_writer_pngwav.cpp
         godot-cpp/gen/src/classes/multi_mesh.cpp
         godot-cpp/gen/src/classes/multi_mesh_instance2d.cpp
         godot-cpp/gen/src/classes/multi_mesh_instance3d.cpp
@@ -1337,7 +1317,6 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/navigation_link3d.cpp
         godot-cpp/gen/src/classes/navigation_mesh.cpp
         godot-cpp/gen/src/classes/navigation_mesh_generator.cpp
-        godot-cpp/gen/src/classes/navigation_mesh_source_geometry_data2d.cpp
         godot-cpp/gen/src/classes/navigation_mesh_source_geometry_data3d.cpp
         godot-cpp/gen/src/classes/navigation_obstacle2d.cpp
         godot-cpp/gen/src/classes/navigation_obstacle3d.cpp
@@ -1369,12 +1348,10 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/open_xr_action.cpp
         godot-cpp/gen/src/classes/open_xr_action_map.cpp
         godot-cpp/gen/src/classes/open_xr_action_set.cpp
-        godot-cpp/gen/src/classes/open_xr_extension_wrapper_extension.cpp
         godot-cpp/gen/src/classes/open_xr_hand.cpp
         godot-cpp/gen/src/classes/open_xr_interaction_profile.cpp
         godot-cpp/gen/src/classes/open_xr_interaction_profile_metadata.cpp
         godot-cpp/gen/src/classes/open_xr_interface.cpp
-        godot-cpp/gen/src/classes/open_xrapi_extension.cpp
         godot-cpp/gen/src/classes/open_xrip_binding.cpp
         godot-cpp/gen/src/classes/optimized_translation.cpp
         godot-cpp/gen/src/classes/option_button.cpp
@@ -1487,31 +1464,13 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/reg_ex_match.cpp
         godot-cpp/gen/src/classes/remote_transform2d.cpp
         godot-cpp/gen/src/classes/remote_transform3d.cpp
-        godot-cpp/gen/src/classes/render_scene_buffers.cpp
-        godot-cpp/gen/src/classes/render_scene_buffers_configuration.cpp
-        godot-cpp/gen/src/classes/render_scene_buffers_extension.cpp
-        godot-cpp/gen/src/classes/render_scene_buffers_rd.cpp
         godot-cpp/gen/src/classes/rendering_device.cpp
         godot-cpp/gen/src/classes/rendering_server.cpp
         godot-cpp/gen/src/classes/resource.cpp
+        godot-cpp/gen/src/classes/resource_format_importer_saver.cpp
         godot-cpp/gen/src/classes/resource_format_loader.cpp
         godot-cpp/gen/src/classes/resource_format_saver.cpp
         godot-cpp/gen/src/classes/resource_importer.cpp
-        godot-cpp/gen/src/classes/resource_importer_bit_map.cpp
-        godot-cpp/gen/src/classes/resource_importer_bm_font.cpp
-        godot-cpp/gen/src/classes/resource_importer_csv_translation.cpp
-        godot-cpp/gen/src/classes/resource_importer_dynamic_font.cpp
-        godot-cpp/gen/src/classes/resource_importer_image.cpp
-        godot-cpp/gen/src/classes/resource_importer_image_font.cpp
-        godot-cpp/gen/src/classes/resource_importer_layered_texture.cpp
-        godot-cpp/gen/src/classes/resource_importer_mp3.cpp
-        godot-cpp/gen/src/classes/resource_importer_obj.cpp
-        godot-cpp/gen/src/classes/resource_importer_ogg_vorbis.cpp
-        godot-cpp/gen/src/classes/resource_importer_scene.cpp
-        godot-cpp/gen/src/classes/resource_importer_shader_file.cpp
-        godot-cpp/gen/src/classes/resource_importer_texture.cpp
-        godot-cpp/gen/src/classes/resource_importer_texture_atlas.cpp
-        godot-cpp/gen/src/classes/resource_importer_wav.cpp
         godot-cpp/gen/src/classes/resource_loader.cpp
         godot-cpp/gen/src/classes/resource_preloader.cpp
         godot-cpp/gen/src/classes/resource_saver.cpp
@@ -1615,15 +1574,9 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/texture.cpp
         godot-cpp/gen/src/classes/texture2d.cpp
         godot-cpp/gen/src/classes/texture2d_array.cpp
-        godot-cpp/gen/src/classes/texture2d_array_rd.cpp
-        godot-cpp/gen/src/classes/texture2drd.cpp
         godot-cpp/gen/src/classes/texture3d.cpp
-        godot-cpp/gen/src/classes/texture3drd.cpp
         godot-cpp/gen/src/classes/texture_button.cpp
-        godot-cpp/gen/src/classes/texture_cubemap_array_rd.cpp
-        godot-cpp/gen/src/classes/texture_cubemap_rd.cpp
         godot-cpp/gen/src/classes/texture_layered.cpp
-        godot-cpp/gen/src/classes/texture_layered_rd.cpp
         godot-cpp/gen/src/classes/texture_progress_bar.cpp
         godot-cpp/gen/src/classes/texture_rect.cpp
         godot-cpp/gen/src/classes/theme.cpp
@@ -1732,9 +1685,7 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/visual_shader_node_random_range.cpp
         godot-cpp/gen/src/classes/visual_shader_node_remap.cpp
         godot-cpp/gen/src/classes/visual_shader_node_resizable_base.cpp
-        godot-cpp/gen/src/classes/visual_shader_node_rotation_by_axis.cpp
         godot-cpp/gen/src/classes/visual_shader_node_sample3d.cpp
-        godot-cpp/gen/src/classes/visual_shader_node_screen_normal_world_space.cpp
         godot-cpp/gen/src/classes/visual_shader_node_screen_uv_to_sdf.cpp
         godot-cpp/gen/src/classes/visual_shader_node_sdf_raymarch.cpp
         godot-cpp/gen/src/classes/visual_shader_node_sdf_to_screen_uv.cpp
@@ -1781,7 +1732,6 @@ add_executable(CONST_INT
         godot-cpp/gen/src/classes/visual_shader_node_vector_len.cpp
         godot-cpp/gen/src/classes/visual_shader_node_vector_op.cpp
         godot-cpp/gen/src/classes/visual_shader_node_vector_refract.cpp
-        godot-cpp/gen/src/classes/visual_shader_node_world_position_from_depth.cpp
         godot-cpp/gen/src/classes/voxel_gi.cpp
         godot-cpp/gen/src/classes/voxel_gi_data.cpp
         godot-cpp/gen/src/classes/weak_ref.cpp
@@ -1926,5 +1876,5 @@ add_executable(CONST_INT
         godot-cpp/test/src/tests.h
         src/gdexample.cpp
         src/gdexample.h
-        src/register_types.h
-        src/register_types.cpp)
+        src/register_types.cpp
+        src/register_types.h)
