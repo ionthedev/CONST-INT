@@ -2,7 +2,6 @@
 // Created by brandon on 4/18/24.
 //
 
-
 //god git can be a headache
 #include "gdexample.h"
 #include <godot_cpp/classes/engine.hpp>
@@ -30,12 +29,10 @@ GDExample::GDExample() {
 
 GDExample::~GDExample() {
 	// Add your cleanup here.
-
 }
 
 void GDExample::_process(double delta) {
-	if(Engine::get_singleton()->is_editor_hint())
-	{
+	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
 
