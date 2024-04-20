@@ -21,21 +21,33 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9619930-0886-4d80-83f7-c5cd0a191929" name="Changes" comment="Removed test stuff from dev">
-      <change afterPath="$PROJECT_DIR$/bin/android/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/ios/Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/linux/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/macos/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/macos/macos.framework/Resources/Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/windows/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/godot-cpp/extension_api.json" afterDir="false" />
+    <list default="true" id="e9619930-0886-4d80-83f7-c5cd0a191929" name="Changes" comment="Test commit">
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/query/cache-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/query/cmakeFiles-v1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/query/codemodel-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/query/toolchains-v1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeSystem.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/cache-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/cmakeFiles-v1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/codemodel-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/toolchains-v1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CMakeCCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CMakeSystem.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/CMakeConfigureLog.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/clion-environment.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.sconsign.dblite" beforeDir="false" afterPath="$PROJECT_DIR$/.sconsign.dblite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SConstruct" beforeDir="false" afterPath="$PROJECT_DIR$/SConstruct" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/bin/constint.gdextension" beforeDir="false" afterPath="$PROJECT_DIR$/demo/bin/constint.gdextension" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/main.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/demo/main.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/demo/project.godot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/godot-cpp" beforeDir="false" afterPath="$PROJECT_DIR$/godot-cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gdexample.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gdexample.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +79,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,7 +98,7 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2fIqDO66amGDHYH8XuNx0f2D2xf" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -108,14 +120,17 @@
     "cf.advertisement.text.overridden": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/brandon/CLionProjects/CONST-INT/CMakeLists.txt",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "preferences.sourceCode",
+    "settings.editor.selected.configurable": "settings.sync",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -125,17 +140,28 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Custom Build Application.CONSTINT">
     <configuration name="CONSTINT" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CONST_INT" TARGET_NAME="GDExtension" CONFIG_NAME="GDExtension">
       <method v="2">
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
+    <configuration name="windows32" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/godot-cpp/Makefile" target="windows32" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Custom Build Application.CONSTINT" />
+      <item itemvalue="Makefile Target.windows32" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.windows32" />
+        <item itemvalue="Makefile Target.windows32" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -151,6 +177,9 @@
       <workItem from="1713503470512" duration="647000" />
       <workItem from="1713504761552" duration="300000" />
       <workItem from="1713505076782" duration="2144000" />
+      <workItem from="1713553729180" duration="36000" />
+      <workItem from="1713553953067" duration="6000" />
+      <workItem from="1713585659751" duration="306000" />
     </task>
     <task id="LOCAL-00001" summary="Setup CLion and GDExample from Godot Documentation.">
       <option name="closed" value="true" />
@@ -192,7 +221,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713505298114</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Test commit">
+      <option name="closed" value="true" />
+      <created>1713508769200</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1713508769200</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,18 +284,8 @@
     <MESSAGE value="huh" />
     <MESSAGE value="Another test, learning clion commit GUI" />
     <MESSAGE value="Removed test stuff from dev" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed test stuff from dev" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/register_types.cpp</url>
-          <line>29</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Test commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test commit" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

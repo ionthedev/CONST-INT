@@ -1,0 +1,269 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"CMakePresetLoader\">{\n  &quot;useNewFormat&quot;: true\n}</component>\n  <component name=\"CMakeReloadState\">\n    <option name=\"reloaded\" value=\"true\" />\n  </component>\n  <component name=\"CMakeRunConfigurationManager\">\n    <generated>\n      <config projectName=\"CONST_INT\" targetName=\"CONST_INT\" />\n    </generated>\n  </component>\n  <component name=\"CMakeSettings\">\n    <configurations>\n      <configuration PROFILE_NAME=\"Debug\" ENABLED=\"true\" CONFIG_NAME=\"Debug\" />\n      <configuration PROFILE_NAME=\"Release\" ENABLED=\"true\" CONFIG_NAME=\"Release\" />\n    </configurations>\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"e9619930-0886-4d80-83f7-c5cd0a191929\" name=\"Changes\" comment=\"Removed test stuff from dev\">\n      <change afterPath=\"$PROJECT_DIR$/bin/android/.gitkeep\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/bin/ios/Info.plist\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/bin/linux/.gitkeep\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/bin/macos/.gitkeep\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/bin/macos/macos.framework/Resources/Info.plist\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/bin/windows/.gitkeep\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/godot-cpp/extension_api.json\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.sconsign.dblite\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.sconsign.dblite\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/SConstruct\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/SConstruct\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/demo/bin/constint.gdextension\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/demo/bin/constint.gdextension\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/demo/main.tscn\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/demo/main.tscn\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/demo/project.godot\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/demo/project.godot\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/godot-cpp\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/godot-cpp\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/gdexample.cpp\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/gdexample.cpp\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"CMakeBuildProfile:Debug\" />\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"CMakeLists.txt\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <favorite-branches>\n      <branch-storage>\n        <map>\n          <entry type=\"REMOTE\">\n            <value>\n              <list>\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"origin/dev\" />\n              </list>\n            </value>\n          </entry>\n        </map>\n      </branch-storage>\n    </favorite-branches>\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n    <option name=\"ROOT_SYNC\" value=\"DONT_SYNC\" />\n  </component>\n  <component name=\"ProblemsViewState\">\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\n  </component>\n  <component name=\"ProjectApplicationVersion\">\n    <option name=\"ide\" value=\"CLion\" />\n    <option name=\"majorVersion\" value=\"2024\" />\n    <option name=\"minorVersion\" value=\"1\" />\n    <option name=\"productBranch\" value=\"Classic\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 8\n}</component>\n  <component name=\"ProjectId\" id=\"2fIqDO66amGDHYH8XuNx0f2D2xf\" />\n  <component name=\"ProjectLevelVcsManager\">\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\n  </component>\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n    <option name=\"showScratchesAndConsoles\" value=\"false\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"ASKED_ADD_EXTERNAL_FILES\": \"true\",\n    \"ASKED_MARK_IGNORED_FILES_AS_EXCLUDED\": \"true\",\n    \"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\n    \"CMake Application.CONST_INT.executor\": \"Run\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\n    \"RunOnceActivity.readMode.enableVisualFormatting\": \"true\",\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\n    \"cf.advertisement.text.has.clang-format\": \"true\",\n    \"cf.advertisement.text.overridden\": \"true\",\n    \"cf.first.check.clang-format\": \"false\",\n    \"cidr.known.project.marker\": \"true\",\n    \"git-widget-placeholder\": \"dev\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"run.code.analysis.last.selected.profile\": \"aDefault\",\n    \"settings.editor.selected.configurable\": \"preferences.sourceCode\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/godot-cpp\" />\n      <recent name=\"$PROJECT_DIR$\" />\n    </key>\n  </component>\n  <component name=\"RunManager\">\n    <configuration name=\"CONSTINT\" type=\"CLionExternalRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"CONST_INT\" TARGET_NAME=\"GDExtension\" CONFIG_NAME=\"GDExtension\">\n      <method v=\"2\">\n        <option name=\"CLION.EXTERNAL.BUILD\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration default=\"true\" type=\"CLionExternalRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\">\n      <method v=\"2\">\n        <option name=\"CLION.EXTERNAL.BUILD\" enabled=\"true\" />\n      </method>\n    </configuration>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"e9619930-0886-4d80-83f7-c5cd0a191929\" name=\"Changes\" comment=\"\" />\n      <created>1713498818889</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1713498818889</updated>\n      <workItem from=\"1713498820420\" duration=\"2362000\" />\n      <workItem from=\"1713501661494\" duration=\"1351000\" />\n      <workItem from=\"1713503020332\" duration=\"446000\" />\n      <workItem from=\"1713503470512\" duration=\"647000\" />\n      <workItem from=\"1713504761552\" duration=\"300000\" />\n      <workItem from=\"1713505076782\" duration=\"2144000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"Setup CLion and GDExample from Godot Documentation.\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1713500959840</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1713500959840</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"huh\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1713501709120</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1713501709120</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Another test, learning clion commit GUI\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1713501753709</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1713501753709</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"Removed test stuff from dev\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1713501795870</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1713501795870</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"Removed test stuff from dev\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1713505298114</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1713505298114</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"6\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VCPKGProject\">\n    <isAutomaticCheckingOnLaunch value=\"false\" />\n    <isAutomaticFoundErrors value=\"true\" />\n    <isAutomaticReloadCMake value=\"true\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"RECENT_FILTERS\">\n      <map>\n        <entry key=\"Branch\">\n          <value>\n            <list>\n              <RecentGroup>\n                <option name=\"FILTER_VALUES\">\n                  <option value=\"origin/dev\" />\n                </option>\n              </RecentGroup>\n            </list>\n          </value>\n        </entry>\n      </map>\n    </option>\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State>\n              <option name=\"FILTERS\">\n                <map>\n                  <entry key=\"branch\">\n                    <value>\n                      <list>\n                        <option value=\"origin/dev\" />\n                      </list>\n                    </value>\n                  </entry>\n                </map>\n              </option>\n            </State>\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\n    <MESSAGE value=\"Setup CLion and GDExample from Godot Documentation.\" />\n    <MESSAGE value=\"huh\" />\n    <MESSAGE value=\"Another test, learning clion commit GUI\" />\n    <MESSAGE value=\"Removed test stuff from dev\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Removed test stuff from dev\" />\n  </component>\n  <component name=\"XDebuggerManager\">\n    <breakpoint-manager>\n      <breakpoints>\n        <line-breakpoint enabled=\"true\" type=\"com.jetbrains.cidr.execution.debugger.OCBreakpointType\">\n          <url>file://$PROJECT_DIR$/src/register_types.cpp</url>\n          <line>29</line>\n          <option name=\"timeStamp\" value=\"1\" />\n        </line-breakpoint>\n      </breakpoints>\n    </breakpoint-manager>\n  </component>\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\n    <expand />\n    <select />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 78036e57f184566b40e464fa15cf9698b98597e5)
++++ b/.idea/workspace.xml	(date 1713507507165)
+@@ -11,46 +11,27 @@
+   </component>
+   <component name="CMakeRunConfigurationManager">
+     <generated>
+-      <config projectName="CONST_INT" targetName="CONST_INT" />
++      <config projectName="Project" targetName="CONST_INT" />
+     </generated>
+   </component>
+   <component name="CMakeSettings">
+     <configurations>
+       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+-      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+     </configurations>
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e9619930-0886-4d80-83f7-c5cd0a191929" name="Changes" comment="Removed test stuff from dev">
+-      <change afterPath="$PROJECT_DIR$/bin/android/.gitkeep" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/bin/ios/Info.plist" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/bin/linux/.gitkeep" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/bin/macos/.gitkeep" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/bin/macos/macos.framework/Resources/Info.plist" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/bin/windows/.gitkeep" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/godot-cpp/extension_api.json" afterDir="false" />
++    <list default="true" id="e9619930-0886-4d80-83f7-c5cd0a191929" name="Changes" comment="Setup CLion and GDExample from Godot Documentation.">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.sconsign.dblite" beforeDir="false" afterPath="$PROJECT_DIR$/.sconsign.dblite" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/SConstruct" beforeDir="false" afterPath="$PROJECT_DIR$/SConstruct" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/demo/bin/constint.gdextension" beforeDir="false" afterPath="$PROJECT_DIR$/demo/bin/constint.gdextension" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/demo/main.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/demo/main.tscn" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/demo/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/demo/project.godot" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/godot-cpp" beforeDir="false" afterPath="$PROJECT_DIR$/godot-cpp" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/gdexample.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gdexample.cpp" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="ClangdSettings">
++    <option name="formatViaClangd" value="false" />
+   </component>
+   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+-  <component name="FileTemplateManagerImpl">
+-    <option name="RECENT_TEMPLATES">
+-      <list>
+-        <option value="CMakeLists.txt" />
+-      </list>
+-    </option>
+-  </component>
+   <component name="Git.Settings">
+     <favorite-branches>
+       <branch-storage>
+@@ -65,16 +46,7 @@
+         </map>
+       </branch-storage>
+     </favorite-branches>
+-    <option name="RECENT_BRANCH_BY_REPOSITORY">
+-      <map>
+-        <entry key="$PROJECT_DIR$" value="main" />
+-      </map>
+-    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+-    <option name="ROOT_SYNC" value="DONT_SYNC" />
+-  </component>
+-  <component name="ProblemsViewState">
+-    <option name="selectedTabId" value="CurrentFile" />
+   </component>
+   <component name="ProjectApplicationVersion">
+     <option name="ide" value="CLion" />
+@@ -86,54 +58,42 @@
+   &quot;associatedIndex&quot;: 8
+ }</component>
+   <component name="ProjectId" id="2fIqDO66amGDHYH8XuNx0f2D2xf" />
+-  <component name="ProjectLevelVcsManager">
+-    <ConfirmationsSetting value="2" id="Add" />
+-  </component>
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showExcludedFiles" value="false" />
+     <option name="showLibraryContents" value="true" />
+     <option name="showScratchesAndConsoles" value="false" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_ADD_EXTERNAL_FILES": "true",
+-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "CMake Application.CONST_INT.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.cidr.known.project.marker": "true",
+-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "cf.advertisement.text.has.clang-format": "true",
+-    "cf.advertisement.text.overridden": "true",
+-    "cf.first.check.clang-format": "false",
+-    "cidr.known.project.marker": "true",
+-    "git-widget-placeholder": "dev",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "run.code.analysis.last.selected.profile": "aDefault",
+-    "settings.editor.selected.configurable": "preferences.sourceCode",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
++    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;CMake Application.CONST_INT.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
++    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;CLionExternalConfigurable&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
+-  <component name="RecentsManager">
+-    <key name="MoveFile.RECENT_KEYS">
+-      <recent name="$PROJECT_DIR$/godot-cpp" />
+-      <recent name="$PROJECT_DIR$" />
+-    </key>
+-  </component>
++}</component>
+   <component name="RunManager">
+     <configuration name="CONSTINT" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CONST_INT" TARGET_NAME="GDExtension" CONFIG_NAME="GDExtension">
+       <method v="2">
+         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
++    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+       <method v="2">
+-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
++        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+       </method>
+     </configuration>
+   </component>
+@@ -146,11 +106,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1713498818889</updated>
+       <workItem from="1713498820420" duration="2362000" />
+-      <workItem from="1713501661494" duration="1351000" />
+-      <workItem from="1713503020332" duration="446000" />
+-      <workItem from="1713503470512" duration="647000" />
+-      <workItem from="1713504761552" duration="300000" />
+-      <workItem from="1713505076782" duration="2144000" />
++      <workItem from="1713501661494" duration="6000" />
+     </task>
+     <task id="LOCAL-00001" summary="Setup CLion and GDExample from Godot Documentation.">
+       <option name="closed" value="true" />
+@@ -160,39 +116,7 @@
+       <option name="project" value="LOCAL" />
+       <updated>1713500959840</updated>
+     </task>
+-    <task id="LOCAL-00002" summary="huh">
+-      <option name="closed" value="true" />
+-      <created>1713501709120</created>
+-      <option name="number" value="00002" />
+-      <option name="presentableId" value="LOCAL-00002" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1713501709120</updated>
+-    </task>
+-    <task id="LOCAL-00003" summary="Another test, learning clion commit GUI">
+-      <option name="closed" value="true" />
+-      <created>1713501753709</created>
+-      <option name="number" value="00003" />
+-      <option name="presentableId" value="LOCAL-00003" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1713501753709</updated>
+-    </task>
+-    <task id="LOCAL-00004" summary="Removed test stuff from dev">
+-      <option name="closed" value="true" />
+-      <created>1713501795870</created>
+-      <option name="number" value="00004" />
+-      <option name="presentableId" value="LOCAL-00004" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1713501795870</updated>
+-    </task>
+-    <task id="LOCAL-00005" summary="Removed test stuff from dev">
+-      <option name="closed" value="true" />
+-      <created>1713505298114</created>
+-      <option name="number" value="00005" />
+-      <option name="presentableId" value="LOCAL-00005" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1713505298114</updated>
+-    </task>
+-    <option name="localTasksCounter" value="6" />
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -242,26 +166,7 @@
+     </option>
+   </component>
+   <component name="VcsManagerConfiguration">
+-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+     <MESSAGE value="Setup CLion and GDExample from Godot Documentation." />
+-    <MESSAGE value="huh" />
+-    <MESSAGE value="Another test, learning clion commit GUI" />
+-    <MESSAGE value="Removed test stuff from dev" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Removed test stuff from dev" />
+-  </component>
+-  <component name="XDebuggerManager">
+-    <breakpoint-manager>
+-      <breakpoints>
+-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+-          <url>file://$PROJECT_DIR$/src/register_types.cpp</url>
+-          <line>29</line>
+-          <option name="timeStamp" value="1" />
+-        </line-breakpoint>
+-      </breakpoints>
+-    </breakpoint-manager>
+-  </component>
+-  <component name="XSLT-Support.FileAssociations.UIState">
+-    <expand />
+-    <select />
++    <option name="LAST_COMMIT_MESSAGE" value="Setup CLion and GDExample from Godot Documentation." />
+   </component>
+ </project>
+\ No newline at end of file
+Index: cmake-build-debug/CMakeFiles/clion-Debug-log.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/home/brandon/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/brandon/.local/share/JetBrains/Toolbox/apps/clion/bin/ninja/linux/x64/ninja -G Ninja -S /home/brandon/CLionProjects/CONST-INT -B /home/brandon/CLionProjects/CONST-INT/cmake-build-debug\n-- The C compiler identification is GNU 11.4.0\n-- The CXX compiler identification is GNU 11.4.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (0.5s)\n-- Generating done (0.1s)\n-- Build files have been written to: /home/brandon/CLionProjects/CONST-INT/cmake-build-debug\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/CMakeFiles/clion-Debug-log.txt b/cmake-build-debug/CMakeFiles/clion-Debug-log.txt
+--- a/cmake-build-debug/CMakeFiles/clion-Debug-log.txt	(revision 78036e57f184566b40e464fa15cf9698b98597e5)
++++ b/cmake-build-debug/CMakeFiles/clion-Debug-log.txt	(date 1713507520312)
+@@ -1,16 +1,4 @@
+ /home/brandon/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/brandon/.local/share/JetBrains/Toolbox/apps/clion/bin/ninja/linux/x64/ninja -G Ninja -S /home/brandon/CLionProjects/CONST-INT -B /home/brandon/CLionProjects/CONST-INT/cmake-build-debug
+--- The C compiler identification is GNU 11.4.0
+--- The CXX compiler identification is GNU 11.4.0
+--- Detecting C compiler ABI info
+--- Detecting C compiler ABI info - done
+--- Check for working C compiler: /usr/bin/cc - skipped
+--- Detecting C compile features
+--- Detecting C compile features - done
+--- Detecting CXX compiler ABI info
+--- Detecting CXX compiler ABI info - done
+--- Check for working CXX compiler: /usr/bin/c++ - skipped
+--- Detecting CXX compile features
+--- Detecting CXX compile features - done
+--- Configuring done (0.5s)
+--- Generating done (0.1s)
++-- Configuring done (0.0s)
++-- Generating done (0.0s)
+ -- Build files have been written to: /home/brandon/CLionProjects/CONST-INT/cmake-build-debug
