@@ -5,3 +5,6 @@ TheSaukArchive/.idea/.idea.TheSaukArchive/.idea/workspace.xml
 .idea/workspace.xml
 
 *.o
+*.so
+*.dll
+*.framework
