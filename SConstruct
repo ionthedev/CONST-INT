@@ -2,7 +2,7 @@
 import os
 import sys
 
-libname = "libCONST_INT"
+libname = "CONST_INT"
 env = SConscript("godot-cpp/SConstruct")
 
 # For reference:
