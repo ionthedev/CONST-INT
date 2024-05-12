@@ -7,7 +7,7 @@ https://ionthedev.itch.io/constint
 
 If you would like to support the project as it develops, feel free to click the sponsor button on the top or visit https://ko-fi.com/ionthedev
 
-The current features of the legecy version (0.5.2 on [Itch.io]([url](https://ionthedev.itch.io/constint)))
+The current features of the legecy version (0.5.2 on [Itch.io]([url](https://ionthedev.itch.io/constint))
 
 
 - FPS Controller (Sprinting, Crouching, Jumping and Walking)
