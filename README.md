@@ -1,5 +1,5 @@
 # CONST-INT
-A GDExtension made to make game development easier. If you clone this project, please do not hesitate to watch or star the repo to stay up to data with it's changes.
+A GDExtension planning to make game development easier. If you clone this project, please do not hesitate to watch or star the repo to stay up to data with it's changes.
 
 ## CURRENT STATE: LANGUAGE PORTING
 Converting the project from C# to C++. The C# version has been made legacy.
