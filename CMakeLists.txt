@@ -24,6 +24,6 @@ add_executable(CONST_INT
         src/register_types.h
         src/gdexample.cpp
         src/gdexample.h
-        src/PlayerMovement.cpp
-        src/PlayerMovement.h
+        src/ActorBase.cpp
+        src/ActorBase.h
 )
