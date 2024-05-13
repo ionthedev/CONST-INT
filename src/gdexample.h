@@ -23,8 +23,10 @@ namespace godot {
         ~GDExample();
 
         void _process(double delta) override;
+        void PrintTestFromCI();
     };
 
 }
+
 
 #endif

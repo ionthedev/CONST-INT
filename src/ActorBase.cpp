@@ -11,12 +11,14 @@ void CONST_INT::ActorBase::_process(double delta) {
 	CharacterBody3D::_process(delta);
 }
 void CONST_INT::ActorBase::_ready() {
-	CharacterBody3D::_ready();
 	ActorBase::MakeAttachments();
 	ActorBase::physicsServer = PhysicsServer3D::get_singleton();
+	e_input = Input::get_singleton();
 }
 void CONST_INT::ActorBase::_physics_process(double delta) {
 	ApplyGravity(delta);
+	CalculateWishDirection(delta);
+
 	move_and_slide();
 }
 void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
@@ -24,10 +26,29 @@ void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> 
 }
 void CONST_INT::ActorBase::MouseLook(double delta) {
 }
-godot::Vector3 CONST_INT::ActorBase::CalculateWishDirection() {
-	return godot::Vector3();
+void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
+
+	if (Engine::get_singleton()->is_editor_hint())
+		return;
+
+	actor_vars.inputDir = e_input->get_vector("MoveLeft","MoveRight","MoveForward","MoveBackward").normalized();
+	if(actor_vars.inputDir.is_zero_approx()) {
+		actor_vars.wishDir = actor_vars.wishDir.move_toward(Vector3(0,0,0), (float)delta);
+	}
+	else {
+
+		actor_vars.wishDir += (attachments.head_h->get_basis().rows[2] * Vector3(actor_vars.inputDir.x, 0, actor_vars.inputDir.y));
+	}
+
+	Vector3 v = get_velocity();
+	v += actor_vars.wishDir * (float)delta;
+	set_velocity(v);
+
+	UtilityFunctions::print("WishDir: " + actor_vars.wishDir + " | MoveDir: " + actor_vars.inputDir);
+
 }
 void CONST_INT::ActorBase::MakeAttachments() {
+	if(attachments.initialized == true) return;
 	//Collision Creation
 	attachments.collider = new CollisionShape3D();
 	attachments.collider->set_name("_col");
@@ -64,6 +85,7 @@ void CONST_INT::ActorBase::MakeAttachments() {
 	attachments.body->set_name("_body");
 	attachments.body->set_position(Vector3(0.0f, 0.0f, 0.0f));
 	attachments.collider->add_child(attachments.body);
+	attachments.initialized = true;
 
 	Ref<MeshLibrary> meshLibrary = ResourceLoader::get_singleton()->load("res://bin/CONST_INT/Resources/CI_MeshLibrary.tres");
 	if(meshLibrary.is_valid())
@@ -75,6 +97,7 @@ void CONST_INT::ActorBase::MakeAttachments() {
 
 
 }
+
 void CONST_INT::ActorBase::ApplyGravity(double delta) {
 	Vector3 gravity = Vector3(0.0, -9.8, 0.0); // You can make this a member variable to adjust gravity as needed
 	Vector3 v = get_velocity();

@@ -43,6 +43,7 @@ typedef struct {
 	MeshInstance3D* body;
 	AnimationPlayer* animationPlayer;
 	CollisionShape3D* collider;
+	bool initialized;
 } attachments_t;
 
 
@@ -68,7 +69,7 @@ protected:
 
 	//CONST_INT Methods
 	void MouseLook(double delta);
-	Vector3 CalculateWishDirection();
+	void CalculateWishDirection(double delta);
 	void CalculateVelocity();
 	void ApplyGravity(double delta);
 	void MakeAttachments();
@@ -76,6 +77,8 @@ protected:
 
 	//CONST_INT Variables
 	PhysicsServer3D *physicsServer;
+
+	Input *e_input;
 
 
 public:
