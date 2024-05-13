@@ -1,6 +1,6 @@
 [configuration]
 
-entry_symbol = "CONST_INT"
+entry_symbol = "CONST_INT_INIT"
 compatibility_minimum = "4.2"
 reloadable = true
 

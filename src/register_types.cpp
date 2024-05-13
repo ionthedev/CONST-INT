@@ -6,6 +6,7 @@
 #include "register_types.h"
 
 #include "gdexample.h"
+#include "ActorBase.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -19,6 +20,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
   }
 
   ClassDB::register_class<GDExample>();
+  ClassDB::register_class<CONST_INT::ActorBase>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {
@@ -29,7 +31,7 @@ void uninitialize_example_module(ModuleInitializationLevel p_level) {
 
 extern "C" {
   // Initialization.
-  GDExtensionBool GDE_EXPORT CONST_INT(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
+  GDExtensionBool GDE_EXPORT CONST_INT_INIT(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
     godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
     init_obj.register_initializer(initialize_example_module);
