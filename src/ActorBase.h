@@ -72,10 +72,9 @@ protected:
 	//CONST_INT Methods
 	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
 	void CalculateWishDirection(double delta);
-	void CalculateVelocity();
-	void UpdateVelocity(Vector3 newV, double delta);
 	void ApplyGravity(double delta);
 	void MakeAttachments();
+	void SetMouseMode(Input::MouseMode _mode);
 
 
 
@@ -95,13 +94,16 @@ public:
 
 	// Godot Methods
 	void _process(double delta) override;
-
 	void _ready() override;
-
 	void _physics_process(double delta) override;
-
 	void _unhandled_input(const Ref<InputEvent> &p_event) override;
 
+private:
+	void CreateCollider();
+	void CreateHeadHorizontal();
+	void CreateHeadVertical();
+	void CreateCamera();
+	void CreateBody();
 
 
 
