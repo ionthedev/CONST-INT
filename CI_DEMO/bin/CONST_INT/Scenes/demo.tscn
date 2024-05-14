@@ -36,4 +36,4 @@ transform = Transform3D(0.392012, 0.352988, 0.849545, -0.614411, -0.586856, 0.52
 shadow_enabled = true
 
 [node name="ActorBase" type="ActorBase" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.196277, 0.000136103, -1.48877)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.196277, 0.000249771, -1.48877)

@@ -61,15 +61,22 @@ void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
 
-	actor_vars.inputDir = e_input->get_vector("MoveRight","MoveLeft","MoveBackward","MoveForward").normalized();
+	actor_vars.inputDir = e_input->get_vector("MoveRight","MoveLeft","MoveForward","MoveBackward").normalized();
 
 
 	if(actor_vars.inputDir != Vector2(0,0)) {
-		actor_vars.wishDir = (attachments.camera->get_basis().rows[2] * Vector3(actor_vars.inputDir.x, 0, actor_vars.inputDir.y).normalized());
+		Vector3 forward = attachments.camera->get_global_transform().basis.get_column(2).normalized();
+        Vector3 right = -attachments.camera->get_global_transform().basis.get_column(0).normalized();
 
-		set_velocity(actor_vars.wishDir * actor_vars.speed);
+        // Combine vectors based on input direction
+        actor_vars.wishDir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
+
+	}
+	else {
+		actor_vars.wishDir = Vector3(0,0,0);
 	}
 
+	set_velocity(actor_vars.wishDir * actor_vars.speed);
 
 
 	UtilityFunctions::print("WishDir: " + actor_vars.wishDir + " | MoveDir: " + actor_vars.inputDir);
