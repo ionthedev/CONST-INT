@@ -1,11 +1,39 @@
-[gd_scene format=3 uid="uid://dg2sccrgajq63"]
+[gd_scene load_steps=4 format=3 uid="uid://dg2sccrgajq63"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_p8tyx"]
+
+[sub_resource type="Sky" id="Sky_tqajv"]
+sky_material = SubResource("PhysicalSkyMaterial_p8tyx")
+
+[sub_resource type="Environment" id="Environment_bns2i"]
+background_mode = 2
+sky = SubResource("Sky_tqajv")
 
 [node name="Node3D" type="Node3D"]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -14.2224)
 use_collision = true
-size = Vector3(12.7986, 1, 15.4336)
+size = Vector3(157.752, 1, 180.651)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12101, 2.48872, 0.0598059)
+size = Vector3(0.614258, 6.62891, 2.75562)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3643, 5.62847, 0.0598059)
+size = Vector3(5.23926, 0.493896, 2.78027)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, -9.53384, 2.9812, 0.0598059)
+size = Vector3(10.7722, 0.493896, 2.6604)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bns2i")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.392012, 0.352988, 0.849545, -0.614411, -0.586856, 0.527352, 0.684709, -0.728697, -0.0131746, 0, 7.75875, 0)
+shadow_enabled = true
 
 [node name="ActorBase" type="ActorBase" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000505053, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.196277, 0.000136103, -1.48877)

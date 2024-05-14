@@ -37,13 +37,12 @@ using namespace godot;
 namespace CONST_INT {
 
 typedef struct {
-	Camera3D* camera;
-	Node3D* head_h;
-	Node3D* head_v;
-	MeshInstance3D* body;
-	AnimationPlayer* animationPlayer;
-	CollisionShape3D* collider;
-	bool initialized;
+	Camera3D* camera = nullptr;
+	Node3D* head_h = nullptr;
+	Node3D* head_v = nullptr;
+	MeshInstance3D* body = nullptr;
+	AnimationPlayer* animationPlayer = nullptr;
+	CollisionShape3D* collider = nullptr;
 } attachments_t;
 
 
@@ -55,6 +54,9 @@ typedef struct {
 	Vector3 velocity;
 	float speed;
 	float acceleration;
+	Vector3 mouse_rotation;
+	float mouse_sensitivity;
+	bool initialized;
 
 } actor_vars_t;
 
@@ -68,11 +70,13 @@ protected:
 	static void _bind_methods();
 
 	//CONST_INT Methods
-	void MouseLook(double delta);
+	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
 	void CalculateWishDirection(double delta);
 	void CalculateVelocity();
+	void UpdateVelocity(Vector3 newV, double delta);
 	void ApplyGravity(double delta);
 	void MakeAttachments();
+
 
 
 	//CONST_INT Variables
