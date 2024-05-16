@@ -16,6 +16,7 @@
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
 #include <godot_cpp/variant/variant.hpp>
 #include <godot_cpp/core/math.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/variant/transform3d.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -31,6 +32,12 @@
 #include <godot_cpp/classes/shape3d.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/physics_server3d.hpp>
+#include <godot_cpp/classes/ray_cast3d.hpp>
+#include <godot_cpp/classes/physics_server3d.hpp>
+#include <godot_cpp/classes/physics_test_motion_result3d.hpp>
+#include <godot_cpp/classes/physics_test_motion_parameters3d.hpp>
+#include <godot_cpp/classes/physics_body3d.hpp>
+
 
 
 using namespace godot;
@@ -43,6 +50,9 @@ typedef struct {
 	MeshInstance3D* body = nullptr;
 	AnimationPlayer* animationPlayer = nullptr;
 	CollisionShape3D* collider = nullptr;
+	RayCast3D* stepDownRay = nullptr;
+	RayCast3D* stepAheadRay = nullptr;
+
 } attachments_t;
 
 
@@ -57,6 +67,10 @@ typedef struct {
 	Vector3 mouse_rotation;
 	float mouse_sensitivity;
 	bool initialized;
+
+	const float max_step_height = 0.5f;
+	bool _snapped_to_stairs_last_frame = false;
+	uint64_t _last_frame_was_on_floor;
 
 } actor_vars_t;
 
@@ -75,6 +89,7 @@ protected:
 	void ApplyGravity(double delta);
 	void MakeAttachments();
 	void SetMouseMode(Input::MouseMode _mode);
+	bool IsSurfaceTooSteep(Vector3 _normal);
 
 
 
@@ -104,6 +119,9 @@ private:
 	void CreateHeadVertical();
 	void CreateCamera();
 	void CreateBody();
+	void CreateStepRays();
+	bool RunBodyTest(Transform3D from, Vector3 motion, Ref<PhysicsTestMotionResult3D> result);
+	void SnapDownToStairsCheck();
 
 
 

@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="Ci Demo"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/CSGStairs/plugin.cfg")
+
 [input]
 
 MoveForward={
