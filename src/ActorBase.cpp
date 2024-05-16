@@ -19,15 +19,17 @@ void CONST_INT::ActorBase::_ready() {
 	SetMouseMode(Input::MOUSE_MODE_CAPTURED);
 }
 void CONST_INT::ActorBase::_physics_process(const double delta) {
-	if(is_on_floor()) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
+	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 
-
-
-	//ApplyGravity(delta);
+	ApplyGravity(delta);
 	CalculateWishDirection(delta);
+	if(!StepUpStairsCheck(delta))
+	{
 
-	move_and_slide();
-	SnapDownToStairsCheck();
+		move_and_slide();
+
+		SnapDownToStairsCheck();
+	}
 }
 void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
@@ -60,7 +62,6 @@ void CONST_INT::ActorBase::MouseLook(const Ref<InputEventMouseMotion> &p_event) 
 
 	attachments.head_v->rotate_object_local(Vector3(1, 0, 0), actor_vars.mouse_rotation.x);
 
-	UtilityFunctions::print(actor_vars.mouse_motion);
 
 }
 
@@ -70,24 +71,26 @@ void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
 		return;
 
 	actor_vars.inputDir = e_input->get_vector("MoveLeft","MoveRight","MoveBackward","MoveForward").normalized();
-
+	Vector3 v = get_velocity();
 
 	if(actor_vars.inputDir != Vector2(0,0)) {
 		const Vector3 forward = -attachments.head_h->get_transform().basis.get_column(2).normalized();
 		const Vector3 right = attachments.camera->get_global_transform().basis.get_column(0).normalized();
 
+		Vector3 _dir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
         // Combine vectors based on input direction
-        actor_vars.wishDir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
-		if(!is_on_floor())actor_vars.wishDir.y += -9.8f;
+        actor_vars.wishDir.x = _dir.x * actor_vars.speed;
+		actor_vars.wishDir.z = _dir.z * actor_vars.speed;
 	}
 	else {
 		actor_vars.wishDir = Vector3(0,0,0);
 	}
 
-	set_velocity(actor_vars.wishDir * actor_vars.speed);
+	v.x = actor_vars.wishDir.x;
+	v.z = actor_vars.wishDir.z;
+	set_velocity(v);
 
 
-	UtilityFunctions::print("WishDir: " + actor_vars.wishDir + " | MoveDir: " + actor_vars.inputDir);
 
 }
 
@@ -109,10 +112,12 @@ void CONST_INT::ActorBase::SetMouseMode(Input::MouseMode _mode) {
 }
 
 void CONST_INT::ActorBase::ApplyGravity(const double delta) {
-	const auto gravity = Vector3(0.0, -9.8, 0.0); // You can make this a member variable to adjust gravity as needed
+	if(is_on_floor()) return;
+
 	Vector3 v = get_velocity();
-	v.y += gravity.y * delta;
+	v.y += actor_vars.gravity * delta;
 	set_velocity(v);
+
 }
 bool CONST_INT::ActorBase::IsSurfaceTooSteep(Vector3 _normal) {
 	return _normal.angle_to(Vector3(0.0f, 1.0f, 0.0f)) > get_floor_max_angle();
@@ -123,7 +128,7 @@ void CONST_INT::ActorBase::CreateCollider() {
 	attachments.collider = new CollisionShape3D();
 	attachments.collider->set_name("_col");
 
-	Ref<CylinderShape3D> colShape;
+	Ref<CapsuleShape3D> colShape;
 	colShape.instantiate();
 	colShape->set_height(2.0f);
 	colShape->set_radius(0.5f);
@@ -168,29 +173,28 @@ void CONST_INT::ActorBase::CreateStepRays() {
 	attachments.stepDownRay->set_name("_stepDownRay");
 	attachments.stepDownRay->set_position(Vector3(0.0f, 0.0f, 0.0f));
 	attachments.stepDownRay->set_target_position(Vector3(0, -1, 0));
-	attachments.body->add_child(attachments.stepDownRay);
+	add_child(attachments.stepDownRay);
 
 	attachments.stepAheadRay = new RayCast3D;
 	attachments.stepAheadRay->set_name("_stepAheadRay");
 	attachments.stepAheadRay->set_position(Vector3(0.0f, 0.55f, -0.55f));
 	attachments.stepAheadRay->set_target_position(Vector3(0, -0.55f, 0));
 	attachments.stepAheadRay->set_target_position(Vector3(0, -0.55f, 0));
-	attachments.body->add_child(attachments.stepAheadRay);
+	add_child(attachments.stepAheadRay);
 }
-bool CONST_INT::ActorBase::RunBodyTest(Transform3D from, Vector3 motion, Ref<PhysicsTestMotionResult3D> result) {
-	auto* params = new PhysicsTestMotionParameters3D;
-	params->set_from(from);
-	params->set_motion(motion);
-	return physicsServer->body_test_motion(get_rid(), params, result);
-}
+
 void CONST_INT::ActorBase::SnapDownToStairsCheck() {
 	bool did_snap = false;
+	attachments.stepDownRay->force_raycast_update();
+	bool floor_below = (attachments.stepDownRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepDownRay->get_collision_normal()));
 	uint64_t was_on_floor_last_frame = Engine().get_physics_frames() - actor_vars._last_frame_was_on_floor == 1;
 
-	if(!is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame))
+	if(!is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
 	{
-		PhysicsTestMotionResult3D* body_test_result = new PhysicsTestMotionResult3D();
-		if(RunBodyTest(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
+
+		KinematicCollision3D* body_test_result = new KinematicCollision3D();
+
+		if(test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
 		{
 			float translate_y = body_test_result->get_travel().y;
 			Vector3 pos = get_position();
@@ -202,3 +206,29 @@ void CONST_INT::ActorBase::SnapDownToStairsCheck() {
 		actor_vars._snapped_to_stairs_last_frame = did_snap;
 	}
 }
+bool CONST_INT::ActorBase::StepUpStairsCheck(double delta) {
+	if(!is_on_floor() && !actor_vars._snapped_to_stairs_last_frame) return false;
+	Vector3 expected_move_motion = get_velocity() * Vector3(1,0,1) * (float)delta;
+
+	//Makes sure you can't step up if something is blocking you
+	Transform3D step_pos_with_clearance = get_global_transform().translated(expected_move_motion + Vector3(0, actor_vars.max_step_height *2, 0));
+	KinematicCollision3D* down_check_result = new KinematicCollision3D();
+	if(test_move(step_pos_with_clearance, Vector3(0, -actor_vars.max_step_height*2.0f, 0), down_check_result))
+	{
+		//how much higher is the step_height
+		float step_height = ((step_pos_with_clearance.origin + down_check_result->get_travel()) - get_global_position()).y;
+		if(step_height > actor_vars.max_step_height || step_height <= 0.01f || (down_check_result->get_position() - get_global_position()).y > actor_vars.max_step_height) return false;
+		attachments.stepAheadRay->set_global_position(down_check_result->get_position() + Vector3(0, actor_vars.max_step_height, 0) + expected_move_motion.normalized() * 0.025f);
+		attachments.stepAheadRay->force_raycast_update();
+		UtilityFunctions::print(step_height);
+		if(attachments.stepAheadRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepAheadRay->get_collision_normal()))
+		{
+			set_global_position(step_pos_with_clearance.origin + down_check_result->get_travel());
+			apply_floor_snap();
+			actor_vars._snapped_to_stairs_last_frame = true;
+			return true;
+		}
+	}
+	return false;
+}
+

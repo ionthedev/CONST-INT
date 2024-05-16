@@ -13,7 +13,16 @@ config_version=5
 config/name="Ci Demo"
 run/main_scene="res://bin/CONST_INT/Scenes/demo.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
+
+[debug]
+
+settings/stdout/print_fps=true
+
+[display]
+
+window/vsync/vsync_mode=0
 
 [dotnet]
 

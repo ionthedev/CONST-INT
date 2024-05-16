@@ -23,6 +23,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/cylinder_shape3d.hpp>
+#include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/mesh_library.hpp>
@@ -67,8 +68,9 @@ typedef struct {
 	Vector3 mouse_rotation;
 	float mouse_sensitivity;
 	bool initialized;
+	const float gravity = -9.85f;
 
-	const float max_step_height = 0.5f;
+	const float max_step_height = 0.25f;
 	bool _snapped_to_stairs_last_frame = false;
 	uint64_t _last_frame_was_on_floor;
 
@@ -120,8 +122,8 @@ private:
 	void CreateCamera();
 	void CreateBody();
 	void CreateStepRays();
-	bool RunBodyTest(Transform3D from, Vector3 motion, Ref<PhysicsTestMotionResult3D> result);
 	void SnapDownToStairsCheck();
+	bool StepUpStairsCheck(double delta);
 
 
 
