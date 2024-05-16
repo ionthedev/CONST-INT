@@ -115,6 +115,8 @@ public:
 	void _physics_process(double delta) override;
 	void _unhandled_input(const Ref<InputEvent> &p_event) override;
 
+	void CI_Move();
+
 private:
 	void CreateCollider();
 	void CreateHeadHorizontal();

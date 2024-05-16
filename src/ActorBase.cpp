@@ -19,17 +19,7 @@ void CONST_INT::ActorBase::_ready() {
 	SetMouseMode(Input::MOUSE_MODE_CAPTURED);
 }
 void CONST_INT::ActorBase::_physics_process(const double delta) {
-	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
-
-	ApplyGravity(delta);
-	CalculateWishDirection(delta);
-	if(!StepUpStairsCheck(delta))
-	{
-
-		move_and_slide();
-
-		SnapDownToStairsCheck();
-	}
+	CI_Move();
 }
 void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
@@ -231,4 +221,18 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(double delta) {
 	}
 	return false;
 }
+void CONST_INT::ActorBase::CI_Move() {
+	double delta = get_physics_process_delta_time();
+	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 
+	ApplyGravity(delta);
+	CalculateWishDirection(delta);
+	if(!StepUpStairsCheck(delta))
+	{
+
+		move_and_slide();
+
+		SnapDownToStairsCheck();
+	}
+
+}
