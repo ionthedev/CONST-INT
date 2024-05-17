@@ -4,6 +4,8 @@ A GDExtension planning to make game development easier. If you clone this projec
 ## CURRENT STATE: LANGUAGE PORTING
 Check the [Projects](https://github.com/users/ionthedev/projects/2) page to view the currently active aspects being ported.
 
+External contributions are locked until the language port is complete.
+
 Converting the project from C# to C++. The C# version has been made legacy.
 https://ionthedev.itch.io/constint
 
