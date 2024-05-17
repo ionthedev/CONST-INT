@@ -11,8 +11,8 @@ void CONST_INT::ActorBase::_process(const double delta) {
 	CharacterBody3D::_process(delta);
 }
 void CONST_INT::ActorBase::_ready() {
-	ActorBase::MakeAttachments();
-	ActorBase::physicsServer = PhysicsServer3D::get_singleton();
+	MakeAttachments();
+	physicsServer = PhysicsServer3D::get_singleton();
 	e_input = Input::get_singleton();
 	actor_vars.speed = 3.0f;
 	actor_vars.mouse_sensitivity = 0.19f;
@@ -26,7 +26,7 @@ void CONST_INT::ActorBase::_physics_process(const double delta) {
 void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
 		auto *mouseMotionEvent = dynamic_cast<InputEventMouseMotion *>(*p_event);
-		ActorBase::MouseLook(mouseMotionEvent);
+		MouseLook(mouseMotionEvent);
 	}
 }
 
@@ -69,7 +69,7 @@ void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
 		const Vector3 forward = -attachments.head_h->get_transform().basis.get_column(2).normalized();
 		const Vector3 right = attachments.camera->get_global_transform().basis.get_column(0).normalized();
 
-		Vector3 _dir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
+		const Vector3 _dir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
         // Combine vectors based on input direction
         actor_vars.wishDir.x = _dir.x * actor_vars.speed;
 		actor_vars.wishDir.z = _dir.z * actor_vars.speed;
@@ -87,20 +87,20 @@ void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
 }
 
 void CONST_INT::ActorBase::MakeAttachments() {
-	if (ActorBase::actor_vars.initialized)
+	if (actor_vars.initialized)
 		return;
 
-	ActorBase::CreateCollider();
-	ActorBase::CreateSkull();
-	ActorBase::CreateHeadHorizontal();
-	ActorBase::CreateHeadVertical();
-	ActorBase::CreateCamera();
-	ActorBase::CreateBody();
-	ActorBase::CreateStepRays();
+	CreateCollider();
+	CreateSkull();
+	CreateHeadHorizontal();
+	CreateHeadVertical();
+	CreateCamera();
+	CreateBody();
+	CreateStepRays();
 
-	ActorBase::actor_vars.initialized = true;
+	actor_vars.initialized = true;
 }
-void CONST_INT::ActorBase::SetMouseMode(Input::MouseMode _mode) {
+void CONST_INT::ActorBase::SetMouseMode(const Input::MouseMode _mode) const {
 	e_input->set_mouse_mode(_mode);
 }
 
@@ -108,11 +108,11 @@ void CONST_INT::ActorBase::ApplyGravity(const double delta) {
 	if(is_on_floor()) return;
 
 	Vector3 v = get_velocity();
-	v.y += actor_vars.gravity * delta;
+	v.y += actor_vars.gravity * static_cast<float>(delta);
 	set_velocity(v);
 
 }
-bool CONST_INT::ActorBase::IsSurfaceTooSteep(Vector3 _normal) {
+bool CONST_INT::ActorBase::IsSurfaceTooSteep(const Vector3 _normal) const {
 	return _normal.angle_to(Vector3(0.0f, 1.0f, 0.0f)) > get_floor_max_angle();
 }
 
@@ -125,7 +125,7 @@ void CONST_INT::ActorBase::CreateCollider() {
 	colShape.instantiate();
 	colShape->set_height(2.0f);
 	colShape->set_radius(0.5f);
-	ActorBase::actor_vars.original_height = (float)colShape->get_height();
+	actor_vars.original_height = static_cast<float>(colShape->get_height());
 	attachments.collider->set_shape(colShape);
 	attachments.collider->set_position(Vector3(0.0f, 1.0f, 0.0f));
 	this->add_child(attachments.collider);
@@ -160,10 +160,10 @@ void CONST_INT::ActorBase::CreateCamera() {
 void CONST_INT::ActorBase::CreateBody() {
 	attachments.body = new MeshInstance3D;
 	attachments.body->set_name("_body");
-	attachments.body->set_cast_shadows_setting(godot::GeometryInstance3D::ShadowCastingSetting::SHADOW_CASTING_SETTING_ON);
+	attachments.body->set_cast_shadows_setting(GeometryInstance3D::ShadowCastingSetting::SHADOW_CASTING_SETTING_ON);
 	attachments.body->set_position(Vector3(0.0f, 0.0f, 0.0f));
-	attachments.collider->add_child(attachments.body);Ref<MeshLibrary> meshLibrary = ResourceLoader::get_singleton()->load("res://bin/CONST_INT/Resources/CI_MeshLibrary.tres");
-	if (meshLibrary.is_valid())
+	attachments.collider->add_child(attachments.body);
+	if (const Ref<MeshLibrary> meshLibrary = ResourceLoader::get_singleton()->load("res://bin/CONST_INT/Resources/CI_MeshLibrary.tres"); meshLibrary.is_valid())
 	{
 		const Ref<Mesh> bodyMesh = meshLibrary->get_item_mesh(0);
 		attachments.body->set_mesh(bodyMesh);
@@ -186,19 +186,15 @@ void CONST_INT::ActorBase::CreateStepRays() {
 }
 
 void CONST_INT::ActorBase::SnapDownToStairsCheck() {
-	bool did_snap = false;
 	attachments.stepDownRay->force_raycast_update();
-	bool floor_below = (attachments.stepDownRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepDownRay->get_collision_normal()));
-	uint64_t was_on_floor_last_frame = Engine().get_physics_frames() - actor_vars._last_frame_was_on_floor == 1;
+	const bool floor_below = attachments.stepDownRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepDownRay->get_collision_normal());
 
-	if(!is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
+	if (const uint64_t was_on_floor_last_frame = Engine().get_physics_frames() - actor_vars._last_frame_was_on_floor == 1; !is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
 	{
-
-		KinematicCollision3D* body_test_result = new KinematicCollision3D();
-
-		if(test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
+		bool did_snap = false;
+		if (auto *body_test_result = new KinematicCollision3D(); test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
 		{
-			float translate_y = body_test_result->get_travel().y;
+			const float translate_y = body_test_result->get_travel().y;
 			Vector3 pos = get_position();
 			pos.y += translate_y;
 			set_position(pos);
@@ -208,17 +204,17 @@ void CONST_INT::ActorBase::SnapDownToStairsCheck() {
 		actor_vars._snapped_to_stairs_last_frame = did_snap;
 	}
 }
-bool CONST_INT::ActorBase::StepUpStairsCheck(double delta) {
-	if(!is_on_floor() && !actor_vars._snapped_to_stairs_last_frame) return false;
-	Vector3 expected_move_motion = get_velocity() * Vector3(1,0,1) * (float)delta;
+bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
+	if (!is_on_floor() && !actor_vars._snapped_to_stairs_last_frame)
+		return false;
+	const Vector3 expected_move_motion = get_velocity() * Vector3(1,0,1) * static_cast<float>(delta);
 
 	//Makes sure you can't step up if something is blocking you
-	Transform3D step_pos_with_clearance = get_global_transform().translated(expected_move_motion + Vector3(0, actor_vars.max_step_height *2, 0));
-	KinematicCollision3D* down_check_result = new KinematicCollision3D();
-	if(test_move(step_pos_with_clearance, Vector3(0, -actor_vars.max_step_height*2.0f, 0), down_check_result))
+	const Transform3D step_pos_with_clearance = get_global_transform().translated(expected_move_motion + Vector3(0, actor_vars.max_step_height *2, 0));
+	if (auto *down_check_result = new KinematicCollision3D(); test_move(step_pos_with_clearance, Vector3(0, -actor_vars.max_step_height*2.0f, 0), down_check_result))
 	{
 		//how much higher is the step_height
-		float step_height = ((step_pos_with_clearance.origin + down_check_result->get_travel()) - get_global_position()).y;
+		const float step_height = (step_pos_with_clearance.origin + down_check_result->get_travel() - get_global_position()).y;
 		if(step_height > actor_vars.max_step_height || step_height <= 0.01f || (down_check_result->get_position() - get_global_position()).y > actor_vars.max_step_height) return false;
 		attachments.stepAheadRay->set_global_position(down_check_result->get_position() + Vector3(0, actor_vars.max_step_height, 0) + expected_move_motion.normalized() * 0.025f);
 		attachments.stepAheadRay->force_raycast_update();
@@ -234,7 +230,7 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(double delta) {
 	return false;
 }
 void CONST_INT::ActorBase::CI_Move() {
-	double delta = get_physics_process_delta_time();
+	const double delta = get_physics_process_delta_time();
 	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 
 	ApplyGravity(delta);
@@ -248,9 +244,10 @@ void CONST_INT::ActorBase::CI_Move() {
 	}
 
 }
-float CONST_INT::ActorBase::GetMoveSpeed() {                      //This is supposed to be ugly for right now
-	if(actor_vars.is_crouched) 		return (3.0f * 0.8);
-	else 					   		return 3.0f;
+float CONST_INT::ActorBase::GetMoveSpeed() const { //This is supposed to be ugly for right now
+	if (actor_vars.is_crouched)
+		return 3.0f * 0.8;
+	return 3.0f;
 }
 void CONST_INT::ActorBase::HandleCrouch(double delta) {
 	actor_vars.is_crouched = e_input->is_action_pressed("Crouch");

@@ -94,8 +94,8 @@ protected:
 	void CalculateWishDirection(double delta);
 	void ApplyGravity(double delta);
 	void MakeAttachments();
-	void SetMouseMode(Input::MouseMode _mode);
-	bool IsSurfaceTooSteep(Vector3 _normal);
+	void SetMouseMode(Input::MouseMode _mode) const;
+	bool IsSurfaceTooSteep(Vector3 _normal) const;
 
 
 
@@ -121,7 +121,7 @@ public:
 
 	void CI_Move();
 	void Jump();
-	float GetMoveSpeed();
+	float GetMoveSpeed() const;
 
 private:
 	void CreateCollider();
