@@ -23,7 +23,7 @@ void CONST_INT::ActorBase::_physics_process(const double delta) {
 	HandleCrouch(delta);
 	CI_Move();
 }
-void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
+void CONST_INT::ActorBase::_unhandled_input(const Ref<InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
 		auto *mouseMotionEvent = dynamic_cast<InputEventMouseMotion *>(*p_event);
 		MouseLook(mouseMotionEvent);
@@ -57,7 +57,7 @@ void CONST_INT::ActorBase::MouseLook(const Ref<InputEventMouseMotion> &p_event) 
 
 }
 
-void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
+void CONST_INT::ActorBase::CalculateWishDirection() {
 
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -234,7 +234,7 @@ void CONST_INT::ActorBase::CI_Move() {
 	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 
 	ApplyGravity(delta);
-	CalculateWishDirection(delta);
+	CalculateWishDirection();
 	if(!StepUpStairsCheck(delta))
 	{
 

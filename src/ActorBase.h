@@ -91,7 +91,7 @@ protected:
 
 	//CONST_INT Methods
 	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
-	void CalculateWishDirection(double delta);
+	void CalculateWishDirection();
 	void ApplyGravity(double delta);
 	void MakeAttachments();
 	void SetMouseMode(Input::MouseMode _mode) const;
