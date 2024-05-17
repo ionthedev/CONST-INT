@@ -19,6 +19,8 @@ void CONST_INT::ActorBase::_ready() {
 	SetMouseMode(Input::MOUSE_MODE_CAPTURED);
 }
 void CONST_INT::ActorBase::_physics_process(const double delta) {
+	actor_vars.speed = GetMoveSpeed();
+	HandleCrouch(delta);
 	CI_Move();
 }
 void CONST_INT::ActorBase::_unhandled_input(const godot::Ref<godot::InputEvent> &p_event) {
@@ -85,17 +87,18 @@ void CONST_INT::ActorBase::CalculateWishDirection(double delta) {
 }
 
 void CONST_INT::ActorBase::MakeAttachments() {
-	if (actor_vars.initialized)
+	if (ActorBase::actor_vars.initialized)
 		return;
 
-	CreateCollider();
-	CreateHeadHorizontal();
-	CreateHeadVertical();
-	CreateCamera();
-	CreateBody();
-	CreateStepRays();
+	ActorBase::CreateCollider();
+	ActorBase::CreateSkull();
+	ActorBase::CreateHeadHorizontal();
+	ActorBase::CreateHeadVertical();
+	ActorBase::CreateCamera();
+	ActorBase::CreateBody();
+	ActorBase::CreateStepRays();
 
-	actor_vars.initialized = true;
+	ActorBase::actor_vars.initialized = true;
 }
 void CONST_INT::ActorBase::SetMouseMode(Input::MouseMode _mode) {
 	e_input->set_mouse_mode(_mode);
@@ -122,16 +125,25 @@ void CONST_INT::ActorBase::CreateCollider() {
 	colShape.instantiate();
 	colShape->set_height(2.0f);
 	colShape->set_radius(0.5f);
-
+	ActorBase::actor_vars.original_height = (float)colShape->get_height();
 	attachments.collider->set_shape(colShape);
 	attachments.collider->set_position(Vector3(0.0f, 1.0f, 0.0f));
 	this->add_child(attachments.collider);
 }
+
+void CONST_INT::ActorBase::CreateSkull() {
+	attachments.skull = new Node3D;
+	attachments.skull->set_name("skull");
+	attachments.skull->set_position(Vector3(0.0f, 1.0f, 0.0f));
+	attachments.collider->add_child(attachments.skull);
+}
+
+
 void CONST_INT::ActorBase::CreateHeadHorizontal() {
 	attachments.head_h = new Node3D;
 	attachments.head_h->set_name("_head_h");
-	attachments.head_h->set_position(Vector3(0.0f, 1.0f, 0.0f));
-	attachments.collider->add_child(attachments.head_h);
+	attachments.head_h->set_position(Vector3(0.0f, 0.0f, 0.0f));
+	attachments.skull->add_child(attachments.head_h);
 }
 void CONST_INT::ActorBase::CreateHeadVertical() {
 	attachments.head_v = new Node3D;
@@ -233,6 +245,23 @@ void CONST_INT::ActorBase::CI_Move() {
 		move_and_slide();
 
 		SnapDownToStairsCheck();
+	}
+
+}
+float CONST_INT::ActorBase::GetMoveSpeed() {                      //This is supposed to be ugly for right now
+	if(actor_vars.is_crouched) 		return (3.0f * 0.8);
+	else 					   		return 3.0f;
+}
+void CONST_INT::ActorBase::HandleCrouch(double delta) {
+	actor_vars.is_crouched = e_input->is_action_pressed("Crouch");
+	if(actor_vars.is_crouched)
+	{
+		attachments.skull->set_position(Vector3(0,-actor_vars.crouch_translate, 0));
+	}
+	else
+	{
+
+		attachments.skull->set_position(Vector3(0, 1, 0));
 	}
 
 }

@@ -46,6 +46,7 @@ namespace CONST_INT {
 
 typedef struct {
 	Camera3D* camera = nullptr;
+	Node3D* skull = nullptr; //contains head_h, which contains head_v, which contains camera
 	Node3D* head_h = nullptr;
 	Node3D* head_v = nullptr;
 	MeshInstance3D* body = nullptr;
@@ -69,8 +70,11 @@ typedef struct {
 	float mouse_sensitivity;
 	bool initialized;
 	const float gravity = -9.85f;
-
+	const float crouch_translate = 0.25f;
+	const float crouch_jump_add = crouch_translate * 0.9f;
+	bool is_crouched = false;
 	const float max_step_height = 0.25f;
+	float original_height;
 	bool _snapped_to_stairs_last_frame = false;
 	uint64_t _last_frame_was_on_floor;
 
@@ -116,9 +120,12 @@ public:
 	void _unhandled_input(const Ref<InputEvent> &p_event) override;
 
 	void CI_Move();
+	void Jump();
+	float GetMoveSpeed();
 
 private:
 	void CreateCollider();
+	void CreateSkull();
 	void CreateHeadHorizontal();
 	void CreateHeadVertical();
 	void CreateCamera();
@@ -126,6 +133,7 @@ private:
 	void CreateStepRays();
 	void SnapDownToStairsCheck();
 	bool StepUpStairsCheck(double delta);
+	void HandleCrouch(double delta);
 
 
 
