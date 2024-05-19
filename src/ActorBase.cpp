@@ -19,9 +19,8 @@ void CONST_INT::ActorBase::_ready() {
 	SetMouseMode(Input::MOUSE_MODE_CAPTURED);
 }
 void CONST_INT::ActorBase::_physics_process(const double delta) {
-	actor_vars.speed = GetMoveSpeed();
-	HandleCrouch(delta);
 	CI_Move();
+	SmoothCamera(delta);
 }
 void CONST_INT::ActorBase::_unhandled_input(const Ref<InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
@@ -95,7 +94,7 @@ void CONST_INT::ActorBase::MakeAttachments() {
 	CreateHeadHorizontal();
 	CreateHeadVertical();
 	CreateCamera();
-	CreateBody();
+	//CreateBody();
 	CreateStepRays();
 
 	actor_vars.initialized = true;
@@ -105,13 +104,26 @@ void CONST_INT::ActorBase::SetMouseMode(const Input::MouseMode _mode) const {
 }
 
 void CONST_INT::ActorBase::ApplyGravity(const double delta) {
-	if(is_on_floor()) return;
 
+	if(is_on_floor()) return;
 	Vector3 v = get_velocity();
-	v.y += actor_vars.gravity * static_cast<float>(delta);
+	v.y -= actor_vars.gravity * static_cast<float>(delta);
 	set_velocity(v);
 
 }
+
+void CONST_INT::ActorBase::ProcessJump(const double delta) {
+
+	if(Engine().is_editor_hint()) return;
+	if(e_input->is_action_just_pressed("Jump"))
+	{
+	Vector3 v = get_velocity();
+	v.y = actor_vars.jump_velocity;
+	set_velocity(v);
+	}
+
+}
+
 bool CONST_INT::ActorBase::IsSurfaceTooSteep(const Vector3 _normal) const {
 	return _normal.angle_to(Vector3(0.0f, 1.0f, 0.0f)) > get_floor_max_angle();
 }
@@ -186,23 +198,30 @@ void CONST_INT::ActorBase::CreateStepRays() {
 }
 
 void CONST_INT::ActorBase::SnapDownToStairsCheck() {
+	bool did_snap = false;
+
+
 	attachments.stepDownRay->force_raycast_update();
 	const bool floor_below = attachments.stepDownRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepDownRay->get_collision_normal());
-
-	if (const uint64_t was_on_floor_last_frame = Engine().get_physics_frames() - actor_vars._last_frame_was_on_floor == 1; !is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
+	bool was_on_floor_last_frame = Engine().get_physics_frames() == actor_vars._last_frame_was_on_floor;
+	if(!is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
 	{
-		bool did_snap = false;
-		if (auto *body_test_result = new KinematicCollision3D(); test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
+		Ref<KinematicCollision3D> body_test_result = new KinematicCollision3D();
+		if(test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
 		{
-			const float translate_y = body_test_result->get_travel().y;
-			Vector3 pos = get_position();
-			pos.y += translate_y;
-			set_position(pos);
-			apply_floor_snap();
-			did_snap = true;
+			SaveCamPosForSmoothing();
+			{
+				float translate_y = body_test_result->get_travel().y;
+				Vector3 pos = get_position();
+				pos.y += translate_y;
+				set_position(pos);
+				apply_floor_snap();
+				did_snap = true;
+			}
 		}
-		actor_vars._snapped_to_stairs_last_frame = did_snap;
 	}
+	actor_vars._snapped_to_stairs_last_frame = did_snap;
+
 }
 bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 	if (!is_on_floor() && !actor_vars._snapped_to_stairs_last_frame)
@@ -218,9 +237,11 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 		if(step_height > actor_vars.max_step_height || step_height <= 0.01f || (down_check_result->get_position() - get_global_position()).y > actor_vars.max_step_height) return false;
 		attachments.stepAheadRay->set_global_position(down_check_result->get_position() + Vector3(0, actor_vars.max_step_height, 0) + expected_move_motion.normalized() * 0.025f);
 		attachments.stepAheadRay->force_raycast_update();
-		UtilityFunctions::print(step_height);
+		//UtilityFunctions::print(step_height);
 		if(attachments.stepAheadRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepAheadRay->get_collision_normal()))
 		{
+
+			SaveCamPosForSmoothing();
 			set_global_position(step_pos_with_clearance.origin + down_check_result->get_travel());
 			apply_floor_snap();
 			actor_vars._snapped_to_stairs_last_frame = true;
@@ -231,16 +252,16 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 }
 void CONST_INT::ActorBase::CI_Move() {
 	const double delta = get_physics_process_delta_time();
-	if(is_on_floor() || actor_vars._snapped_to_stairs_last_frame) actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 
-	ApplyGravity(delta);
-	CalculateWishDirection();
-	if(!StepUpStairsCheck(delta))
+	HandleCrouch(delta);
+	if(!is_on_floor())
+	{
+		HandleAirPhysics(delta);
+	}
+	else
 	{
 
-		move_and_slide();
-
-		SnapDownToStairsCheck();
+		HandleGroundPhysics(delta);
 	}
 
 }
@@ -249,16 +270,129 @@ float CONST_INT::ActorBase::GetMoveSpeed() const { //This is supposed to be ugly
 		return 3.0f * 0.8;
 	return 3.0f;
 }
+
+
 void CONST_INT::ActorBase::HandleCrouch(double delta) {
-	actor_vars.is_crouched = e_input->is_action_pressed("Crouch");
-	if(actor_vars.is_crouched)
-	{
-		attachments.skull->set_position(Vector3(0,-actor_vars.crouch_translate, 0));
-	}
-	else
-	{
 
-		attachments.skull->set_position(Vector3(0, 1, 0));
+
+	if(Engine::get_singleton()->is_editor_hint()) return;
+	bool was_crouched_last_frame = actor_vars.is_crouched;
+
+
+
+	Vector3 colPos = attachments.collider->get_position();
+	Ref<CapsuleShape3D> colShape = attachments.collider->get_shape();
+
+	if(e_input->is_action_pressed("Crouch"))
+	{
+		actor_vars.is_crouched = true;
+	}
+	else if (actor_vars.is_crouched && !test_move(get_transform(), Vector3(0, actor_vars.crouch_translate,0)))
+	{
+		actor_vars.is_crouched = false;
 	}
 
+	float translate_y_if_possible = 0;
+
+	if(was_crouched_last_frame != actor_vars.is_crouched && !is_on_floor() && !actor_vars._snapped_to_stairs_last_frame)
+	{
+		translate_y_if_possible = (actor_vars.is_crouched) ? actor_vars.crouch_jump_add : -actor_vars.crouch_jump_add;
+	}
+
+	Vector3 cPos = attachments.skull->get_position();
+	if(translate_y_if_possible != 0)
+	{
+		Ref<KinematicCollision3D> result = new KinematicCollision3D();
+		test_move(get_transform(), Vector3(0, translate_y_if_possible, 0), result);
+		Vector3 pos = get_position();
+		pos.y += result->get_travel().y;
+		set_position(pos);
+		cPos.y -= result->get_travel().y;
+		cPos.y = Math::clamp(cPos.y, -actor_vars.crouch_translate, 1.0f);
+		attachments.skull->set_position(cPos);
+	}
+
+
+	attachments.skull->set_position(Vector3(0, Math::move_toward(attachments.skull->get_position().y, (actor_vars.is_crouched) ? actor_vars.crouch_translate : 1 , 3.0f * (float)delta),0));
+	colShape->set_height((actor_vars.is_crouched) ? actor_vars.original_height - actor_vars.crouch_translate : actor_vars.original_height);
+
+	attachments.collider->set_shape(colShape);
+	colPos.y = colShape->get_height() / 2;
+	attachments.collider->set_position(colPos);
+	//UtilityFunctions::print(actor_vars._snapped_to_stairs_last_frame);
+
+}
+void CONST_INT::ActorBase::HandleGroundPhysics(double delta) {
+	actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
+	CalculateWishDirection();
+	ProcessJump(delta);
+	if(!StepUpStairsCheck(delta))
+	{
+		PushAwayRigidBodies();
+
+		move_and_slide();
+
+		SnapDownToStairsCheck();
+	}
+
+	HeadBob(delta);
+}
+void CONST_INT::ActorBase::HandleAirPhysics(double delta) {
+	move_and_slide();
+	ApplyGravity(delta);
+}
+void CONST_INT::ActorBase::SaveCamPosForSmoothing() {
+	if(SavedCameraPos != attachments.head_h->get_position())
+	{
+		SavedCameraPos = attachments.head_h->get_global_position();
+	}
+}
+void CONST_INT::ActorBase::SmoothCamera(double delta) {
+	if(SavedCameraPos == attachments.head_h->get_position()) return;
+	attachments.head_h->set_global_position(SavedCameraPos);
+	Vector3 camSmoothPos = attachments.camera->get_position();
+	camSmoothPos.y = Math::clamp(attachments.camera->get_position().y, -actor_vars.crouch_translate, actor_vars.crouch_translate);
+	float moveAmount = Math::max(get_velocity().length() * (float)delta, actor_vars.speed/2 * (float)delta);
+	camSmoothPos.y = Math::move_toward(camSmoothPos.y, 0.0f, moveAmount);
+	attachments.head_h->set_position(camSmoothPos);
+	camSmoothPos = attachments.head_h->get_position();
+	SavedCameraPos = attachments.head_h->get_global_position();
+	if(camSmoothPos.y == 0)
+	{
+		SavedCameraPos = attachments.head_h->get_position();
+	}
+}
+void CONST_INT::ActorBase::HeadBob(double delta) {
+	actor_vars.headbob_time += (float)delta * get_velocity().length();
+	Transform3D _t = attachments.camera->get_transform();
+	Vector3 o = _t.origin;
+
+	double t = actor_vars.headbob_time;
+	double f = actor_vars.headbob_frequency;
+	double a = actor_vars.headbob_amount;
+
+	double x = cos(t * f * 0.5f) * a;
+	double y = sin(t * f) * a;
+	o = Vector3((float)x, (float)y ,0);
+	_t.set_origin(o);
+	attachments.camera->set_transform(_t);
+}
+void CONST_INT::ActorBase::PushAwayRigidBodies() {
+	for(int i = 0; i < get_slide_collision_count(); i++)
+	{
+		Ref<KinematicCollision3D> c = get_slide_collision(i);
+		if(c->get_collider()->is_class("RigidBody3D"))
+		{
+			RigidBody3D *rb = Object::cast_to<RigidBody3D>(c->get_collider());
+			Vector3 push_dir = -c->get_normal();
+			real_t velocity_diff_in_push_dir = get_velocity().dot(push_dir) - rb->get_linear_velocity().dot(push_dir);
+			velocity_diff_in_push_dir = Math::max(0.0f, velocity_diff_in_push_dir);
+
+			const float my_mass = 1.25f;
+			float mass_ratio = Math::min(1.0f, my_mass / (float)rb->get_mass());
+			push_dir.y = 0;
+			float push_force = mass_ratio * 5.0f;
+			rb->apply_impulse(push_dir * velocity_diff_in_push_dir * push_force, rb->get_position() - rb->get_global_position());
+		}
+	}
 }

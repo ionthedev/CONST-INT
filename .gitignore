@@ -35,3 +35,11 @@ TheSaukArchive/.idea/.idea.TheSaukArchive/.idea/workspace.xml
 /.idea/codeStyles/Project.xml
 /cmake-build-debug/.cmake/api/v1/query/toolchains-v1
 /.idea/.gitignore
+/CI_DEMO/audio/
+/CI_DEMO/meshes/
+/CI_DEMO/textures/
+/CI_DEMO/CanTest.tscn
+/CI_DEMO/Box_2_Test.tscn
+/CI_DEMO/Box_1_Test.tscn
+/CI_DEMO/ChairTest.tscn
+/CI_DEMO/_showcase/

@@ -23,6 +23,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/cylinder_shape3d.hpp>
+#include <godot_cpp/classes/rigid_body3d.hpp>
 #include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/input_event.hpp>
@@ -65,18 +66,23 @@ typedef struct {
 	Vector3 moveDir;
 	Vector3 velocity;
 	float speed;
+	float jump_velocity = 5.0f;
 	float acceleration;
 	Vector3 mouse_rotation;
 	float mouse_sensitivity;
 	bool initialized;
-	const float gravity = -9.85f;
-	const float crouch_translate = 0.25f;
+	const float gravity = 9.85f;
+	const float crouch_translate = 0.125f;
 	const float crouch_jump_add = crouch_translate * 0.9f;
 	bool is_crouched = false;
 	const float max_step_height = 0.25f;
 	float original_height;
 	bool _snapped_to_stairs_last_frame = false;
 	uint64_t _last_frame_was_on_floor;
+	const float headbob_amount = 0.06f;
+	const float headbob_frequency = 2.4f;
+	float headbob_time;
+
 
 } actor_vars_t;
 
@@ -93,7 +99,10 @@ protected:
 	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
 	void CalculateWishDirection();
 	void ApplyGravity(double delta);
+	void ProcessJump(double delta);
 	void MakeAttachments();
+	void HandleGroundPhysics(double delta);
+	void HandleAirPhysics(double delta);
 	void SetMouseMode(Input::MouseMode _mode) const;
 	bool IsSurfaceTooSteep(Vector3 _normal) const;
 
@@ -120,7 +129,6 @@ public:
 	void _unhandled_input(const Ref<InputEvent> &p_event) override;
 
 	void CI_Move();
-	void Jump();
 	float GetMoveSpeed() const;
 
 private:
@@ -134,6 +142,11 @@ private:
 	void SnapDownToStairsCheck();
 	bool StepUpStairsCheck(double delta);
 	void HandleCrouch(double delta);
+	Vector3 SavedCameraPos = Vector3(0,0,0);
+	void SaveCamPosForSmoothing();
+	void SmoothCamera(double delta);
+	void HeadBob(double delta);
+	void PushAwayRigidBodies();
 
 
 
