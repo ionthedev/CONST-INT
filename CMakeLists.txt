@@ -26,4 +26,6 @@ add_executable(CONST_INT
         src/gdexample.h
         src/ActorBase.cpp
         src/ActorBase.h
+        src/ActorSettings.h
+        src/ActorSettings.cpp
 )

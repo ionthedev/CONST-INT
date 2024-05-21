@@ -6,45 +6,40 @@
 #ifndef CONST_INT_ACTORBASE_H
 #define CONST_INT_ACTORBASE_H
 
-#include <godot_cpp/classes/character_body3d.hpp>
-#include <godot_cpp/classes/node3d.hpp>
-#include <godot_cpp/classes/camera3d.hpp>
+#include "ActorSettings.h"
 #include <godot_cpp/classes/animation_player.hpp>
-#include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/classes/camera3d.hpp>
+#include <godot_cpp/classes/capsule_shape3d.hpp>
+#include <godot_cpp/classes/character_body3d.hpp>
+#include <godot_cpp/classes/collision_shape3d.hpp>
+#include <godot_cpp/classes/cylinder_shape3d.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
-#include <godot_cpp/variant/variant.hpp>
-#include <godot_cpp/core/math.hpp>
-#include <godot_cpp/classes/engine.hpp>
-#include <godot_cpp/variant/transform3d.hpp>
-#include <godot_cpp/variant/vector3.hpp>
-#include <godot_cpp/classes/engine.hpp>
-#include <godot_cpp/variant/utility_functions.hpp>
-#include <godot_cpp/classes/collision_shape3d.hpp>
-#include <godot_cpp/classes/cylinder_shape3d.hpp>
-#include <godot_cpp/classes/rigid_body3d.hpp>
-#include <godot_cpp/classes/capsule_shape3d.hpp>
-#include <godot_cpp/classes/mesh_instance3d.hpp>
-#include <godot_cpp/classes/input_event.hpp>
-#include <godot_cpp/classes/mesh_library.hpp>
 #include <godot_cpp/classes/mesh.hpp>
+#include <godot_cpp/classes/mesh_instance3d.hpp>
+#include <godot_cpp/classes/mesh_library.hpp>
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/classes/physics_body3d.hpp>
-#include <godot_cpp/classes/shape3d.hpp>
-#include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/physics_server3d.hpp>
-#include <godot_cpp/classes/ray_cast3d.hpp>
-#include <godot_cpp/classes/physics_server3d.hpp>
-#include <godot_cpp/classes/physics_test_motion_result3d.hpp>
 #include <godot_cpp/classes/physics_test_motion_parameters3d.hpp>
-#include <godot_cpp/classes/physics_body3d.hpp>
+#include <godot_cpp/classes/physics_test_motion_result3d.hpp>
+#include <godot_cpp/classes/ray_cast3d.hpp>
+#include <godot_cpp/classes/resource.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/rigid_body3d.hpp>
+#include <godot_cpp/classes/shape3d.hpp>
+#include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/core/math.hpp>
+#include <godot_cpp/variant/transform3d.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/variant/variant.hpp>
+#include <godot_cpp/variant/vector3.hpp>
 
-
-
-using namespace godot;
 namespace CONST_INT {
-
+using namespace godot;
 typedef struct {
 	Camera3D* camera = nullptr;
 	Node3D* skull = nullptr; //contains head_h, which contains head_v, which contains camera
@@ -105,6 +100,8 @@ protected:
 	void HandleAirPhysics(double delta);
 	void SetMouseMode(Input::MouseMode _mode) const;
 	bool IsSurfaceTooSteep(Vector3 _normal) const;
+	Ref<ActorSettings> *get_Settings();
+	void set_Settings(Ref<ActorSettings> *_settings);
 
 
 
@@ -120,6 +117,7 @@ public:
 
 	attachments_t attachments{};
 	actor_vars_t actor_vars{};
+	Ref<ActorSettings> *settings;
 
 
 	// Godot Methods

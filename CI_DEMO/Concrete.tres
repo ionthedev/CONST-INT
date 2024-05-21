@@ -9,16 +9,18 @@
 [ext_resource type="Texture2D" uid="uid://jkcqojfysl6y" path="res://bin/CONST_INT/Textures/Concrete002_4K_Roughness.jpg" id="7_fy6w7"]
 
 [resource]
+diffuse_mode = 1
+albedo_color = Color(0.585062, 0.585062, 0.585062, 1)
 albedo_texture = ExtResource("1_e0nqf")
-metallic_specular = 0.35
+albedo_texture_force_srgb = true
+metallic_specular = 0.0
 roughness_texture = ExtResource("7_fy6w7")
 normal_enabled = true
-normal_scale = 3.89
 normal_texture = ExtResource("6_eeihy")
 heightmap_scale = 1.0
 heightmap_texture = ExtResource("5_6d2em")
-detail_enabled = true
 detail_mask = ExtResource("4_lww2l")
+detail_blend_mode = 1
 detail_albedo = ExtResource("1_cm73y")
 detail_normal = ExtResource("3_xm6fq")
 uv1_triplanar = true

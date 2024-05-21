@@ -7,12 +7,13 @@
 
 #include "gdexample.h"
 #include "ActorBase.h"
+#include "ActorSettings.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-using namespace godot;
+using namespace CONST_INT;
 
 void initialize_example_module(ModuleInitializationLevel p_level) {
   if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -21,6 +22,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 
   ClassDB::register_class<GDExample>();
   ClassDB::register_class<CONST_INT::ActorBase>();
+  ClassDB::register_class<ActorSettings>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

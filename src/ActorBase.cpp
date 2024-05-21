@@ -5,6 +5,9 @@
 #include "ActorBase.h"
 
 void CONST_INT::ActorBase::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_Settings"), &CONST_INT::ActorBase::get_Settings);
+	ClassDB::bind_method(D_METHOD("set_Settings", "_settings"), &ActorBase::set_Settings);
+	ClassDB::add_property("ActorBase", PropertyInfo(Variant::Type(), "Settings"), "set_Settings", "get_Settings");
 
 }
 void CONST_INT::ActorBase::_process(const double delta) {
@@ -115,6 +118,7 @@ void CONST_INT::ActorBase::ApplyGravity(const double delta) {
 void CONST_INT::ActorBase::ProcessJump(const double delta) {
 
 	if(Engine().is_editor_hint()) return;
+	//if(!settings->get_CanJump()) return;
 	if(e_input->is_action_just_pressed("Jump"))
 	{
 	Vector3 v = get_velocity();
@@ -252,7 +256,7 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 }
 void CONST_INT::ActorBase::CI_Move() {
 	const double delta = get_physics_process_delta_time();
-
+	actor_vars.speed = GetMoveSpeed();
 	HandleCrouch(delta);
 	if(!is_on_floor())
 	{
@@ -267,7 +271,7 @@ void CONST_INT::ActorBase::CI_Move() {
 }
 float CONST_INT::ActorBase::GetMoveSpeed() const { //This is supposed to be ugly for right now
 	if (actor_vars.is_crouched)
-		return 3.0f * 0.8;
+		return 1.5f;
 	return 3.0f;
 }
 
@@ -276,6 +280,7 @@ void CONST_INT::ActorBase::HandleCrouch(double delta) {
 
 
 	if(Engine::get_singleton()->is_editor_hint()) return;
+	//if(!settings->get_CanCrouch()) return;
 	bool was_crouched_last_frame = actor_vars.is_crouched;
 
 
@@ -395,4 +400,10 @@ void CONST_INT::ActorBase::PushAwayRigidBodies() {
 			rb->apply_impulse(push_dir * velocity_diff_in_push_dir * push_force, rb->get_position() - rb->get_global_position());
 		}
 	}
+}
+godot::Ref<ActorSettings> *CONST_INT::ActorBase::get_Settings() {
+	return settings;
+}
+void CONST_INT::ActorBase::set_Settings(godot::Ref<ActorSettings> *_settings) {
+	settings = _settings;
 }
