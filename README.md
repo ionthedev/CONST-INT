@@ -13,6 +13,19 @@ If you would like to support the project as it develops, feel free to click the 
 
 The current features of the legecy version (0.5.2 on [Itch.io]([url](https://ionthedev.itch.io/constint))) https://ionthedev.itch.io/constint
 
+
+- [FPS Controller (Sprinting, Crouching, Stair Handling Jumping and Walking)](https://github.com/ionthedev/CONST-INT/issues/4)
+- Inventory Component
+- Enemy with simple EXTREMELY simple follow AI
+- Custom State Machine - used for FPS controller
+- Doors - Rotational and Translational
+- Display Box Message System
+- Event System (resource based)
+- Custom PSX Shader
+- Custom Post Processing Shader
+- Health System
+- Custom GDpsx with helper functions for people wanting to expand the system with their own code.
+
 # Why //CONST //INT
 Godot leverages Entity-Component Patterns, Flyweight Patterns and Observer Patterns masterfully. This probably makes NO sense if you are not a programmer, which is why YOU are the type of person I am making this for. 
 
@@ -27,19 +40,6 @@ That is what I aim for this project to be for Godot.
 Look [Projects](https://github.com/users/ionthedev/projects/2) page and pick and issue a task that isn't already an active issue. Once you feel it's ready, make it a PR and it will go through the process. The project should follow the [Contributing Guidelines set by Godot](https://docs.godotengine.org/en/stable/contributing/ways_to_contribute.html) as close as possible and the project will be built upon to further reflect those guidelines for a solid foundation of mutual understanding.
 
 Also join the discord and hop in the chat if you are interested in joining in on the project.
-
-
-- [FPS Controller (Sprinting, Crouching, Stair Handling Jumping and Walking)](https://github.com/ionthedev/CONST-INT/issues/4)
-- Inventory Component
-- Enemy with simple EXTREMELY simple follow AI
-- Custom State Machine - used for FPS controller
-- Doors - Rotational and Translational
-- Display Box Message System
-- Event System (resource based)
-- Custom PSX Shader
-- Custom Post Processing Shader
-- Health System
-- Custom GDpsx with helper functions for people wanting to expand the system with their own code.
 
 
 # Community
