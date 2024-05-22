@@ -9,6 +9,7 @@
 #include "ActorSettings.h"
 #include <godot_cpp/classes/animation_player.hpp>
 #include <godot_cpp/classes/camera3d.hpp>
+#include <godot_cpp/classes/area3d.hpp>
 #include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
@@ -77,6 +78,7 @@ typedef struct {
 	const float headbob_amount = 0.06f;
 	const float headbob_frequency = 2.4f;
 	float headbob_time;
+	Area3D* currentLadder = nullptr;
 
 
 } actor_vars_t;
@@ -100,8 +102,9 @@ protected:
 	void HandleAirPhysics(double delta);
 	void SetMouseMode(Input::MouseMode _mode) const;
 	bool IsSurfaceTooSteep(Vector3 _normal) const;
-	Ref<ActorSettings> *get_Settings();
-	void set_Settings(Ref<ActorSettings> *_settings);
+	Ref<ActorSettings> get_Settings() const;
+	void set_Settings(const Ref<ActorSettings>& _settings);
+	bool HandleLadderPhysics(double delta);
 
 
 
@@ -117,7 +120,6 @@ public:
 
 	attachments_t attachments{};
 	actor_vars_t actor_vars{};
-	Ref<ActorSettings> *settings;
 
 
 	// Godot Methods
@@ -130,6 +132,7 @@ public:
 	float GetMoveSpeed() const;
 
 private:
+	Ref<ActorSettings> settings;
 	void CreateCollider();
 	void CreateSkull();
 	void CreateHeadHorizontal();

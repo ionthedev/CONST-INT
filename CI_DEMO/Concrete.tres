@@ -1,15 +1,30 @@
-[gd_resource type="StandardMaterial3D" load_steps=8 format=3 uid="uid://clfxk2npp6huy"]
+[gd_resource type="StandardMaterial3D" load_steps=10 format=3 uid="uid://clfxk2npp6huy"]
 
 [ext_resource type="Texture2D" uid="uid://c61ybaha835s8" path="res://bin/CONST_INT/Textures/Concrete015_4K_Color.jpg" id="1_cm73y"]
 [ext_resource type="Texture2D" uid="uid://by0x152walw7d" path="res://bin/CONST_INT/Textures/Concrete002_4K_Color.jpg" id="1_e0nqf"]
 [ext_resource type="Texture2D" uid="uid://dibqcm88tnpo" path="res://bin/CONST_INT/Textures/Concrete015_4K_NormalGL.jpg" id="3_xm6fq"]
-[ext_resource type="Texture2D" uid="uid://c0hqkwtw50go3" path="res://bin/CONST_INT/Textures/Concrete015_4K_Roughness.jpg" id="4_lww2l"]
 [ext_resource type="Texture2D" uid="uid://b5odjfkfnyla7" path="res://bin/CONST_INT/Textures/Concrete002_4K_Displacement.jpg" id="5_6d2em"]
 [ext_resource type="Texture2D" uid="uid://b55mtm4cb4xic" path="res://bin/CONST_INT/Textures/Concrete002_4K_NormalGL.jpg" id="6_eeihy"]
 [ext_resource type="Texture2D" uid="uid://jkcqojfysl6y" path="res://bin/CONST_INT/Textures/Concrete002_4K_Roughness.jpg" id="7_fy6w7"]
 
+[sub_resource type="Gradient" id="Gradient_nqkbs"]
+offsets = PackedFloat32Array(0.0176211, 0.638767)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fsbm3"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ondar"]
+width = 64
+height = 77
+invert = true
+in_3d_space = true
+seamless = true
+seamless_blend_skirt = 1.0
+normalize = false
+color_ramp = SubResource("Gradient_nqkbs")
+noise = SubResource("FastNoiseLite_fsbm3")
+
 [resource]
-diffuse_mode = 1
+diffuse_mode = 2
 albedo_color = Color(0.585062, 0.585062, 0.585062, 1)
 albedo_texture = ExtResource("1_e0nqf")
 albedo_texture_force_srgb = true
@@ -17,9 +32,17 @@ metallic_specular = 0.0
 roughness_texture = ExtResource("7_fy6w7")
 normal_enabled = true
 normal_texture = ExtResource("6_eeihy")
-heightmap_scale = 1.0
+clearcoat = 0.0
+clearcoat_roughness = 1.0
+heightmap_scale = 16.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_flip_tangent = true
+heightmap_flip_binormal = true
 heightmap_texture = ExtResource("5_6d2em")
-detail_mask = ExtResource("4_lww2l")
+detail_enabled = true
+detail_mask = SubResource("NoiseTexture2D_ondar")
 detail_blend_mode = 1
 detail_albedo = ExtResource("1_cm73y")
 detail_normal = ExtResource("3_xm6fq")

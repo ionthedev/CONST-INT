@@ -7,9 +7,9 @@
 void CONST_INT::ActorBase::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_Settings"), &CONST_INT::ActorBase::get_Settings);
 	ClassDB::bind_method(D_METHOD("set_Settings", "_settings"), &ActorBase::set_Settings);
-	ClassDB::add_property("ActorBase", PropertyInfo(Variant::Type(), "Settings"), "set_Settings", "get_Settings");
-
+	ClassDB::add_property("ActorBase", PropertyInfo(Variant::OBJECT, "settings", PROPERTY_HINT_RESOURCE_TYPE, "ActorSettings"), "set_Settings", "get_Settings");
 }
+
 void CONST_INT::ActorBase::_process(const double delta) {
 	CharacterBody3D::_process(delta);
 }
@@ -118,7 +118,7 @@ void CONST_INT::ActorBase::ApplyGravity(const double delta) {
 void CONST_INT::ActorBase::ProcessJump(const double delta) {
 
 	if(Engine().is_editor_hint()) return;
-	//if(!settings->get_CanJump()) return;
+	if(!settings->get_CanJump()) return;
 	if(e_input->is_action_just_pressed("Jump"))
 	{
 	Vector3 v = get_velocity();
@@ -257,7 +257,6 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 void CONST_INT::ActorBase::CI_Move() {
 	const double delta = get_physics_process_delta_time();
 	actor_vars.speed = GetMoveSpeed();
-	HandleCrouch(delta);
 	if(!is_on_floor())
 	{
 		HandleAirPhysics(delta);
@@ -267,12 +266,13 @@ void CONST_INT::ActorBase::CI_Move() {
 
 		HandleGroundPhysics(delta);
 	}
+	HandleCrouch(delta);
 
 }
 float CONST_INT::ActorBase::GetMoveSpeed() const { //This is supposed to be ugly for right now
 	if (actor_vars.is_crouched)
-		return 1.5f;
-	return 3.0f;
+		return settings->get_CrouchSpeed();
+	return settings->get_WalkSpeed();
 }
 
 
@@ -280,7 +280,7 @@ void CONST_INT::ActorBase::HandleCrouch(double delta) {
 
 
 	if(Engine::get_singleton()->is_editor_hint()) return;
-	//if(!settings->get_CanCrouch()) return;
+	if(!settings->get_CanCrouch()) return;
 	bool was_crouched_last_frame = actor_vars.is_crouched;
 
 
@@ -401,9 +401,14 @@ void CONST_INT::ActorBase::PushAwayRigidBodies() {
 		}
 	}
 }
-godot::Ref<ActorSettings> *CONST_INT::ActorBase::get_Settings() {
+Ref<ActorSettings> CONST_INT::ActorBase::get_Settings() const {
 	return settings;
 }
-void CONST_INT::ActorBase::set_Settings(godot::Ref<ActorSettings> *_settings) {
+void CONST_INT::ActorBase::set_Settings(const Ref<ActorSettings> &_settings) {
 	settings = _settings;
+}
+bool CONST_INT::ActorBase::HandleLadderPhysics(double delta) {
+	bool was_climbing_ladder = actor_vars.currentLadder && actor_vars.currentLadder->overlaps_body(this);
+
+	return false;
 }
