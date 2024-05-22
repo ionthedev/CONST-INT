@@ -15,7 +15,9 @@ The current features of the legecy version (0.5.2 on [Itch.io]([url](https://ion
 
 # Why //CONST //INT
 Godot leverages Entity-Component Patterns, Flyweight Patterns and Observer Patterns masterfully. This probably makes NO sense if you are not a programmer, which is why YOU are the type of person I am making this for. 
+
 //CONST //INT is aimed to act as your technical artist and systems engineer, allowing you to just hop in and make 3D games. 
+
 If you are a programmer, //CONST //INT aims to fill in the gaps of systems you don't want to keep writing time and time again; allowing you to just make the tings that are fun for you.
 
 //CONST //INT is inspired greatly by the way Valve and Source engine games feel, and a huge aspect of that is strong toolset that they've unleashed onto their audience allowing them to make amazing games and experiences. 
