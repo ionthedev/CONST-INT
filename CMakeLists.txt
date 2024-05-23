@@ -2,24 +2,30 @@ cmake_minimum_required(VERSION 3.28)
 project(CONST_INT)
 
 set(CMAKE_CXX_STANDARD 17)
-include_directories(godot-cpp/gdextension)
-include_directories(godot-cpp/gen/include)
-include_directories(godot-cpp/gen/include/godot_cpp)
-include_directories(godot-cpp/gen/include/godot_cpp/classes)
-include_directories(godot-cpp/gen/include/godot_cpp/core)
-include_directories(godot-cpp/gen/include/godot_cpp/variant)
-include_directories(godot-cpp/gen/src/classes)
-include_directories(godot-cpp/gen/src/variant)
-include_directories(godot-cpp/include)
-include_directories(godot-cpp/include/godot_cpp)
-include_directories(godot-cpp/include/godot_cpp/classes)
-include_directories(godot-cpp/include/godot_cpp/core)
-include_directories(godot-cpp/include/godot_cpp/templates)
-include_directories(godot-cpp/include/godot_cpp/variant)
-include_directories(godot-cpp/test/src)
-include_directories(src)
 
-add_executable(CONST_INT
+# Include directories
+include_directories(
+        godot-cpp/gdextension
+        godot-cpp/gen/include
+        godot-cpp/gen/include/godot_cpp
+        godot-cpp/gen/include/godot_cpp/classes
+        godot-cpp/gen/include/godot_cpp/core
+        godot-cpp/gen/include/godot_cpp/variant
+        godot-cpp/gen/src/classes
+        godot-cpp/gen/src/variant
+        godot-cpp/include
+        godot-cpp/include/godot_cpp
+        godot-cpp/include/godot_cpp/classes
+        godot-cpp/include/godot_cpp/core
+        godot-cpp/include/godot_cpp/templates
+        godot-cpp/include/godot_cpp/variant
+        godot-cpp/test/src
+        src
+)
+
+# Add executable
+add_executable(
+        CONST_INT
         src/register_types.cpp
         src/register_types.h
         src/gdexample.cpp

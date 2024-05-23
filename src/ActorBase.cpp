@@ -59,7 +59,7 @@ void CONST_INT::ActorBase::MouseLook(const Ref<InputEventMouseMotion> &p_event) 
 
 }
 
-void CONST_INT::ActorBase::CalculateWishDirection() {
+void CONST_INT::ActorBase::CalculateDirection() {
 
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -73,15 +73,17 @@ void CONST_INT::ActorBase::CalculateWishDirection() {
 
 		const Vector3 _dir = forward * actor_vars.inputDir.y + right * actor_vars.inputDir.x;
         // Combine vectors based on input direction
-        actor_vars.wishDir.x = _dir.x * actor_vars.speed;
-		actor_vars.wishDir.z = _dir.z * actor_vars.speed;
+        actor_vars.moveDir.x = _dir.x * actor_vars.speed;
+		actor_vars.moveDir.z = _dir.z * actor_vars.speed;
+
+		actor_vars.wishDir = get_transform().basis.xform(Vector3(actor_vars.moveDir.x, 0, -actor_vars.moveDir.z));
 	}
 	else {
-		actor_vars.wishDir = Vector3(0,0,0);
+		actor_vars.moveDir = Vector3(0,0,0);
 	}
 
-	v.x = actor_vars.wishDir.x;
-	v.z = actor_vars.wishDir.z;
+	v.x = actor_vars.moveDir.x;
+	v.z = actor_vars.moveDir.z;
 	set_velocity(v);
 
 
@@ -256,22 +258,31 @@ bool CONST_INT::ActorBase::StepUpStairsCheck(const double delta) {
 }
 void CONST_INT::ActorBase::CI_Move() {
 	const double delta = get_physics_process_delta_time();
+	if(Engine::get_singleton()->is_editor_hint()) return;
 	actor_vars.speed = GetMoveSpeed();
+	if(!HandleLadderPhysics(delta))
+	{
+
 	if(!is_on_floor())
 	{
-		HandleAirPhysics(delta);
+			HandleAirPhysics(delta);
 	}
 	else
 	{
 
 		HandleGroundPhysics(delta);
 	}
+
 	HandleCrouch(delta);
 
+	}
 }
 float CONST_INT::ActorBase::GetMoveSpeed() const { //This is supposed to be ugly for right now
 	if (actor_vars.is_crouched)
 		return settings->get_CrouchSpeed();
+
+	if(e_input->is_action_pressed("Sprint") && settings->get_CanSprint())
+		return settings->get_SprintSpeed();
 	return settings->get_WalkSpeed();
 }
 
@@ -329,7 +340,7 @@ void CONST_INT::ActorBase::HandleCrouch(double delta) {
 }
 void CONST_INT::ActorBase::HandleGroundPhysics(double delta) {
 	actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
-	CalculateWishDirection();
+	CalculateDirection();
 	ProcessJump(delta);
 	if(!StepUpStairsCheck(delta))
 	{
@@ -409,6 +420,93 @@ void CONST_INT::ActorBase::set_Settings(const Ref<ActorSettings> &_settings) {
 }
 bool CONST_INT::ActorBase::HandleLadderPhysics(double delta) {
 	bool was_climbing_ladder = actor_vars.currentLadder && actor_vars.currentLadder->overlaps_body(this);
+	CalculateDirection();
 
-	return false;
+	// Check if we are currently climbing a ladder. If not, check if we are overlapping a ladder
+	if (!was_climbing_ladder) {
+		actor_vars.currentLadder = nullptr;
+		SceneTree *scene = get_tree();
+		TypedArray<Node> ladder_group = scene->get_nodes_in_group("ladder_area3d");
+		for (int i = 0; i < ladder_group.size(); i++) {
+			Area3D *ladder = Object::cast_to<Area3D>(ladder_group[i]);
+			if (ladder && ladder->overlaps_body(this)) {
+				actor_vars.currentLadder = ladder;
+				break;
+			}
+		}
+	}
+	if (actor_vars.currentLadder == nullptr)
+		return false;
+
+	// Variable creation for ladder calculations
+	Transform3D ladder_global_t = actor_vars.currentLadder->get_global_transform();
+	Vector3 rel_pos_to_ladder = ladder_global_t.affine_inverse().xform(get_global_position());
+
+	float forward_move = actor_vars.inputDir.y;
+	float side_move = actor_vars.inputDir.x;
+
+	// Calculate movement in ladder's local space
+	Vector3 local_forward_move = Vector3(0, 0, forward_move);
+	Vector3 local_side_move = Vector3(side_move, 0, 0);
+
+	// Transform these movements to the ladder's local space
+	Vector3 ladder_forward_move = ladder_global_t.affine_inverse().basis.xform(attachments.camera->get_global_transform().basis.xform(Vector3(0,0,-forward_move)));
+	Vector3 ladder_side_move = ladder_global_t.affine_inverse().basis.xform(attachments.camera->get_global_transform().basis.xform(Vector3(side_move,0,0)));
+
+	// Calculate strafing and climbing velocities
+	float ladder_strafe_vel = settings->get_ClimbSpeed() * (ladder_side_move.x + ladder_forward_move.x);
+	float ladder_climb_vel = settings->get_ClimbSpeed() * -ladder_forward_move.z;
+
+	// Camera bias checks to determine if the player wants to move up or down the ladder
+	float cam_forward_amount = attachments.camera->get_global_transform().basis.get_column(2).normalized().dot(actor_vars.currentLadder->get_basis().get_column(2).normalized());
+	float up_wish = Vector3(0, 1, 0).rotated(Vector3(1, 0, 0), Math::deg_to_rad(-45 * cam_forward_amount)).dot(ladder_forward_move);
+	ladder_climb_vel += settings->get_ClimbSpeed() * up_wish;
+
+
+	// Only climb ladder when moving towards ladder and not being trapped forever within its bounds.
+	bool should_dismount = false;
+	if(!was_climbing_ladder)
+	{
+		bool mounting_from_top = rel_pos_to_ladder.y > actor_vars.currentLadder->get_node<Node3D>("Ladder_Top")->get_position().y;
+		if(mounting_from_top)
+		{
+			if(ladder_climb_vel > 0) should_dismount = true;
+		}
+		else
+		{
+			// If not mounting from top, they are either falling or on the floor
+			if(ladder_global_t.affine_inverse().basis.xform(actor_vars.wishDir).z >= 0) should_dismount = true;
+		}
+
+		// Only stick to ladder if close
+
+		if(Math::abs(rel_pos_to_ladder.z) > 0.1f) should_dismount = true;
+	}
+
+	if(is_on_floor() && ladder_climb_vel <= 0) should_dismount = true;
+
+	if(should_dismount)
+	{
+		actor_vars.currentLadder = nullptr;
+		return false;
+	}
+
+	if(was_climbing_ladder && e_input->is_action_just_pressed("Jump"))
+	{
+		actor_vars.velocity = ladder_global_t.basis.get_column(Vector3::AXIS_Z) * settings->get_jumpForce() * 1.5f;
+
+		actor_vars.currentLadder = nullptr;
+		return false;
+	}
+
+	// Apply the calculated velocity
+	set_velocity(ladder_global_t.basis.xform(Vector3(ladder_strafe_vel, ladder_climb_vel, 0)));
+
+	// Adjust the position to remain aligned with the ladder
+	rel_pos_to_ladder.z = 0; // Ensure the player does not drift along the Z axis
+	set_global_position(ladder_global_t.xform(rel_pos_to_ladder));
+	move_and_slide();
+
+	return true;
 }
+

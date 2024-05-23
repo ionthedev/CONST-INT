@@ -422,7 +422,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_l5wps")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sdrhq"]
-size = Vector3(1.02832, 8.03214, 0.300049)
+size = Vector3(1.02832, 7.95264, 0.300049)
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0021739, 0.00705326, -0.00319219)
@@ -711,7 +711,6 @@ skeleton = NodePath("")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="table_small_12/Radio013"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.396482, 0)
 stream = ExtResource("11_rmhpx")
-autoplay = true
 max_distance = 40.0
 emission_angle_enabled = true
 emission_angle_degrees = 46.0
@@ -938,11 +937,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.7233, 0)
 mesh = SubResource("ArrayMesh_ldhj0")
 skeleton = NodePath("")
 
-[node name="ladder_area3D" type="Area3D" parent="LadderBlock" groups=["ladder_area3D"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 0, 0.12743)
+[node name="ladder_area3D" type="Area3D" parent="LadderBlock" groups=["ladder_area3d"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0763124, 0.328)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LadderBlock/ladder_area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.029, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.05263, -0.354626)
 shape = SubResource("BoxShape3D_sdrhq")
 
 [node name="Ladder_Top" type="Node3D" parent="LadderBlock/ladder_area3D"]

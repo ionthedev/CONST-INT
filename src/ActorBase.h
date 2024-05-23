@@ -22,6 +22,7 @@
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/mesh_library.hpp>
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/classes/physics_body3d.hpp>
 #include <godot_cpp/classes/physics_server3d.hpp>
@@ -94,7 +95,7 @@ protected:
 
 	//CONST_INT Methods
 	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
-	void CalculateWishDirection();
+	void CalculateDirection();
 	void ApplyGravity(double delta);
 	void ProcessJump(double delta);
 	void MakeAttachments();
