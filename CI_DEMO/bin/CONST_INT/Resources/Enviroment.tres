@@ -1,27 +1,45 @@
 [gd_resource type="Environment" load_steps=3 format=3 uid="uid://dbbcwjfceb55u"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_q2rnb"]
-resource_local_to_scene = true
-sky_top_color = Color(0.133364, 0.344884, 0.549096, 1)
-sky_horizon_color = Color(0.647288, 0.6551, 0.670726, 1)
-ground_bottom_color = Color(0.521203, 0.52958, 0.546343, 1)
+[ext_resource type="Material" uid="uid://b74ygjipkpcpa" path="res://bin/CONST_INT/Resources/Sky.tres" id="1_yynck"]
 
 [sub_resource type="Sky" id="Sky_tqajv"]
-sky_material = SubResource("ProceduralSkyMaterial_q2rnb")
+sky_material = ExtResource("1_yynck")
 
 [resource]
 background_mode = 2
+background_energy_multiplier = 1.48
 sky = SubResource("Sky_tqajv")
+sky_rotation = Vector3(0, 1.35398, 0)
 ambient_light_source = 3
 reflected_light_source = 2
 tonemap_mode = 3
+ssr_enabled = true
+ssr_fade_out = 2.21914
 ssao_enabled = true
-sdfgi_read_sky_light = false
-sdfgi_y_scale = 2
-fog_light_color = Color(0.865243, 0.879034, 0.900712, 1)
-fog_light_energy = 0.69
-fog_sun_scatter = 0.15
-fog_density = 0.006
-fog_sky_affect = 0.249
-volumetric_fog_density = 0.023
-volumetric_fog_sky_affect = 0.296
+ssao_radius = 0.79
+ssao_intensity = 3.5
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_bounce_feedback = 1.62
+sdfgi_min_cell_size = 0.4
+sdfgi_energy = 1.395
+sdfgi_normal_bias = 1.595
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.23
+glow_strength = 1.05
+glow_blend_mode = 0
+glow_hdr_scale = 2.5
+glow_hdr_luminance_cap = 5.04
+glow_map_strength = 0.45
+fog_enabled = true
+fog_sky_affect = 0.05
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0041
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_anisotropy = 0.18
+volumetric_fog_ambient_inject = 7.97
+adjustment_enabled = true
+adjustment_contrast = 1.2
+adjustment_saturation = 1.1

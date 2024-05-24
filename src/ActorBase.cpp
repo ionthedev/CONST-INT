@@ -117,7 +117,7 @@ void CONST_INT::ActorBase::ApplyGravity(const double delta) {
 
 }
 
-void CONST_INT::ActorBase::ProcessJump(const double delta) {
+void CONST_INT::ActorBase::ProcessJump() {
 
 	if(Engine().is_editor_hint()) return;
 	if(!settings->get_CanJump()) return;
@@ -260,7 +260,7 @@ void CONST_INT::ActorBase::CI_Move() {
 	const double delta = get_physics_process_delta_time();
 	if(Engine::get_singleton()->is_editor_hint()) return;
 	actor_vars.speed = GetMoveSpeed();
-	if(!HandleLadderPhysics(delta))
+	if(!HandleLadderPhysics())
 	{
 
 	if(!is_on_floor())
@@ -333,7 +333,7 @@ void CONST_INT::ActorBase::HandleCrouch(double delta) {
 	colShape->set_height((actor_vars.is_crouched) ? actor_vars.original_height - actor_vars.crouch_translate : actor_vars.original_height);
 
 	attachments.collider->set_shape(colShape);
-	colPos.y = colShape->get_height() / 2;
+	colPos.y = (float)colShape->get_height() / 2.0f;
 	attachments.collider->set_position(colPos);
 	//UtilityFunctions::print(actor_vars._snapped_to_stairs_last_frame);
 
@@ -341,7 +341,7 @@ void CONST_INT::ActorBase::HandleCrouch(double delta) {
 void CONST_INT::ActorBase::HandleGroundPhysics(double delta) {
 	actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 	CalculateDirection();
-	ProcessJump(delta);
+	ProcessJump();
 	if(!StepUpStairsCheck(delta))
 	{
 		PushAwayRigidBodies();
@@ -381,7 +381,7 @@ void CONST_INT::ActorBase::SmoothCamera(double delta) {
 void CONST_INT::ActorBase::HeadBob(double delta) {
 	actor_vars.headbob_time += (float)delta * get_velocity().length();
 	Transform3D _t = attachments.camera->get_transform();
-	Vector3 o = _t.origin;
+	Vector3 o;
 
 	double t = actor_vars.headbob_time;
 	double f = actor_vars.headbob_frequency;
@@ -399,7 +399,7 @@ void CONST_INT::ActorBase::PushAwayRigidBodies() {
 		Ref<KinematicCollision3D> c = get_slide_collision(i);
 		if(c->get_collider()->is_class("RigidBody3D"))
 		{
-			RigidBody3D *rb = Object::cast_to<RigidBody3D>(c->get_collider());
+			auto *rb = Object::cast_to<RigidBody3D>(c->get_collider());
 			Vector3 push_dir = -c->get_normal();
 			real_t velocity_diff_in_push_dir = get_velocity().dot(push_dir) - rb->get_linear_velocity().dot(push_dir);
 			velocity_diff_in_push_dir = Math::max(0.0f, velocity_diff_in_push_dir);
@@ -418,7 +418,7 @@ Ref<ActorSettings> CONST_INT::ActorBase::get_Settings() const {
 void CONST_INT::ActorBase::set_Settings(const Ref<ActorSettings> &_settings) {
 	settings = _settings;
 }
-bool CONST_INT::ActorBase::HandleLadderPhysics(double delta) {
+bool CONST_INT::ActorBase::HandleLadderPhysics() {
 	bool was_climbing_ladder = actor_vars.currentLadder && actor_vars.currentLadder->overlaps_body(this);
 	CalculateDirection();
 
@@ -428,7 +428,7 @@ bool CONST_INT::ActorBase::HandleLadderPhysics(double delta) {
 		SceneTree *scene = get_tree();
 		TypedArray<Node> ladder_group = scene->get_nodes_in_group("ladder_area3d");
 		for (int i = 0; i < ladder_group.size(); i++) {
-			Area3D *ladder = Object::cast_to<Area3D>(ladder_group[i]);
+			auto *ladder = Object::cast_to<Area3D>(ladder_group[i]);
 			if (ladder && ladder->overlaps_body(this)) {
 				actor_vars.currentLadder = ladder;
 				break;
@@ -444,10 +444,6 @@ bool CONST_INT::ActorBase::HandleLadderPhysics(double delta) {
 
 	float forward_move = actor_vars.inputDir.y;
 	float side_move = actor_vars.inputDir.x;
-
-	// Calculate movement in ladder's local space
-	Vector3 local_forward_move = Vector3(0, 0, forward_move);
-	Vector3 local_side_move = Vector3(side_move, 0, 0);
 
 	// Transform these movements to the ladder's local space
 	Vector3 ladder_forward_move = ladder_global_t.affine_inverse().basis.xform(attachments.camera->get_global_transform().basis.xform(Vector3(0,0,-forward_move)));

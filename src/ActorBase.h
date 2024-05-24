@@ -97,7 +97,7 @@ protected:
 	void MouseLook(const Ref<InputEventMouseMotion> &p_event);
 	void CalculateDirection();
 	void ApplyGravity(double delta);
-	void ProcessJump(double delta);
+	void ProcessJump();
 	void MakeAttachments();
 	void HandleGroundPhysics(double delta);
 	void HandleAirPhysics(double delta);
@@ -105,7 +105,7 @@ protected:
 	bool IsSurfaceTooSteep(Vector3 _normal) const;
 	Ref<ActorSettings> get_Settings() const;
 	void set_Settings(const Ref<ActorSettings>& _settings);
-	bool HandleLadderPhysics(double delta);
+	bool HandleLadderPhysics();
 
 
 

@@ -15,44 +15,44 @@ class ActorSettings : public Resource {
 	GDCLASS(ActorSettings, Resource)
 
 public:
-	void set_WalkSpeed(const float _speed);
+	void set_WalkSpeed(float _speed);
 	float get_WalkSpeed() const;
 
-	void set_CrouchSpeed(const float _speed);
+	void set_CrouchSpeed(float _speed);
 	float get_CrouchSpeed() const;
 
-	void set_SprintSpeed(const float _speed);
+	void set_SprintSpeed(float _speed);
 	float get_SprintSpeed() const;
 
-	void set_ProneSpeed(const float _speed);
+	void set_ProneSpeed(float _speed);
 	float get_ProneSpeed() const;
 
-	void set_ClimbSpeed(const float _speed);
+	void set_ClimbSpeed(float _speed);
 	float get_ClimbSpeed() const;
 
 
-	void set_jumpForce(const float _force);
+	void set_jumpForce(float _force);
 	float get_jumpForce() const;
 
-	void set_Mass(const float _mass);
+	void set_Mass(float _mass);
 	float get_Mass() const;
 
-	void set_CanCrouch(const bool _value);
+	void set_CanCrouch(bool _value);
 	bool get_CanCrouch() const;
 
-	void set_CanSprint(const bool _value);
+	void set_CanSprint(bool _value);
 	bool get_CanSprint() const;
 
-	void set_CanProne(const bool _value);
+	void set_CanProne(bool _value);
 	bool get_CanProne() const;
 
-	void set_CanJump(const bool _value);
+	void set_CanJump(bool _value);
 	bool get_CanJump() const;
 
-	void set_CanHeadBob(const bool _value);
+	void set_CanHeadBob(bool _value);
 	bool get_CanHeadBob() const;
 
-	void set_CanClimbLadder(const bool _value);
+	void set_CanClimbLadder(bool _value);
 	bool get_CanClimbLadder() const;
 
 
