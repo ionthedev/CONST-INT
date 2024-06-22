@@ -3,6 +3,9 @@
 #include <godot_cpp/core/class_db.hpp>
 
 #include "Actors/Player.h"
+#include "Components/InteractionComponent.h"
+#include "Core/ComponentNode.h"
+#include "Core/InputHandler.h"
 
 
 using namespace godot;
@@ -14,6 +17,8 @@ void initializer(const ModuleInitializationLevel level) {
 
   ClassDB::register_class<Player>();
   ClassDB::register_class<ActorSettings>();
+  ClassDB::register_class<InputHandler>();
+  ClassDB::register_class<InteractionComponent>();
 }
 
 void terminator(ModuleInitializationLevel level) {}

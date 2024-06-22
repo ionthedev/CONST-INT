@@ -59,29 +59,30 @@ using namespace godot;
 };
 
 	struct actor_vars_t{
-	Vector2 mouse_motion;
-	Vector2 inputDir;
-	Vector3 wishDir;
-	Vector3 moveDir;
-	Vector3 velocity;
-	float speed;
-	float jump_velocity = 5.0f;
-	float acceleration;
-	Vector3 mouse_rotation;
-	float mouse_sensitivity;
-	bool initialized;
-	const float gravity = 9.85f;
-	const float crouch_translate = 0.125f;
-	const float crouch_jump_add = crouch_translate * 0.9f;
-	bool is_crouched = false;
-	const float max_step_height = 0.25f;
-	float original_height;
-	bool _snapped_to_stairs_last_frame = false;
-	uint64_t _last_frame_was_on_floor;
-	const float headbob_amount = 0.06f;
-	const float headbob_frequency = 2.4f;
-	float headbob_time;
-	Area3D* currentLadder = nullptr;
+		Vector2 mouse_motion;
+		Vector2 inputDir;
+		Vector3 wishDir;
+		Vector3 moveDir;
+		Vector3 velocity;
+		float speed;
+		float jump_velocity = 5.0f;
+		float acceleration;
+		Vector3 mouse_rotation;
+		float mouse_sensitivity;
+		bool initialized;
+		const float gravity = 9.85f;
+		const float crouch_translate = 0.125f;
+		const float crouch_jump_add = crouch_translate * 0.9f;
+		bool is_crouched = false;
+		const float max_step_height = 0.25f;
+		float original_height;
+		bool _snapped_to_stairs_last_frame = false;
+		uint64_t _last_frame_was_on_floor;
+		const float headbob_amount = 0.06f;
+		const float headbob_frequency = 2.4f;
+		float headbob_time;
+		Area3D* currentLadder = nullptr;
+		Variant interact_cast_result = nullptr;
 
 
 };
@@ -127,6 +128,8 @@ public:
 	void _ready() override;
 	void _physics_process(double delta) override;
 	void _unhandled_input(const Ref<InputEvent> &p_event) override;
+
+	void ProcessInteract();
 
 	void CI_Move();
 	float GetMoveSpeed() const;
