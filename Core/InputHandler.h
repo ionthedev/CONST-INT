@@ -14,8 +14,8 @@
 
 using namespace godot;
 
-class InputHandler : public Input {
-    GDCLASS(InputHandler, Input)
+class InputHandler : public Object {
+    GDCLASS(InputHandler, Object)
 
 protected:
     static void _bind_methods();

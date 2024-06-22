@@ -5,6 +5,8 @@
 
 #include "Player.h"
 
+#include "Components/InteractionComponent.h"
+
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_Settings"), &Player::get_Settings);
@@ -35,6 +37,7 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("CreateCamera"), &Player::CreateCamera);
 	ClassDB::bind_method(D_METHOD("CreateBody"), &Player::CreateBody);
 	ClassDB::bind_method(D_METHOD("CreateStepRays"), &Player::CreateStepRays);
+	ADD_SIGNAL(MethodInfo("player_jumped"));
 
 }
 
@@ -57,6 +60,32 @@ void Player::_unhandled_input(const Ref<InputEvent> &p_event) {
 	if (p_event->is_class("InputEventMouseMotion")) {
 		auto *mouseMotionEvent = dynamic_cast<InputEventMouseMotion *>(*p_event);
 		MouseLook(mouseMotionEvent);
+	}
+}
+
+void Player::ProcessInteract() {
+	if (!actor_vars.interact_cast_result) {
+		return;
+	}
+
+	Node *interactable_node = Object::cast_to<Node>(actor_vars.interact_cast_result.operator Object *());
+	if (!interactable_node) {
+		return;
+	}
+
+
+	bool interactable = interactable_node->has_user_signal("start_interact");
+
+	if (interactable) {
+		if (e_input->is_action_just_pressed("Interact")) {
+			UtilityFunctions::print("Interacting with: " + interactable_node->get_name());
+			interactable_node->emit_signal("start_interact");
+		}
+
+		if (e_input->is_action_just_released("Interact")) {
+			UtilityFunctions::print("Stopped interacting with: " + interactable_node->get_name());
+			interactable_node->emit_signal("end_interact");
+		}
 	}
 }
 
@@ -152,9 +181,10 @@ void Player::ProcessJump() {
 	if(!settings->get_CanJump()) return;
 	if(e_input->is_action_just_pressed("Jump"))
 	{
-	Vector3 v = get_velocity();
-	v.y = actor_vars.jump_velocity;
-	set_velocity(v);
+		Vector3 v = get_velocity();
+		v.y = actor_vars.jump_velocity;
+		set_velocity(v);
+		emit_signal("player_jumped");
 	}
 
 }
@@ -289,6 +319,8 @@ void Player::CI_Move() {
 	const double delta = get_physics_process_delta_time();
 	if(Engine::get_singleton()->is_editor_hint()) return;
 	actor_vars.speed = GetMoveSpeed();
+	InteractionCast();
+	ProcessInteract();
 	if(!HandleLadderPhysics())
 	{
 
@@ -442,17 +474,46 @@ void Player::PushAwayRigidBodies() {
 	}
 }
 
+
 void Player::InteractionCast() {
-	Camera3D cam = *attachments.camera;
-	PhysicsDirectSpaceState3D space_state = *cam.get_world_3d()->get_direct_space_state();
-	/*Ref<Viewport> viewport = get_tree()->get_root();
-	Vector2 viewport_size = viewport->get_visible_rect().size;
-	Vector2 screen_center = viewport_size / 2;
-	Vector3 origin = cam.project_ray_normal(screen_center);
-	Vector3 end = origin + cam.project_ray_normal(screen_center) * get_Settings()->get_interactDistance();
-	Ref<PhysicsRayQueryParameters3D> query = PhysicsRayQueryParameters3D::create(origin, end);
-	query->set_collide_with_bodies(true);
-	Dictionary result = space_state.intersect_ray(query);*/
+    Camera3D *cam = Object::cast_to<Camera3D>(attachments.camera);
+    PhysicsDirectSpaceState3D *space_state = Object::cast_to<PhysicsDirectSpaceState3D>(cam->get_world_3d()->get_direct_space_state());
+    Viewport *viewport = get_viewport();
+    Vector2 viewport_size = viewport->get_visible_rect().get_size();
+    Vector2 screen_center = viewport_size / 2;
+    Vector3 origin = cam->project_ray_origin(screen_center);
+    Vector3 end = origin + cam->project_ray_normal(screen_center) * get_Settings()->get_interactDistance();
+
+    Ref<PhysicsRayQueryParameters3D> query = PhysicsRayQueryParameters3D::create(origin, end);
+    query->set_from(origin);
+    query->set_to(end);
+    query->set_collide_with_bodies(true);
+    query->set_exclude(Array::make(this)); // Exclude the player
+
+    Dictionary result = space_state->intersect_ray(query);
+    Variant current_cast_result = result.get("collider", Variant());
+
+
+    if (current_cast_result != actor_vars.interact_cast_result) {
+
+        if (actor_vars.interact_cast_result) {
+            Node *interactable_node = Object::cast_to<Node>(actor_vars.interact_cast_result.operator Object *());
+            if (interactable_node && interactable_node->has_user_signal("out_focus")) {
+                UtilityFunctions::print(interactable_node->get_name() + StringName(" unfocused"));
+                interactable_node->emit_signal("out_focus");
+            }
+        }
+
+        actor_vars.interact_cast_result = current_cast_result;
+
+        if (actor_vars.interact_cast_result) {
+            Node *interactable_node = Object::cast_to<Node>(actor_vars.interact_cast_result.operator Object *());
+            if (interactable_node && interactable_node->has_user_signal("in_focus")) {
+                UtilityFunctions::print(interactable_node->get_name() + StringName(" focused"));
+                interactable_node->emit_signal("in_focus");
+            }
+        }
+    }
 }
 
 Ref<ActorSettings> Player::get_Settings() const {
