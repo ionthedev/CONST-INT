@@ -133,6 +133,7 @@ void Player::MakeAttachments() {
 	actor_vars.initialized = true;
 }
 void Player::SetMouseMode(const Input::MouseMode _mode) const {
+	if(Engine().is_editor_hint()) return;
 	e_input->set_mouse_mode(_mode);
 }
 
