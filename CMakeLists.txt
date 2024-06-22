@@ -13,7 +13,11 @@ include_directories(
 # Setup project as dynamic library with source code
 add_library("${PROJECT_NAME}" SHARED "${SOURCES}"
         Actors/Player.cpp
-        Core/InputHandler.h)
+        Core/InputHandler.h
+        Components/InteractionComponent.cpp
+        Components/InteractionComponent.h
+        Core/ComponentNode.cpp
+        Core/ComponentNode.h)
 
 # Add godot cpp to the library
 target_link_libraries(${PROJECT_NAME} PRIVATE "godot-cpp" ${TARGET_LINK_LIBRARIES_OPTIONS})
