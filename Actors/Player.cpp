@@ -263,6 +263,7 @@ void Player::CreateStepRays() {
 }
 
 void Player::SnapDownToStairsCheck() {
+	if(!settings->get_CanClimbStairs()) return;
 	bool did_snap = false;
 
 
@@ -272,7 +273,7 @@ void Player::SnapDownToStairsCheck() {
 	if(!is_on_floor() && get_velocity().y <= 0 && (was_on_floor_last_frame || actor_vars._snapped_to_stairs_last_frame) && floor_below)
 	{
 		Ref<KinematicCollision3D> body_test_result = new KinematicCollision3D();
-		if(test_move(get_global_transform(), Vector3(0, -actor_vars.max_step_height, 0), body_test_result))
+		if(test_move(get_global_transform(), Vector3(0, -settings->get_maxStairHeight(), 0), body_test_result))
 		{
 			SaveCamPosForSmoothing();
 			{
@@ -289,18 +290,19 @@ void Player::SnapDownToStairsCheck() {
 
 }
 bool Player::StepUpStairsCheck(const double delta) {
+	if(!settings->get_CanClimbStairs()) return false;
 	if (!is_on_floor() && !actor_vars._snapped_to_stairs_last_frame)
 		return false;
 	const Vector3 expected_move_motion = get_velocity() * Vector3(1,0,1) * static_cast<float>(delta);
 
 	//Makes sure you can't step up if something is blocking you
-	const Transform3D step_pos_with_clearance = get_global_transform().translated(expected_move_motion + Vector3(0, actor_vars.max_step_height *2, 0));
-	if (auto *down_check_result = new KinematicCollision3D(); test_move(step_pos_with_clearance, Vector3(0, -actor_vars.max_step_height*2.0f, 0), down_check_result))
+	const Transform3D step_pos_with_clearance = get_global_transform().translated(expected_move_motion + Vector3(0, settings->get_maxStairHeight() *2, 0));
+	if (auto *down_check_result = new KinematicCollision3D(); test_move(step_pos_with_clearance, Vector3(0, -settings->get_maxStairHeight()*2.0f, 0), down_check_result))
 	{
 		//how much higher is the step_height
 		const float step_height = (step_pos_with_clearance.origin + down_check_result->get_travel() - get_global_position()).y;
-		if(step_height > actor_vars.max_step_height || step_height <= 0.01f || (down_check_result->get_position() - get_global_position()).y > actor_vars.max_step_height) return false;
-		attachments.stepAheadRay->set_global_position(down_check_result->get_position() + Vector3(0, actor_vars.max_step_height, 0) + expected_move_motion.normalized() * 0.025f);
+		if(step_height > settings->get_maxStairHeight() || step_height <= 0.01f || (down_check_result->get_position() - get_global_position()).y > settings->get_maxStairHeight()) return false;
+		attachments.stepAheadRay->set_global_position(down_check_result->get_position() + Vector3(0, settings->get_maxStairHeight(), 0) + expected_move_motion.normalized() * 0.025f);
 		attachments.stepAheadRay->force_raycast_update();
 		//UtilityFunctions::print(step_height);
 		if(attachments.stepAheadRay->is_colliding() && !IsSurfaceTooSteep(attachments.stepAheadRay->get_collision_normal()))
@@ -364,7 +366,7 @@ void Player::HandleCrouch(double delta) {
 	{
 		actor_vars.is_crouched = true;
 	}
-	else if (actor_vars.is_crouched && !test_move(get_transform(), Vector3(0, actor_vars.crouch_translate,0)))
+	else if (actor_vars.is_crouched && !test_move(get_transform(), Vector3(0, settings->get_crouchAmount(),0)))
 	{
 		actor_vars.is_crouched = false;
 	}
@@ -373,7 +375,7 @@ void Player::HandleCrouch(double delta) {
 
 	if(was_crouched_last_frame != actor_vars.is_crouched && !is_on_floor() && !actor_vars._snapped_to_stairs_last_frame)
 	{
-		translate_y_if_possible = (actor_vars.is_crouched) ? actor_vars.crouch_jump_add : -actor_vars.crouch_jump_add;
+		translate_y_if_possible = (actor_vars.is_crouched) ? settings->get_crouchJumpValue() : -settings->get_crouchJumpValue();
 	}
 
 	Vector3 cPos = attachments.skull->get_position();
@@ -385,13 +387,13 @@ void Player::HandleCrouch(double delta) {
 		pos.y += result->get_travel().y;
 		set_position(pos);
 		cPos.y -= result->get_travel().y;
-		cPos.y = Math::clamp(cPos.y, -actor_vars.crouch_translate, 1.0f);
+		cPos.y = Math::clamp(cPos.y, -settings->get_crouchAmount(), 1.0f);
 		attachments.skull->set_position(cPos);
 	}
 
 
-	attachments.skull->set_position(Vector3(0, Math::move_toward(attachments.skull->get_position().y, (actor_vars.is_crouched) ? actor_vars.crouch_translate : 1 , 3.0f * (float)delta),0));
-	colShape->set_height((actor_vars.is_crouched) ? actor_vars.original_height - actor_vars.crouch_translate : actor_vars.original_height);
+	attachments.skull->set_position(Vector3(0, Math::move_toward(attachments.skull->get_position().y, (actor_vars.is_crouched) ? settings->get_crouchAmount() : 1 , 3.0f * (float)delta),0));
+	colShape->set_height((actor_vars.is_crouched) ? actor_vars.original_height - settings->get_crouchAmount() : actor_vars.original_height);
 
 	attachments.collider->set_shape(colShape);
 	colPos.y = (float)colShape->get_height() / 2.0f;
@@ -428,7 +430,7 @@ void Player::SmoothCamera(double delta) {
 	if(SavedCameraPos == attachments.head_h->get_position()) return;
 	attachments.head_h->set_global_position(SavedCameraPos);
 	Vector3 camSmoothPos = attachments.camera->get_position();
-	camSmoothPos.y = Math::clamp(attachments.camera->get_position().y, -actor_vars.crouch_translate, actor_vars.crouch_translate);
+	camSmoothPos.y = Math::clamp(attachments.camera->get_position().y, -settings->get_crouchAmount(), settings->get_crouchAmount());
 	float moveAmount = Math::max(get_velocity().length() * (float)delta, actor_vars.speed/2 * (float)delta);
 	camSmoothPos.y = Math::move_toward(camSmoothPos.y, 0.0f, moveAmount);
 	attachments.head_h->set_position(camSmoothPos);
@@ -440,13 +442,14 @@ void Player::SmoothCamera(double delta) {
 	}
 }
 void Player::HeadBob(double delta) {
+	if(!settings->get_CanHeadBob()) return;
 	actor_vars.headbob_time += (float)delta * get_velocity().length();
 	Transform3D _t = attachments.camera->get_transform();
 	Vector3 o;
 
 	double t = actor_vars.headbob_time;
-	double f = actor_vars.headbob_frequency;
-	double a = actor_vars.headbob_amount;
+	double f = settings->get_HeadBobFrequency();
+	double a = settings->get_HeadBobAmount();
 
 	double x = cos(t * f * 0.5f) * a;
 	double y = sin(t * f) * a;
@@ -454,6 +457,7 @@ void Player::HeadBob(double delta) {
 	_t.set_origin(o);
 	attachments.camera->set_transform(_t);
 }
+
 void Player::PushAwayRigidBodies() {
 	for(int i = 0; i < get_slide_collision_count(); i++)
 	{

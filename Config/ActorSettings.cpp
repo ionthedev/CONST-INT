@@ -26,9 +26,9 @@ void ActorSettings::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_CanSprint", "_value"), &ActorSettings::set_CanSprint);
 	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::BOOL, "can_sprint"), "set_CanSprint", "get_CanSprint");
 
-	ClassDB::bind_method(D_METHOD("get_ProneSpeed"), &ActorSettings::get_ProneSpeed);
-	ClassDB::bind_method(D_METHOD("set_ProneSpeed", "_speed"), &ActorSettings::set_ProneSpeed);
-	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "prone_speed", PROPERTY_HINT_RANGE, "0,20,0.01"), "set_ProneSpeed", "get_ProneSpeed");
+	//ClassDB::bind_method(D_METHOD("get_ProneSpeed"), &ActorSettings::get_ProneSpeed);
+	//ClassDB::bind_method(D_METHOD("set_ProneSpeed", "_speed"), &ActorSettings::set_ProneSpeed);
+	//ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "prone_speed", PROPERTY_HINT_RANGE, "0,20,0.01"), "set_ProneSpeed", "get_ProneSpeed");
 
 	ClassDB::bind_method(D_METHOD("get_CanProne"), &ActorSettings::get_CanProne);
 	ClassDB::bind_method(D_METHOD("set_CanProne", "_value"), &ActorSettings::set_CanProne);
@@ -64,6 +64,35 @@ void ActorSettings::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_interactDistance", "_value"), &ActorSettings::set_interactDistance);
 	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "interact_distance"), "set_interactDistance", "get_interactDistance");
 
+
+	ClassDB::bind_method(D_METHOD("get_crouchAmount"), &ActorSettings::get_crouchAmount);
+	ClassDB::bind_method(D_METHOD("set_crouchAmount", "_value"), &ActorSettings::set_crouchAmount);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "crouch_amount"), "set_crouchAmount", "get_crouchAmount");
+
+
+	ClassDB::bind_method(D_METHOD("get_crouchJumpMultiplier"), &ActorSettings::get_crouchJumpMultiplier);
+	ClassDB::bind_method(D_METHOD("set_crouchJumpMultiplier", "_value"), &ActorSettings::set_crouchJumpMultiplier);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "crouch_jump_multiplier"), "set_crouchJumpMultiplier", "get_crouchJumpMultiplier");
+
+
+	ClassDB::bind_method(D_METHOD("get_HeadBobAmount"), &ActorSettings::get_HeadBobAmount);
+	ClassDB::bind_method(D_METHOD("set_HeadBobAmount", "_value"), &ActorSettings::set_HeadBobAmount);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "headbob_amount"), "set_HeadBobAmount", "get_HeadBobAmount");
+
+
+	ClassDB::bind_method(D_METHOD("get_HeadBobFrequency"), &ActorSettings::get_HeadBobFrequency);
+	ClassDB::bind_method(D_METHOD("set_HeadBobFrequency", "_value"), &ActorSettings::set_HeadBobFrequency);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "headbob_amount"), "set_HeadBobFrequency", "get_HeadBobFrequency");
+
+
+	ClassDB::bind_method(D_METHOD("get_CanClimbStairs"), &ActorSettings::get_CanClimbStairs);
+	ClassDB::bind_method(D_METHOD("set_CanClimbStairs", "_value"), &ActorSettings::set_CanClimbStairs);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::BOOL, "canClimbStairs"), "set_CanClimbStairs", "get_CanClimbStairs");
+
+
+	ClassDB::bind_method(D_METHOD("get_maxStairHeight"), &ActorSettings::get_maxStairHeight);
+	ClassDB::bind_method(D_METHOD("set_maxStairHeight", "_value"), &ActorSettings::set_maxStairHeight);
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "max_step_height"), "set_maxStairHeight", "get_maxStairHeight");
 }
 
 
@@ -73,6 +102,27 @@ void ActorSettings::set_CrouchSpeed(const float _speed) {
 float ActorSettings::get_CrouchSpeed() const {
 	return crouchSpeed;
 }
+
+void ActorSettings::set_crouchAmount(float _value) {
+	crouch_amount = _value;
+}
+
+float ActorSettings::get_crouchAmount() const {
+	return crouch_amount;
+}
+
+void ActorSettings::set_crouchJumpMultiplier(float _value) {
+	crouch_jump_multiplier = _value;
+}
+
+float ActorSettings::get_crouchJumpMultiplier() {
+	return crouch_jump_multiplier;
+}
+
+float ActorSettings::get_crouchJumpValue() const {
+	return crouch_amount * crouch_jump_multiplier;
+}
+
 float ActorSettings::get_WalkSpeed() const {
 	return walkSpeed;
 }
@@ -122,10 +172,10 @@ bool ActorSettings::get_CanSprint() const {
 	return canSprint;
 }
 void ActorSettings::set_CanProne(const bool _value) {
-	canProne = _value;
+	//canProne = _value;
 }
 bool ActorSettings::get_CanProne() const {
-	return canProne;
+	return true;
 }
 void ActorSettings::set_CanJump(const bool _value) {
 	canJump = _value;
@@ -139,11 +189,44 @@ void ActorSettings::set_CanHeadBob(const bool _value) {
 bool ActorSettings::get_CanHeadBob() const {
 	return canHeadBob;
 }
+
+void ActorSettings::set_HeadBobAmount(float _value) {
+	headbob_amount = _value;
+}
+
+float ActorSettings::get_HeadBobAmount() const {
+	return headbob_amount;
+}
+
+void ActorSettings::set_HeadBobFrequency(float _value) {
+	headbob_frequency = _value;
+}
+
+float ActorSettings::get_HeadBobFrequency() const {
+	return headbob_frequency;
+}
+
 void ActorSettings::set_CanClimbLadder(const bool _value) {
 	canClimbLadder = _value;
 }
 bool ActorSettings::get_CanClimbLadder() const {
 	return canClimbLadder;
+}
+
+void ActorSettings::set_CanClimbStairs(bool _value) {
+	canClimbStairs = _value;
+}
+
+bool ActorSettings::get_CanClimbStairs() const {
+	return canClimbStairs;
+}
+
+void ActorSettings::set_maxStairHeight(float _value) {
+	max_step_height = _value;
+}
+
+float ActorSettings::get_maxStairHeight() const {
+	return max_step_height;
 }
 
 void ActorSettings::set_interactDistance(float _value) {
