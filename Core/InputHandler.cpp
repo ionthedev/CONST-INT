@@ -6,14 +6,14 @@
 #include "InputHandler.h"
 
 
-InputHandler* InputHandler::input_instance = nullptr; // Initialize static member
-
 
 void InputHandler::_bind_methods() {
     ClassDB::bind_method(D_METHOD("UpdateKeyMapping", "key_name", "key"), &InputHandler::UpdateKeyMapping);
     ClassDB::bind_method(D_METHOD("get_key_as_string", "key_name"), &InputHandler::get_key_as_string);
-    ClassDB::bind_static_method("get_singleton", InputHandler::get_singleton());
+    ClassDB::bind_static_method(get_class_static(), D_METHOD("get_singleton"), &InputHandler::get_singleton);
     ClassDB::bind_method(D_METHOD("_input", "event"), &InputHandler::_input);
+    ClassDB::bind_method(D_METHOD("print_test"), &InputHandler::print_test);
+    ClassDB::bind_method(D_METHOD("initialize_default_keys"), &InputHandler::initialize_default_keys);
 }
 void InputHandler::UpdateKeyMapping(const StringName &key_name, Key key) {
     if (key_name == StringName("move_forward")) k_move_forward = key;
@@ -26,6 +26,11 @@ void InputHandler::UpdateKeyMapping(const StringName &key_name, Key key) {
     else if (key_name == StringName("interact")) k_interact = key;
     else if (key_name == StringName("inventory")) k_inventory  = key;
     else if (key_name == StringName("pause")) k_pause = key;
+}
+
+InputHandler * InputHandler::get_singleton() {
+    static InputHandler *instance = memnew(InputHandler);
+    return instance;
 }
 
 void InputHandler::_input(const Ref<InputEvent> &event) {
@@ -65,16 +70,17 @@ String InputHandler::get_key_as_string(const StringName &key_name) {
     else if (key_name == StringName("inventory")) key = k_inventory ;
     else if (key_name == StringName("pause")) key = k_pause;
 
-    Ref<InputEventKey> key_event;
+    Ref<InputEventKey> key_event = memnew(InputEventKey);
     key_event->set_keycode(key);
 
-    return key_event->as_text_keycode();
+
+
+    return String::num_int64((key_event->get_keycode()));
+
+}
+
+void InputHandler::print_test() {
+    UtilityFunctions::print("Holy fucking shit!");
 }
 
 
-InputHandler* InputHandler::get_singleton() {
-    if (input_instance == nullptr) {
-        input_instance = new InputHandler();
-    }
-    return input_instance;
-}
