@@ -17,8 +17,8 @@ void initializer(const ModuleInitializationLevel level) {
 
   ClassDB::register_class<Player>();
   ClassDB::register_class<ActorSettings>();
-  ClassDB::register_class<InputHandler>();
   ClassDB::register_class<InteractionComponent>();
+  ClassDB::register_class<InputHandler>();
 }
 
 void terminator(ModuleInitializationLevel level) {}
