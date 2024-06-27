@@ -404,6 +404,8 @@ void Player::HandleCrouch(double delta) {
 void Player::HandleGroundPhysics(double delta) {
 	actor_vars._last_frame_was_on_floor = Engine().get_physics_frames();
 	CalculateDirection();
+
+	HeadBob(delta);
 	ProcessJump();
 	if(!StepUpStairsCheck(delta))
 	{
@@ -414,7 +416,6 @@ void Player::HandleGroundPhysics(double delta) {
 		SnapDownToStairsCheck();
 	}
 
-	HeadBob(delta);
 }
 void Player::HandleAirPhysics(double delta) {
 	move_and_slide();
@@ -527,6 +528,7 @@ void Player::set_Settings(const Ref<ActorSettings> &_settings) {
 	settings = _settings;
 }
 bool Player::HandleLadderPhysics() {
+	if(!settings->get_CanClimbLadder()) return false;
 	bool was_climbing_ladder = actor_vars.currentLadder && actor_vars.currentLadder->overlaps_body(this);
 	CalculateDirection();
 

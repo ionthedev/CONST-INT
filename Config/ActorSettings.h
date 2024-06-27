@@ -108,10 +108,7 @@ private:
 
     bool canHeadBob = true;
     float headbob_amount = 0.06f;
-    float headbob_frequency = 0.25f;
+    float headbob_frequency = 2.4f;
 };
-
-
-
 
 #endif //ACTORSETTINGS_H
