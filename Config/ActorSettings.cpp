@@ -82,7 +82,7 @@ void ActorSettings::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_HeadBobFrequency"), &ActorSettings::get_HeadBobFrequency);
 	ClassDB::bind_method(D_METHOD("set_HeadBobFrequency", "_value"), &ActorSettings::set_HeadBobFrequency);
-	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "headbob_amount"), "set_HeadBobFrequency", "get_HeadBobFrequency");
+	ClassDB::add_property("ActorSettings", PropertyInfo(Variant::FLOAT, "headbob_frequency"), "set_HeadBobFrequency", "get_HeadBobFrequency");
 
 
 	ClassDB::bind_method(D_METHOD("get_CanClimbStairs"), &ActorSettings::get_CanClimbStairs);
