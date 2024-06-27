@@ -11,6 +11,7 @@
 #include <godot_cpp/classes/input_event_key.hpp>
 #include <godot_cpp/classes/input_map.hpp>
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -26,34 +27,38 @@ protected:
 public:
     InputHandler(const InputHandler& obj) = delete; // Delete copy constructor
 
-    static void UpdateKeyMapping(StringName key_name, Key key);
+    void UpdateKeyMapping(const StringName &key_name, Key key);
     static InputHandler* get_singleton();
 
+
+
+
+    // Method to process input events
+    void _input(const Ref<InputEvent> &event);
+
 private:
+    // Singleton instance
     static InputHandler* input_instance;
 
-    Key key_to_map = KEY_UNKNOWN; // Key to map to
-    MouseButton mouse_button_to_map = MOUSE_BUTTON_LEFT; // Mouse button to map to
-    bool is_mapping = false; // If we are currently mapping a key
-    bool is_mouse_mapping = false; // If we are currently mapping a mouse button
-    bool is_key_mapped = false; // If a key is mapped
-    bool is_mouse_mapped = false; // If a mouse button is mapped
+    Key key_to_map;
+    bool is_mapping;
 
+    // Key mappings
+    Key k_move_forward;
+    Key k_move_backward;
+    Key k_move_left;
+    Key k_move_right;
+    Key k_jump;
+    Key k_sprint;
+    Key k_crouch;
+    Key k_interact;
+    Key k_inventory;
+    Key k_pause;
 
-    Key last_key_pressed = KEY_UNKNOWN;
+    // Initialize default key mappings
+    void initialize_default_keys();
 
-    Key k_move_forward = KEY_W;
-    Key k_move_backward = KEY_S;
-    Key k_move_left = KEY_A;
-    Key k_move_right = KEY_D;
-    Key k_jump = KEY_SPACE;
-    Key k_sprint = KEY_SHIFT;
-    Key k_crouch = KEY_CTRL;
-    Key k_interact = KEY_E;
-    Key k_inventory = KEY_TAB;
-    Key k_pause = KEY_ESCAPE;
-    MouseButton k_PrimaryUse = MOUSE_BUTTON_LEFT;
-    MouseButton k_SecondaryUse = MOUSE_BUTTON_RIGHT;
+    String get_key_as_string(const StringName &key_name);
 
 
 };
