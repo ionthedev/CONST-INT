@@ -12,6 +12,10 @@
 #include <godot_cpp/classes/input_map.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/global_constants.hpp>
+#include <godot_cpp/core/binder_common.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+
 
 using namespace godot;
 
@@ -21,13 +25,13 @@ class InputHandler : public Object {
 protected:
     static void _bind_methods();
 
-    InputHandler() {} // Constructor
 
 
 public:
     InputHandler(const InputHandler& obj) = delete; // Delete copy constructor
 
     void UpdateKeyMapping(const StringName &key_name, Key key);
+
     static InputHandler* get_singleton();
 
 
@@ -37,8 +41,10 @@ public:
     void _input(const Ref<InputEvent> &event);
 
 private:
+
+    InputHandler() {} // Constructor
     // Singleton instance
-    static InputHandler* input_instance;
+
 
     Key key_to_map;
     bool is_mapping;
@@ -60,7 +66,7 @@ private:
 
     String get_key_as_string(const StringName &key_name);
 
-
+    void print_test();
 };
 
 #endif // INPUTHANDLER_H
