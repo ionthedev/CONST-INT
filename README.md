@@ -1,6 +1,8 @@
 # CONST-INT
 A GDExtension planning to make game development easier. If you clone this project, please do not hesitate to watch or star the repo to stay up to data with it's changes.
 
+CURRENT CLASSES MAY BE A WORK IN PROGRESS.
+
 ## CURRENT STATE: LANGUAGE PORTING
 Check the [Projects](https://github.com/users/ionthedev/projects/2) page to view the currently active aspects being ported.
 
