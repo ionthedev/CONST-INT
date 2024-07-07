@@ -4,6 +4,7 @@
 
 #include "Actors/Player.h"
 #include "Components/InteractionComponent.h"
+#include "Components/InventoryComponent.h"
 #include "Core/ComponentNode.h"
 #include "Core/InputHandler.h"
 
@@ -18,6 +19,7 @@ void initializer(const ModuleInitializationLevel level) {
   ClassDB::register_class<Player>();
   ClassDB::register_class<ActorSettings>();
   ClassDB::register_class<InteractionComponent>();
+  ClassDB::register_class<InventoryComponent>();
   ClassDB::register_class<InputHandler>();
 }
 
