@@ -22,8 +22,13 @@ add_library("${PROJECT_NAME}" SHARED "${SOURCES}"
         Components/InventoryComponent.h
         Config/InventoryData.cpp
         Config/InventoryData.h
-        Core/itemDatabase.cpp
-        Core/itemDatabase.h)
+        Core/Data/ItemDatabase.cpp
+        Core/Data/ItemDatabase.h
+        Core/Data/Item.cpp
+        Core/Data/Item.h
+        Core/Data/InventoryObject.cpp
+        Core/Data/InventoryObject.h
+)
 
 # Add godot cpp to the library
 target_link_libraries(${PROJECT_NAME} PRIVATE "godot-cpp" ${TARGET_LINK_LIBRARIES_OPTIONS})

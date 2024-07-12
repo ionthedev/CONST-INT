@@ -7,6 +7,9 @@
 #include "Components/InventoryComponent.h"
 #include "Core/ComponentNode.h"
 #include "Core/InputHandler.h"
+#include "Core/Data/Item.h"
+#include "Core/Data/InventoryObject.h"
+#include "Core/Data/ItemDatabase.h"
 
 
 using namespace godot;
@@ -21,6 +24,10 @@ void initializer(const ModuleInitializationLevel level) {
   ClassDB::register_class<InteractionComponent>();
   ClassDB::register_class<InventoryComponent>();
   ClassDB::register_class<InputHandler>();
+  ClassDB::register_class<InventoryObject>();
+
+  ClassDB::register_class<Item>();
+  ClassDB::register_class<ItemDatabase>();
 }
 
 void terminator(ModuleInitializationLevel level) {}

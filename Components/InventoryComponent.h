@@ -12,10 +12,20 @@
 #include <godot_cpp/classes/grid_container.hpp>
 #include <godot_cpp/classes/texture_rect.hpp>
 
+#include "Core/Data/InventoryObject.h"
+#include "Core/Data/ItemDatabase.h"
+
 //TODO: Add boilerplate for Use, Inspect, Combine and Drop functionality.
 
 
 using namespace godot;
+
+
+struct ItemObject
+{
+
+};
+
 
 class InventoryComponent : public Control {
     GDCLASS(InventoryComponent, Control)
@@ -48,12 +58,36 @@ protected:
     void SetSlotHoveredColor(Color _value);
     Color GetSlotHoveredColor();
 
+    void GrabItem();
+
+    void GiveItem(InventoryObject *_item);
+    void DisplayItems();
+    void MakeAxe();
+
+    TypedArray<StringName> get_items() const;
+    void set_items(const TypedArray<StringName>& new_items);
+
+    void set_database(Ref<ItemDatabase> new_database);
+    Ref<ItemDatabase> get_database();
+
+
+
+
+
 private:
     Vector2 *inventorySize = new Vector2( 7, 4);
 
 
+    TypedArray<StringName> items;
+
+    Ref<ItemDatabase> database;
+
     Color slotBaseColor = Color::hex(0xffffffff);
     Color slotHoveredColor = Color::hex(0x88888888);
+
+    int CellSize = 64;
+
+
 
 };
 

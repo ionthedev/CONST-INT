@@ -16,6 +16,10 @@ using namespace godot;
 
 class InventoryData : public Object {
     //TODO: Create data structure to store item id and position
+    GDCLASS(InventoryData, Object)
+
+protected:
+    static void _bind_methods();
 
 };
 

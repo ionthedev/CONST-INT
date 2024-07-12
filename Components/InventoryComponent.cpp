@@ -6,16 +6,19 @@
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
+#include "Core/Data/ItemDatabase.h"
+
 void InventoryComponent::_ready()
 {
     SetInventorySize(Vector2(8, 4));
+    DisplayItems();
 }
 
 void InventoryComponent::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("GetInventorySize"), &InventoryComponent::GetInventorySize);
     ClassDB::bind_method(D_METHOD("SetInventorySize", "_value"), &InventoryComponent::SetInventorySize);
-    ClassDB::add_property("InventoryComponent", PropertyInfo(Variant::VECTOR2I, "_value"), "SetInventorySize", "GetInventorySize");
+    ClassDB::add_property("InventoryComponent", PropertyInfo(Variant::VECTOR2, "_value"), "SetInventorySize", "GetInventorySize");
 
     ClassDB::bind_method(D_METHOD("_on_slot_mouse_entered", "slot"), &InventoryComponent::_on_slot_mouse_entered);
     ClassDB::bind_method(D_METHOD("_on_slot_mouse_exited", "slot"), &InventoryComponent::_on_slot_mouse_exited);
@@ -27,6 +30,14 @@ void InventoryComponent::_bind_methods()
     ClassDB::bind_method(D_METHOD("GetSlotHoveredColor"), &InventoryComponent::GetSlotHoveredColor);
     ClassDB::bind_method(D_METHOD("SetSlotHoveredColor", "_value"), &InventoryComponent::SetSlotHoveredColor);
     ClassDB::add_property("InventoryComponent", PropertyInfo(Variant::COLOR, "Slot Hover Color"), "SetSlotHoveredColor", "GetSlotHoveredColor");
+
+    ClassDB::bind_method(D_METHOD("set_items", "new_items"), &InventoryComponent::set_items);
+    ClassDB::bind_method(D_METHOD("get_items"), &InventoryComponent::get_items);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "Items", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::STRING_NAME, PROPERTY_HINT_TYPE_STRING, "InventoryObject")), "set_items", "get_items");
+
+    ClassDB::bind_method(D_METHOD("set_database", "database"), &InventoryComponent::set_database);
+    ClassDB::bind_method(D_METHOD("get_database"), &InventoryComponent::get_database);
+    ClassDB::add_property("InventoryComponent", PropertyInfo(Variant::OBJECT, "database", PROPERTY_HINT_RESOURCE_TYPE, "ItemDatabase"), "set_database", "get_database");
 
 }
 
@@ -93,7 +104,7 @@ TextureRect *InventoryComponent::GridSlotFactory()
     gridTexture = ResourceLoader::get_singleton()->load("res://bin/CONST-INT/UI/Inventory/GridSlot.png");
     TextureRect *slot = memnew(TextureRect);
     slot->set_texture(gridTexture);
-    slot->set_custom_minimum_size(Vector2(64, 64));
+    slot->set_custom_minimum_size(Vector2(CellSize, CellSize));
     return slot;
 }
 
@@ -141,5 +152,59 @@ Color InventoryComponent::GetSlotHoveredColor()
 {
     return slotHoveredColor;
 }
+
+void InventoryComponent::GiveItem(InventoryObject *_item)
+{
+
+}
+
+void InventoryComponent::DisplayItems()
+{
+    for(int i = 0; i < items.size(); i++)
+    {
+        InventoryObject *itemObject = memnew(InventoryObject);
+        itemObject->set_texture(database->get_icon(items[i]));
+        itemObject->set_custom_minimum_size(itemObject->get_texture()->get_size()*2);
+        add_child(itemObject);
+        itemObject->set_position(Vector2(0, 0));
+    }
+
+}
+
+void InventoryComponent::MakeAxe()
+{
+
+}
+
+TypedArray<StringName> InventoryComponent::get_items() const
+{
+    TypedArray<StringName> items_;
+    for (int i = 0; i < items.size(); ++i) {
+        items_.push_back(items[i]);
+    }
+    return items_;
+}
+
+void InventoryComponent::set_items(const TypedArray<StringName>& new_items)
+{
+    items.clear();
+    for (int i = 0; i < new_items.size(); ++i) {
+        items.insert(i, new_items[i]);
+    }
+}
+
+void InventoryComponent::set_database(Ref<ItemDatabase> new_database)
+{
+    database = new_database;
+}
+
+Ref<ItemDatabase> InventoryComponent::get_database()
+{
+    return database;
+}
+
+
+
+
 
 
