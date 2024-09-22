@@ -28,6 +28,12 @@ add_library("${PROJECT_NAME}" SHARED "${SOURCES}"
         Core/Data/Item.h
         Core/Data/InventoryObject.cpp
         Core/Data/InventoryObject.h
+        Navigation/AStar3DGrid.cpp
+        Navigation/AStar3DGrid.h
+        Navigation/AStar3DGridEditorPlugin.cpp
+        Navigation/AStar3DGridEditorPlugin.h
+        Navigation/Data/AStar3DGridData.cpp
+        Navigation/Data/AStar3DGridData.h
 )
 
 # Add godot cpp to the library
