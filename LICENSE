@@ -1,15 +1,24 @@
-Copyright (c) 2024, Friendly Studios, LLC
+This is free and unencumbered software released into the public domain.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use the Software in commercial games, and to modify the Software to meet their specifications, subject to the following conditions:
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
 
-1. Redistribution: Redistribution of the Software, in source or binary forms, is not permitted. Users are allowed to build the Software from source for their use. However, distribution of binaries or derivative products must only occur through https://ionthedev.itch.io/constint, and no other channel.
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
 
-2. Commercial Use: Users are granted a non-exclusive, non-transferable license to use the Software in their commercial games.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 
-3. Modification: Users are free to modify the Software, provided such modifications are for personal use or use in a commercial game as per the terms of this license.
-
-4. No Warranty: The Software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the Software or the use or other dealings in the Software.
-
-5. Credits: Any commercial game released that uses the Software must include credits to Brandon Friend as a Game Systems Engineer.
-
-END OF TERMS AND CONDITIONS
+For more information, please refer to <https://unlicense.org>
