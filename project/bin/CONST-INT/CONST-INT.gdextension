@@ -1,0 +1,11 @@
+[configuration]
+entry_symbol = "entrypoint"
+compatibility_minimum = 4.2
+reloadable = true
+
+[icons]
+Player = "res://bin/CONST-INT/Icons/Player.svg"
+InteractionComponent = "res://bin/CONST-INT/Icons/InteractionComponent.svg"
+
+[libraries]
+linux.debug.x86_64 = "libCONST-INT.linux.template_debug.x86_64.so"

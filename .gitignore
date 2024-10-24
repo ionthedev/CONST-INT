@@ -1,39 +1,14 @@
-
-TheSaukArchive/.idea/.idea.TheSaukArchive/.idea/workspace.xml
-.idea/material_theme_project_new.xml
-.idea/vcs.xml
-.idea/workspace.xml
-
-*.o
+# Objects.
+.scons-cache/
 *.os
-*.so
-*.dll
-*.framework
-*.gdextension
 
-/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/a.out
-/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/a.out
-/cmake-build-debug/.cmake/api/v1/query/cache-v2
-/cmake-build-debug/CMakeFiles/clion-Debug-log.txt
-/cmake-build-debug/CMakeFiles/clion-environment.txt
-/cmake-build-debug/CMakeFiles/cmake.check_cache
-/cmake-build-debug/CMakeCache.txt
-/cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake
-/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c
-/cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml
-/cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake
-/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp
-/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_C.bin
-/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_CXX.bin
-/cmake-build-debug/.cmake/api/v1/query/cmakeFiles-v1
-/cmake-build-debug/CMakeFiles/3.28.1/CMakeSystem.cmake
-/cmake-build-debug/.cmake/api/v1/query/codemodel-v2
-/.idea/codeStyles/codeStyleConfig.xml
-/.idea/CONST-INT.iml
-/.idea/customTargets.xml
-/.idea/tools/External Tools.xml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/codeStyles/Project.xml
-/cmake-build-debug/.cmake/api/v1/query/toolchains-v1
-/.idea/.gitignore
+# SConstruct
+.sconf_temp
+.sconsign.dblite
+*.pyc
+
+# MacOS
+.DS_Store
+
+# Editors
+.vscode/
