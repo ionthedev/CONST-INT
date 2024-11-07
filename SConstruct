@@ -14,11 +14,15 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["src/"])
-sources = Glob("src/*.cpp")
+sources = Glob("src/*.cpp")  # Get cpp files in src directory
+sources.extend(Glob("src/*/*.cpp"))  # Get cpp files in immediate subdirectories
+# Or for completely recursive behavior:
+# sources = Glob("src/**/*.cpp", recursive=True)  # Get all cpp files in src and all subdirectories
+
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "demo/bin/libgdexample.{}.{}.framework/libgdexample.{}.{}".format(
+        "project/addons/CONST-INT/bin/libCONST-INT.{}.{}.framework/libCONST-INT.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
@@ -26,17 +30,17 @@ if env["platform"] == "macos":
 elif env["platform"] == "ios":
     if env["ios_simulator"]:
         library = env.StaticLibrary(
-            "demo/bin/libgdexample.{}.{}.simulator.a".format(env["platform"], env["target"]),
+            "project/addons/CONST-INT/bin/libCONST-INT.{}.{}.simulator.a".format(env["platform"], env["target"]),
             source=sources,
         )
     else:
         library = env.StaticLibrary(
-            "demo/bin/libgdexample.{}.{}.a".format(env["platform"], env["target"]),
+            "project/addons/CONST-INT/bin/libCONST-INT.{}.{}.a".format(env["platform"], env["target"]),
             source=sources,
         )
 else:
     library = env.SharedLibrary(
-        "demo/bin/libgdexample{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "project/addons/CONST-INT/bin/libCONST-INT{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 

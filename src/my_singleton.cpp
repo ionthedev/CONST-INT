@@ -21,6 +21,7 @@ MySingleton::MySingleton()
 {
 	ERR_FAIL_COND(singleton != nullptr);
 	singleton = this;
+	UtilityFunctions::print("Hello GDExtension Singleton!");
 }
 
 MySingleton::~MySingleton()

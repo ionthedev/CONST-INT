@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://416ana6c3vte"
+path="res://.godot/imported/CI_PP_Dither.glsl-d72d7d8766bda4a2011fd5e8499f3f39.res"
+
+[deps]
+
+source_file="res://addons/CONST-INT/Assets/Compositor/Dither/CI_PP_Dither.glsl"
+dest_files=["res://.godot/imported/CI_PP_Dither.glsl-d72d7d8766bda4a2011fd5e8499f3f39.res"]
+
+[params]
+
