@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://bdttd055c615c"
+path="res://.godot/imported/CI_PP_Pixelation.glsl-a1d1c9d6b7091169f0ffd0853db0b449.res"
+
+[deps]
+
+source_file="res://addons/CONST-INT/Assets/Compositor/Pixelation/CI_PP_Pixelation.glsl"
+dest_files=["res://.godot/imported/CI_PP_Pixelation.glsl-a1d1c9d6b7091169f0ffd0853db0b449.res"]
+
+[params]
+
