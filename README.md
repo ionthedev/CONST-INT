@@ -8,7 +8,7 @@ Check the [Projects](https://github.com/users/ionthedev/projects/2) page to view
 
 External contributions are locked until the language port is complete.
 
-Converting the project from C# to C++. The C# version has been made legacy.
+Converting the project from C# to rust, check the rust branch to keep up to date.. The C# version has been made legacy.
 https://ionthedev.itch.io/constint
 
 If you would like to support the project as it develops, feel free to click the sponsor button on the top or visit https://ko-fi.com/ionthedev
@@ -51,30 +51,11 @@ We currently only have a discord, so [feel free to join! ](https://discord.com/s
 GDExtension template that automatically builds into a self-contained addon for the Godot Asset Library.
 
 ### Getting started:
-1. Clone this repository (or a new repository with this template) with submodules.
-    - `git clone --recurse-submodules https://github.com/nathanfranke/gdextension.git`
-    - `cd gdextension`
-2. Update to the latest `godot-cpp`.
-    - `git submodule update --remote`
-2. Build a debug binary for the current platform.
-    - `scons`
-3. Import, edit, and play `project/` using Godot Engine 4+.
-    - `godot --path project/`
-4. Check the output:
-   ```
-   Hello GDScript!
-   Hello GDExtension Node!
-   Hello GDExtension Singleton!
-   ```
+PROJECT CURRENTLY IN DEVELOPMENT
 
 ### Repository structure:
-- `project/` - Godot project boilerplate.
-  - `addons/example/` - Files to be distributed to other projects.¹
-  - `demo/` - Scenes and scripts for internal testing. Not strictly necessary.
-- `src/` - Source code of this extension.
-- `godot-cpp/` - Submodule needed for GDExtension compilation.
-
-¹ Before distributing as an addon, all binaries for all platforms must be built and copied to the `bin/` directory. This is done automatically by GitHub Actions.
+- `godot' - Godot project boilerplate
+- 'rust' - Rust project for building the GDExtension
 
 ### Make it your own:
 1. Rename `project/addons/example/` and `project/addons/example/example.gdextension`.
