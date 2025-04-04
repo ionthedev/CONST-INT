@@ -1,5 +1,6 @@
 use crate::air_movement_settings::AirMovementSettings;
 use crate::ground_movement_settings::GroundMovementSettings;
+use crate::juice_settings::JuiceSettings;
 use godot::classes::{CharacterBody3D, ICharacterBody3D, Input, Resource};
 use godot::prelude::*;
 
@@ -13,6 +14,8 @@ pub struct Player {
     ground_settings: Option<Gd<GroundMovementSettings>>,
     #[export]
     air_settings: Option<Gd<AirMovementSettings>>,
+    #[export]
+    juice_settings: Option<Gd<JuiceSettings>>,
 }
 
 #[godot_api]
@@ -28,6 +31,7 @@ impl ICharacterBody3D for Player {
             base,
             ground_settings: None,
             air_settings: None,
+            juice_settings: None,
         }
     }
 
@@ -40,6 +44,10 @@ impl ICharacterBody3D for Player {
         if self.air_settings.is_none() {
             let settings = Gd::<AirMovementSettings>::default();
             self.air_settings = Some(settings);
+        }
+        if self.juice_settings.is_none() {
+            let settings = Gd::<JuiceSettings>::default();
+            self.juice_settings = Some(settings);
         }
     }
 

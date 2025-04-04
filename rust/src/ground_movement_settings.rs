@@ -1,5 +1,6 @@
 use godot::classes::Resource;
-use godot::prelude::*;
+use godot::register::*;
+use godot::{prelude::*, register};
 
 #[derive(GodotClass)]
 #[class(tool, base=Resource)]
