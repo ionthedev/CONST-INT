@@ -1,3 +1,19 @@
-[gd_resource type="JuiceSettings" format=3 uid="uid://ckpt2jaxjlmr0"]
+[gd_resource type="JuiceSettings" load_steps=5 format=3 uid="uid://ckpt2jaxjlmr0"]
+
+[sub_resource type="Curve" id="Curve_s7ek5"]
+_data = [Vector2(0.140533, 0.414984), 0.0, 0.0, 0, 0, Vector2(0.43787, 0.740313), 0.0, 0.0, 0, 0, Vector2(0.747041, 0.34368), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_u64c8"]
+_data = [Vector2(0.238166, 0.205934), 0.0, 0.0, 0, 0, Vector2(0.389053, 0.4636), 0.0, 0.0, 0, 0, Vector2(0.671598, 0.121665), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_s6h4h"]
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_rw2w5"]
+curve_x = SubResource("Curve_s7ek5")
+curve_y = SubResource("Curve_u64c8")
+curve_z = SubResource("Curve_s6h4h")
 
 [resource]
+breath_pos_curve = SubResource("CurveXYZTexture_rw2w5")

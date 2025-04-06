@@ -23,6 +23,17 @@ pub struct GroundMovementSettings {
     pub jump_velocity: f32,
     #[export]
     pub auto_jump: bool,
+    #[export]
+    pub lean_speed: f32,
+    #[export]
+    pub lean_amount: f32,
+
+    #[export]
+    pub crouch_translate: f32,
+    #[export]
+    pub crouch_jump_add_mult: f32,
+    #[export]
+    pub max_step_height: f32,
 }
 
 #[godot_api]
@@ -64,6 +75,11 @@ impl IResource for GroundMovementSettings {
             climb_speed: 7.0,
             jump_velocity: 6.0,
             auto_jump: true,
+            lean_speed: 2.5,
+            lean_amount: -45.0,
+            crouch_translate: 0.5,
+            crouch_jump_add_mult: 0.9,
+            max_step_height: 0.5,
         }
     }
 

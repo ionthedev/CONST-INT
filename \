@@ -6,7 +6,7 @@ use godot::obj::NewGd;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(tool, base=CharacterBody3D)]
+#[class(base=CharacterBody3D)]
 pub struct Player {
     base: Base<CharacterBody3D>,
 
@@ -19,78 +19,43 @@ pub struct Player {
     juice_settings: Option<Gd<JuiceSettings>>,
 
     #[var]
-    pub stairs_ahead_raycast: Option<Gd<RayCast3D>>,
+    pub stairs_ahead_raycast: Gd<RayCast3D>,
 }
 
 #[godot_api]
 impl Player {
     #[func]
     fn make_step_ahead_ray(&mut self) {
-        if self.stairs_ahead_raycast.is_some() {
-            return;
-        }
-        godot_print!("Starting to create raycast...");
         let mut ray = RayCast3D::new_alloc();
-        godot_print!("RayCast3D allocated");
-
-        // For built-in Godot classes, we use the direct methods instead of bind_mut()
-        ray.set_target_position(Vector3::new(0.0, 0.0, 1.0));
-        ray.set_enabled(true);
-        ray.set_collision_mask(1);
-
-        // Make the raycast visible in the editor/game
-        ray.set_debug_shape_thickness(5);
-        ray.set_debug_shape_custom_color(Color::from_rgb(1.0, 0.0, 0.0)); // Red color
-        ray.set_name("StairsAheadRaycast");
-        godot_print!("RayCast3D configured with name: {}", ray.get_name());
-
-        // Add the child to the scene tree - use a clone here
-        self.base_mut().add_child(&ray.clone());
-        godot_print!("RayCast3D added as child");
-
-        // Store the reference
-        self.stairs_ahead_raycast = Some(ray);
-        godot_print!("RayCast3D stored in stairs_ahead_raycast");
-
-        // Debug output
-        if let Some(ray_ref) = &self.stairs_ahead_raycast {
-            godot_print!(
-                "Created raycast with position: {:?}",
-                ray_ref.get_target_position()
-            );
-        }
-    }
-
-    pub fn peepee_poopoo(&mut self) {
-        godot_print!("Braincell Deteriorated ");
+        ray.set_target_position(Vector3 {
+            x: 0.0,
+            y: -1.2,
+            z: 0.0,
+        });
+        
+        self.base.to_gd().add_child(ray.to_godot().upcast());
+        self.set_stairs_ahead_raycast(ray);
     }
 }
 
 #[godot_api]
 impl ICharacterBody3D for Player {
     fn init(base: Base<CharacterBody3D>) -> Self {
-        // This print should appear for each Player instance
         godot_print!("[CONST-INT] Initializing Player Class");
 
+        // Start with no settings, will be set later
         Self {
             base,
             ground_settings: None,
             air_settings: None,
             juice_settings: None,
-            stairs_ahead_raycast: None,
+            stairs_ahead_raycast: RayCast3D::new_alloc(),
         }
     }
 
-    fn enter_tree(&mut self) {
-        // this occurs when Player is added to the tree (both editor and runtime)
-        self.peepee_poopoo();
-    }
-
     fn ready(&mut self) {
-        // Create default settings if none are set
-        godot_print!("Player ready function called");
-
-        // Create default settings if none are set
+        // Create default settings if none are setmutmut
+        self.make_step_ahead_ray();
         if self.ground_settings.is_none() {
             let settings = Gd::<GroundMovementSettings>::default();
             self.ground_settings = Some(settings);
@@ -103,9 +68,9 @@ impl ICharacterBody3D for Player {
             let settings = Gd::<JuiceSettings>::default();
             self.juice_settings = Some(settings);
         }
-        //    if self.stairs_ahead_raycast.is_none() {
-        //        self.make_step_ahead_ray();
-        //    }
+        if !self.stairs_ahead_raycast.is_instance_valid() {
+            self.make_step_ahead_ray();
+        }
     }
 
     fn physics_process(&mut self, delta: f64) {

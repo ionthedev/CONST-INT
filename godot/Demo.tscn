@@ -1,23 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bk75cbxnr7vaj"]
-
-[ext_resource type="GroundMovementSettings" uid="uid://dpslk30t1vurv" path="res://GroundMovement.tres" id="1_l4713"]
-[ext_resource type="Script" uid="uid://b655hvje0ishk" path="res://PlayerTest.gd" id="2_64soo"]
-[ext_resource type="JuiceSettings" uid="uid://ckpt2jaxjlmr0" path="res://JuiceSettings.tres" id="2_umdxf"]
-
-[sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_udokr"]
+[gd_scene format=3 uid="uid://dok8vdq46fmbk"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Player" type="Player" parent="."]
-ground_settings = ExtResource("1_l4713")
-air_settings = SubResource("AirMovementSettings_l4713")
-juice_settings = ExtResource("2_umdxf")
-script = ExtResource("2_64soo")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("PrismMesh_udokr")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.633988, 0.773342, 0, -0.773342, 0.633988, 0, 13.4963, 13.9594)
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128, 0)
