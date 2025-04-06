@@ -1,6 +1,40 @@
-[gd_scene format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=8 format=3 uid="uid://dok8vdq46fmbk"]
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udokr"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_l4713"]
+sky_material = SubResource("ProceduralSkyMaterial_udokr")
+
+[sub_resource type="Environment" id="Environment_64soo"]
+background_mode = 2
+sky = SubResource("Sky_l4713")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="GroundMovementSettings" id="GroundMovementSettings_udokr"]
+
+[sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
+
+[sub_resource type="JuiceSettings" id="JuiceSettings_64soo"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_udokr"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_64soo")
+
+[node name="Player" type="Player" parent="."]
+ground_settings = SubResource("GroundMovementSettings_udokr")
+air_settings = SubResource("AirMovementSettings_l4713")
+juice_settings = SubResource("JuiceSettings_64soo")
 
 [node name="Node3D" type="Node3D" parent="."]
+
+[node name="Node3D" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.074, 3.279)
+mesh = SubResource("SphereMesh_udokr")
+skeleton = NodePath("../Player")
