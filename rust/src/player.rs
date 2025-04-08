@@ -1,4 +1,6 @@
 use std::f32::INFINITY;
+use std::f64::MIN;
+use std::ops::Mul;
 
 use crate::air_movement_settings::AirMovementSettings;
 use crate::ground_movement_settings::GroundMovementSettings;
@@ -127,10 +129,13 @@ impl Player {
     pub fn make_children(&mut self) {
         if !Engine::singleton().is_editor_hint() {
             // Make Head Nodes
+            // TODO: Name these damn things!
             let mut _head = Node3D::new_alloc();
             let mut _h_pivot = Node3D::new_alloc();
             let mut _l_pivot = Node3D::new_alloc();
             let mut _eyes = Node3D::new_alloc();
+            godot_print!("Made head stuff, please show damn you!");
+
             _l_pivot.add_child(&_h_pivot);
             _h_pivot.add_child(&_head);
             _head.add_child(&_eyes);
@@ -143,11 +148,17 @@ impl Player {
             self.base_mut().add_child(&_l_pivot);
 
             // Position head pivot
-            _l_pivot.set_position(Vector3 {
+            _h_pivot.set_position(Vector3 {
                 x: 0.0,
                 y: 1.5,
                 z: 0.0,
             });
+
+            self.lean_pivot = Some(_l_pivot);
+            self.head_pivot = Some(_h_pivot);
+            self.head = Some(_head);
+            self.eyes = Some(_eyes);
+            self.camera = Some(_cam);
         }
 
         // Make capsule
@@ -167,6 +178,48 @@ impl Player {
         _col_shape.set_height(self.original_height);
         _col_shape.set_radius(0.4);
         _col.set_shape(&_col_shape);
+        self.base_mut().add_child(&_col);
+
+        self.collision = Some(_col);
+        self.skin = Some(_skin);
+    }
+
+    pub fn handle_ground_physics(&mut self, delta: f64) {
+        if let Some(ground_settings) = &self.ground_settings {
+            if let Some(air_settings) = &self.air_settings {
+                let player = self.base();
+                let v = player.get_velocity();
+                let wish_dir = &self.calc_wish_dir();
+                let curr_speed = self.curr_speed;
+                let player_velocity_length = player.get_velocity().length();
+                let deceleration = ground_settings.bind().get_deceleration();
+
+                // Calculate everything needed
+                let cur_speed_in_wish_dir: f32 = v.dot(*wish_dir);
+                let add_speed_til_cap: f32 = curr_speed - cur_speed_in_wish_dir;
+                let control = f32::max(player_velocity_length, deceleration);
+                let drop = control * ground_settings.bind().get_friction() * (delta as f32);
+                let mut new_speed = f32::max(player_velocity_length - drop, 0.0);
+
+                if add_speed_til_cap > 0.0 {
+                    let mut accel_speed: f32 = ground_settings.bind().get_acceleration()
+                        * air_settings.bind().get_speed()
+                        * (delta as f32);
+                    accel_speed = f32::min(accel_speed, add_speed_til_cap);
+                    // Now we can mutably borrow self since the previous borrows are via local variables
+                    self.base_mut().set_velocity(v + accel_speed * wish_dir);
+                }
+
+                if player_velocity_length > 0.0 {
+                    new_speed /= player_velocity_length;
+                }
+                let mut new_v = v;
+                new_v *= new_speed;
+                self.base_mut().set_velocity(new_v);
+
+                // Do something with control or the compiler will warn about unused variables
+            }
+        }
     }
 }
 
@@ -231,7 +284,8 @@ impl ICharacterBody3D for Player {
         self.check_input(speed);
         let input_dir = self.calc_wish_dir();
         if !Engine::singleton().is_editor_hint() {
-            godot_print!("Wish input Direction : {:?}", input_dir);
+            self.handle_ground_physics(delta);
+            //if self.base().is_on_floor_only() {}
         }
     }
 }
