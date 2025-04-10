@@ -2,3 +2,4 @@
 
 [resource]
 walk_speed = 8.03
+crouch_translate = 0.8

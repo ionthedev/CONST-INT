@@ -76,7 +76,7 @@ impl IResource for GroundMovementSettings {
             jump_velocity: 6.0,
             auto_jump: true,
             lean_speed: 2.5,
-            lean_amount: -45.0,
+            lean_amount: 0.25,
             crouch_translate: 0.5,
             crouch_jump_add_mult: 0.9,
             max_step_height: 0.5,

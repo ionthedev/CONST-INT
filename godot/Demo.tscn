@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=13 format=3 uid="uid://dok8vdq46fmbk"]
 
 [ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DebugMenu.gd" id="1_l4713"]
 [ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://Grid.gdshader" id="1_umdxf"]
+[ext_resource type="JuiceSettings" uid="uid://ckpt2jaxjlmr0" path="res://JuiceSettings.tres" id="2_0miaj"]
 [ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://Demo.VoxelGI_data.res" id="3_0miaj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udokr"]
@@ -43,25 +44,34 @@ shader_parameter/use_inside_uv = false
 shader_parameter/use_albedo_color = false
 shader_parameter/albedo_alpha = 0.5
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0miaj"]
+render_priority = 0
+shader = ExtResource("1_umdxf")
+shader_parameter/world_uv = false
+shader_parameter/object_uv = false
+shader_parameter/object_uv_scale = Vector2(1, 1)
+shader_parameter/preset_color = 0
+shader_parameter/base_color = Color(0.74902, 0.266667, 0.0509804, 1)
+shader_parameter/metalic = 0.25
+shader_parameter/roughness = 0.75
+shader_parameter/grid_scale = 1.0
+shader_parameter/grid_width = 0.01
+shader_parameter/grid_color = Color(0.8, 0.8, 0.8, 1)
+shader_parameter/inside_scale = 1.0
+shader_parameter/inside_width = 0.01
+shader_parameter/inside_color = Color(0.8, 0.8, 0.8, 0.8)
+shader_parameter/checkered = true
+shader_parameter/sub_checkered_grid = false
+shader_parameter/checkered_color = Color(0.25, 0.25, 0.25, 1)
+shader_parameter/checkered_blend_color = 0.1
+shader_parameter/use_inside_uv = false
+shader_parameter/use_albedo_color = false
+shader_parameter/albedo_alpha = 0.5
+
 [sub_resource type="GroundMovementSettings" id="GroundMovementSettings_udokr"]
 
 [sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
 speed = 4.0
-
-[sub_resource type="Curve" id="Curve_umdxf"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.545064, 0.269663), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_0miaj"]
-
-[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_wppxa"]
-curve_x = SubResource("Curve_umdxf")
-curve_y = SubResource("Curve_umdxf")
-curve_z = SubResource("Curve_0miaj")
-
-[sub_resource type="JuiceSettings" id="JuiceSettings_64soo"]
-breath_pos_curve = SubResource("CurveXYZTexture_wppxa")
-breath_rot_curve = SubResource("CurveXYZTexture_wppxa")
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_64soo")
@@ -86,10 +96,88 @@ use_collision = true
 size = Vector3(211.372, 1, 256.389)
 material = SubResource("ShaderMaterial_wppxa")
 
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5058, 1.52585, -3.19309)
+use_collision = true
+size = Vector3(18.311, 0.536621, 10.525)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.10564, 0.107421, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.86895, 0.339112, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 7.67998, 0.57055, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.35684, 0.787534, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.992, 0.999458, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 9.75532, 1.23115, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 10.5663, 1.46259, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.2432, 1.67957, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.9254, 1.89767, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 12.6888, 2.12936, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 13.4998, 2.3608, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 14.1766, 2.57778, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
 [node name="Player" type="Player" parent="."]
 ground_settings = SubResource("GroundMovementSettings_udokr")
 air_settings = SubResource("AirMovementSettings_l4713")
-juice_settings = SubResource("JuiceSettings_64soo")
+juice_settings = ExtResource("2_0miaj")
 gravity = 9.75
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
 
@@ -106,20 +194,24 @@ velocity = NodePath("Velocity")
 _Player = NodePath("../Player")
 
 [node name="InputDir" type="Label" parent="Control"]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="WishDir" type="Label" parent="Control"]
+layout_mode = 0
 offset_top = 24.0
 offset_right = 79.0
 offset_bottom = 47.0
 
 [node name="Velocity" type="Label" parent="Control"]
+layout_mode = 0
 offset_top = 48.0
 offset_right = 79.0
 offset_bottom = 71.0
 
 [node name="CurrSpeed" type="Label" parent="Control"]
+layout_mode = 0
 offset_top = 82.0
 offset_right = 79.0
 offset_bottom = 105.0
