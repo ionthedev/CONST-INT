@@ -5,6 +5,7 @@ use std::str;
 
 use godot::classes::character_body_3d::MotionMode;
 use godot::classes::input::MouseMode;
+use godot::classes::physics_server_3d::ExBodyTestMotion;
 use godot::classes::{
     Camera3D, CapsuleMesh, CapsuleShape3D, CharacterBody3D, CollisionShape3D, Curve, Engine,
     ICharacterBody3D, Input, InputEvent, InputEventMouseButton, InputEventMouseMotion,
@@ -66,6 +67,12 @@ pub struct Player {
     camera: Option<Gd<Camera3D>>,
     collision: Option<Gd<CollisionShape3D>>,
     skin: Option<Gd<MeshInstance3D>>,
+}
+
+fn call_body_test_motion(varargs: &[Variant]) -> bool {
+    PhysicsServer3D::singleton()
+        .call("body_test_motion", varargs)
+        .to::<bool>()
 }
 
 #[godot_api]
@@ -356,7 +363,7 @@ impl Player {
         let ground_settings = self.ground_settings.as_ref().unwrap().clone();
         let air_settings = self.air_settings.as_ref().unwrap().clone();
 
-        if self.base().is_on_floor() {
+        if self.base().is_on_floor() || self.snapped_stair_last_frame {
             // When on ground, explicitly set current speed to ground values
             if Input::singleton().is_action_pressed("Sprint") {
                 self.curr_speed = ground_settings.bind().get_sprint_speed();
@@ -517,6 +524,12 @@ impl Player {
     fn headbob_effect(&mut self, delta: f64) {
         let mut juice_settings = self.juice_settings.as_ref().unwrap().clone();
         let v = self.base().get_velocity().clone();
+
+        // Only apply headbob if we're moving and on the floor
+        if v.length() < 0.1 || !self.base().is_on_floor() {
+            return;
+        }
+
         let cam = self.camera.clone();
         let previous_y: f32 = f32::sin(
             (juice_settings.bind().headbob_time
@@ -524,17 +537,26 @@ impl Player {
         );
 
         juice_settings.bind_mut().headbob_time += (delta as f32) * v.length();
+
         let current_y: f32 = f32::sin(
             juice_settings.bind().headbob_time * juice_settings.bind().get_headbob_move_freq(),
         ) * juice_settings.bind().get_headbob_move_amount();
+
+        // Get lean amount to adjust headbob
+        let lean_amount = self.get_current_lean_amount();
+        let lean_factor = 1.0
+            - f32::abs(
+                lean_amount / f32::atan(self.ground_settings.as_ref().unwrap().bind().lean_amount),
+            );
 
         let cam_pos: Vector3 = Vector3::new(
             f32::cos(
                 juice_settings.bind().headbob_time
                     * juice_settings.bind().get_headbob_move_freq()
                     * 0.5,
-            ) * juice_settings.bind().get_headbob_move_amount(),
-            current_y,
+            ) * juice_settings.bind().get_headbob_move_amount()
+                * lean_factor,
+            current_y * lean_factor,
             0.0,
         );
 
@@ -542,7 +564,8 @@ impl Player {
             camera.set_position(cam_pos);
         }
 
-        if previous_y < 0.0 && current_y > 0.0 { //play footstep sound
+        if previous_y < 0.0 && current_y > 0.0 {
+            // play footstep sound
         }
     }
 
@@ -573,6 +596,7 @@ impl Player {
             * mag;
 
         let t: f32 = f32::fposmod(juice_settings.bind().breath_time, breath_dur) / breath_dur;
+
         // First get the curves, handling the Option type
         let point_pos = Vector3::new(
             juice_settings
@@ -610,18 +634,22 @@ impl Player {
                 .map_or(0.0, |curve| curve.sample_baked(t)),
         );
 
+        let lean_effect = self.get_current_lean_amount();
         // For position
         // Handle the Option type with if let
         if let Some(eyes) = &mut self.eyes {
+            // Store the lean effect to account for it
+
             // Position calculation and update
             let current_position = eyes.get_position();
             let new_position = current_position.lerp(
                 Vector3::new(
                     point_pos.x * forward_move,
                     point_pos.y * mag,
-                    point_pos.z * side_move,
+                    // Adjust the side movement based on lean
+                    point_pos.z * side_move * (1.0 - lean_effect.abs()),
                 ),
-                mag * delta as f32, // Cast delta to f32 if needed
+                mag * delta as f32,
             );
             eyes.set_position(new_position);
 
@@ -631,12 +659,21 @@ impl Player {
                 Vector3::new(
                     point_rot.x * forward_move,
                     point_rot.y * mag,
-                    point_rot.z * side_move,
+                    // Reduce the z-rotation effect when leaning
+                    point_rot.z * side_move * (1.0 - lean_effect.abs()),
                 ),
-                mag * delta as f32, // Cast delta to f32 if needed
+                mag * delta as f32,
             );
             eyes.set_rotation(new_rotation);
         }
+    }
+
+    // Add this helper function to get current lean amount
+    fn get_current_lean_amount(&self) -> f32 {
+        if let Some(lean_pivot) = &self.lean_pivot {
+            return lean_pivot.get_rotation().z;
+        }
+        0.0
     }
 
     fn handle_lean(&mut self, delta: f64) {
@@ -662,115 +699,180 @@ impl Player {
                 (delta as f32) * ground_settings.bind().lean_speed,
             );
 
+            // Add a clamp to ensure we don't exceed the maximum lean
+            let max_lean = f32::atan(ground_settings.bind().lean_amount);
+            let clamped_z_rotation = f32::clamp(new_z_rotation, -max_lean, max_lean);
+
             // Create new rotation with updated z value
-            let new_rotation = Vector3::new(current_rotation.x, current_rotation.y, new_z_rotation);
+            let new_rotation =
+                Vector3::new(current_rotation.x, current_rotation.y, clamped_z_rotation);
 
             // Set the rotation directly instead of using rotate_z
             lean_pivot.set_rotation(new_rotation);
         }
     }
 
-    fn snap_down_stairs(&mut self) {
-        let ground_settings = self.ground_settings.as_ref().unwrap().clone();
-        let mut did_snap: bool = false;
+    fn snap_up_stairs(&mut self, delta: f64) -> bool {
+        // Check if we can snap up stairs
+        if !self.base().is_on_floor() && !self.snapped_stair_last_frame {
+            self.snapped_stair_last_frame = false;
+            return false;
+        }
 
-        // Get the floor_below status - directly matching the GDScript logic
-        let floor_below = if let Some(raycast) = self.stairs_below_raycast.as_ref() {
-            raycast.is_colliding() && !self.is_surface_too_steep(raycast.get_collision_normal())
+        // Add a velocity check to prevent snapping with no movement
+        let v = self.base().get_velocity().clone();
+        let horizontal_speed = (v.x * v.x + v.z * v.z).sqrt();
+        if horizontal_speed < 0.1 {
+            // Only snap if actually moving
+            return false;
+        }
+
+        let ground_settings = self.ground_settings.as_ref().unwrap().clone();
+        let expected_move_motion = v * Vector3::new(1.0, 0.0, 1.0) * delta as f32;
+        let gt = self.base_mut().get_global_transform();
+        let original_position = self.base().get_global_position();
+        let step_pos_with_clearance = gt.translated(
+            expected_move_motion + Vector3::new(0.0, ground_settings.bind().max_step_height, 0.0),
+        );
+
+        let mut body_test_result = PhysicsTestMotionResult3D::new_gd();
+        if self.run_body_test_motion(
+            step_pos_with_clearance,
+            Vector3::new(0.0, -ground_settings.bind().max_step_height * 2.0, 0.0),
+            &mut body_test_result,
+        ) {
+            if let Some(col) = &mut body_test_result.get_collider() {
+                if col.is_class("StaticBody3D") || col.is_class("CSGShape3D") {
+                    let translate = body_test_result.get_travel();
+                    let step_height: f32 = ((step_pos_with_clearance.origin + translate)
+                        - self.base().get_global_position())
+                    .y;
+
+                    let glob_pos = self.base().get_global_position();
+
+                    if step_height > ground_settings.bind().max_step_height
+                        || step_height <= 0.01
+                        || (body_test_result.get_collision_point() - glob_pos).y
+                            > ground_settings.bind().max_step_height
+                    {
+                        return false;
+                    }
+
+                    if let Some(ray) = &mut self.stairs_ahead_raycast {
+                        ray.set_global_position(
+                            body_test_result.get_collision_point()
+                                + Vector3::new(0.0, ground_settings.bind().max_step_height, 0.0)
+                                + expected_move_motion.normalized() * 0.1,
+                        );
+                        ray.force_raycast_update();
+
+                        let collision_normal = ray.get_collision_normal();
+                        if ray.is_colliding() && !self.is_surface_too_steep(collision_normal) {
+                            // Set position and apply floor snap
+                            let new_position = step_pos_with_clearance.origin + translate;
+                            self.base_mut().set_global_position(new_position);
+                            self.base_mut().apply_floor_snap();
+
+                            // Check if we're stuck after stepping up
+                            let mut stuck_check = PhysicsTestMotionResult3D::new_gd();
+                            if self.run_body_test_motion(
+                                self.base().get_global_transform(),
+                                Vector3::new(0.0, 0.01, 0.0), // Small upward movement
+                                &mut stuck_check,
+                            ) {
+                                if stuck_check.get_travel().length() < 0.005 {
+                                    // We're stuck, revert position
+                                    self.base_mut().set_global_position(original_position);
+                                    self.snapped_stair_last_frame = false;
+                                    return false;
+                                }
+                            }
+
+                            self.snapped_stair_last_frame = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        self.snapped_stair_last_frame = false;
+        return false;
+    }
+
+    fn snap_down_stairs(&mut self) {
+        // Collect all data upfront to avoid overlapping mutable borrows
+        let v = self.base().get_velocity().clone();
+        let was_on_floor_last_frame =
+            Engine::singleton().get_physics_frames() == self.last_frame_grounded;
+        let is_on_floor = self.base().is_on_floor();
+        let ground_settings = self.ground_settings.as_ref().unwrap().clone();
+        let snapped_last_frame = self.snapped_stair_last_frame;
+        let original_position = self.base().get_global_position();
+
+        // Early exit conditions
+        if is_on_floor || v.y > 0.0 || (!was_on_floor_last_frame && !snapped_last_frame) {
+            self.snapped_stair_last_frame = false;
+            return;
+        }
+
+        // Raycast check
+        let floor_below = if let Some(ray) = &mut self.stairs_below_raycast {
+            ray.force_raycast_update();
+            let collision_normal = ray.get_collision_normal();
+            let is_colliding = ray.is_colliding();
+            is_colliding && !self.is_surface_too_steep(collision_normal)
         } else {
             false
         };
 
-        let was_on_floor_last_frame =
-            Engine::singleton().get_physics_frames() == self.last_frame_grounded;
+        if !floor_below {
+            self.snapped_stair_last_frame = false;
+            return;
+        }
 
-        if !self.base().is_on_floor()
-            && self.base().get_velocity().y <= 0.0
-            && (was_on_floor_last_frame || self.snapped_stair_last_frame)
-            && floor_below
-        {
-            let body_test_result = PhysicsTestMotionResult3D::new_gd();
+        // Motion test and position update
+        let current_transform = self.base().get_global_transform();
+        let mut body_test_result = PhysicsTestMotionResult3D::new_gd();
+        let mut did_snap = false;
 
+        if self.run_body_test_motion(
+            current_transform,
+            Vector3::new(0.0, -ground_settings.bind().max_step_height, 0.0),
+            &mut body_test_result,
+        ) {
+            let translate_y = body_test_result.get_travel().y;
+            let mut current_pos = self.base().get_global_position();
+            current_pos.y += translate_y;
+            self.base_mut().set_global_position(current_pos);
+            self.base_mut().apply_floor_snap();
+
+            // Check if we're stuck after snapping down
+            let mut stuck_check = PhysicsTestMotionResult3D::new_gd();
             if self.run_body_test_motion(
                 self.base().get_global_transform(),
-                Vector3::new(0.0, -ground_settings.bind().max_step_height, 0.0),
-                Some(body_test_result.clone()),
+                Vector3::new(0.0, 0.01, 0.0), // Small upward movement
+                &mut stuck_check,
             ) {
-                // No need to check collision count - the if condition already confirms successful collision
-                // self.save_camera_pos_for_smoothing();
-
-                // Directly modify the Y position to match GDScript
-                let translate_y = body_test_result.get_travel().y;
-                let mut current_position = self.base().get_position();
-                current_position.y += translate_y;
-                self.base_mut().set_position(current_position);
-
-                self.base_mut().apply_floor_snap();
-                did_snap = true;
+                if stuck_check.get_travel().length() < 0.005 {
+                    // We're stuck, revert position
+                    self.base_mut().set_global_position(original_position);
+                    self.snapped_stair_last_frame = false;
+                    return;
+                }
             }
+
+            did_snap = true;
         }
 
         self.snapped_stair_last_frame = did_snap;
     }
-     
-fn snap_up_stairs(&mut self, delta: f64) -> bool {
-    godot_print!("Trying to snap up stairs...");
-    
-    // Early exit check
-    if !self.base().is_on_floor() && !self.snapped_stair_last_frame {
-        return false;
-    }
-    
-    let ground_settings = self.ground_settings.as_ref().unwrap().clone();
-    let velocity = self.base().get_velocity();
-    
-    // Only try to snap up stairs if we're moving horizontally
-    let horizontal_velocity = Vector3::new(velocity.x, 0.0, velocity.z);
-    if horizontal_velocity.length_squared() < 0.01 {
-        return false;
-    }
-    
-    // Store needed values before any mutable borrows
-    let forward_dir = horizontal_velocity.normalized();
-    let current_position = self.base().get_global_position();
-    let max_step_height = ground_settings.bind().max_step_height;
-    
-    // Now we can safely modify the raycast and other mutable things
-    let raycast_hit = if let Some(raycast) = self.stairs_ahead_raycast.as_mut() {
-        let ray_position = current_position + 
-            Vector3::new(0.0, 0.25, 0.0) +  // Position at shin height
-            forward_dir * 0.5;              // Position slightly ahead
-            
-        raycast.set_global_position(ray_position);
-        raycast.set_target_position(Vector3::new(0.0, 0.0, 0.0));  // Point straight down
-        raycast.force_raycast_update();
-        
-        raycast.is_colliding()
-    } else {
-        false
-    };
-    
-    if raycast_hit {
-        godot_print!("Found potential stair, snapping up");
-        
-        // Move player up by a fixed amount
-        let new_position = current_position + 
-            Vector3::new(0.0, max_step_height * 0.5, 0.0);
-        
-        self.base_mut().set_global_position(new_position);
-        self.base_mut().apply_floor_snap();
-        self.snapped_stair_last_frame = true;
-        return true;
-    }
-    
-    false
-}
 
     fn run_body_test_motion(
         &self,
         from: Transform3D,
         motion: Vector3,
-        result: Option<Gd<PhysicsTestMotionResult3D>>,
+        result: &Gd<PhysicsTestMotionResult3D>,
     ) -> bool {
         // Create and configure test parameters
         let mut params = PhysicsTestMotionParameters3D::new_gd();
@@ -780,9 +882,7 @@ fn snap_up_stairs(&mut self, delta: f64) -> bool {
         // Get the RID and call the physics server
         let rid = self.base().get_rid();
 
-        // Check the actual signature of body_test_motion in your version of the bindings
-        // It might be something like this:
-        PhysicsServer3D::singleton().body_test_motion(rid, &params)
+        call_body_test_motion(&[rid.to_variant(), params.to_variant(), result.to_variant()])
     }
 
     fn handle_crouch(&mut self, delta: f64) {

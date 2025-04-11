@@ -15,8 +15,16 @@ sky_material = SubResource("ProceduralSkyMaterial_udokr")
 [sub_resource type="Environment" id="Environment_64soo"]
 background_mode = 2
 sky = SubResource("Sky_l4713")
-tonemap_mode = 2
+tonemap_mode = 4
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
 glow_enabled = true
+fog_enabled = true
+fog_density = 0.0044
+fog_sky_affect = 0.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_udokr"]
 
@@ -103,83 +111,76 @@ size = Vector3(18.311, 0.536621, 10.525)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.10564, 0.107421, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.10564, 0.0671664, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.86895, 0.339112, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.86895, 0.298857, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 7.67998, 0.57055, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 7.67998, 0.530295, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.35684, 0.787534, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.35684, 0.747279, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.992, 0.999458, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.992, 0.959203, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 9.75532, 1.23115, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 9.75532, 1.1909, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 10.5663, 1.46259, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 10.5663, 1.42234, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.2432, 1.67957, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.2432, 1.63932, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.9254, 1.89767, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.9254, 1.85742, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 12.6888, 2.12936, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 12.6888, 2.08911, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 13.4998, 2.3608, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 13.4998, 2.32055, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D14" type="CSGBox3D" parent="."]
-transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 14.1766, 2.57778, -3.19309)
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 14.1766, 2.53753, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
-
-[node name="Player" type="Player" parent="."]
-ground_settings = SubResource("GroundMovementSettings_udokr")
-air_settings = SubResource("AirMovementSettings_l4713")
-juice_settings = ExtResource("2_0miaj")
-gravity = 9.75
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
 
 [node name="Control" type="Control" parent="." node_paths=PackedStringArray("InputDir", "WishDir", "currSpeed", "velocity", "_Player")]
 layout_mode = 3
@@ -220,3 +221,10 @@ offset_bottom = 105.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.76843, 23.8948, -83.7094)
 size = Vector3(199.802, 67.7896, 259.746)
 data = ExtResource("3_0miaj")
+
+[node name="Player" type="Player" parent="."]
+ground_settings = SubResource("GroundMovementSettings_udokr")
+air_settings = SubResource("AirMovementSettings_l4713")
+juice_settings = ExtResource("2_0miaj")
+gravity = 9.75
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
