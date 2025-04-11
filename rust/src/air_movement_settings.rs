@@ -19,9 +19,9 @@ impl IResource for AirMovementSettings {
     fn init(base: Base<Resource>) -> Self {
         Self {
             base,
-            speed: 7.0,
-            acceleration: 14.0,
-            airCap: 10.0,
+            speed: 500.0,
+            acceleration: 800.0,
+            airCap: 0.85,
         }
     }
 

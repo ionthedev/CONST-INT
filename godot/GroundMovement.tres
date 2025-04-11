@@ -1,6 +1,4 @@
 [gd_resource type="GroundMovementSettings" format=3 uid="uid://dpslk30t1vurv"]
 
 [resource]
-walk_speed = 8.03
 lean_amount = 0.15
-crouch_translate = 0.8

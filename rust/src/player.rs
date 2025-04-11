@@ -1,3 +1,4 @@
+use std::env::consts::OS;
 use std::f32::INFINITY;
 use std::f64::MIN;
 use std::ops::Mul;
@@ -7,8 +8,8 @@ use godot::classes::character_body_3d::MotionMode;
 use godot::classes::input::MouseMode;
 use godot::classes::physics_server_3d::ExBodyTestMotion;
 use godot::classes::{
-    Camera3D, CapsuleMesh, CapsuleShape3D, CharacterBody3D, CollisionShape3D, Curve, Engine,
-    ICharacterBody3D, Input, InputEvent, InputEventMouseButton, InputEventMouseMotion,
+    Area3D, Camera3D, CapsuleMesh, CapsuleShape3D, CharacterBody3D, CollisionShape3D, Curve,
+    Engine, ICharacterBody3D, Input, InputEvent, InputEventMouseButton, InputEventMouseMotion,
     KinematicCollision3D, MeshInstance3D, PhysicsServer3D, PhysicsTestMotionParameters3D,
     PhysicsTestMotionResult3D, ProjectSettings, RayCast3D,
 };
@@ -35,6 +36,7 @@ pub struct Player {
     gravity: f32,
     #[export]
     look_sensitivity: f32,
+    cur_ladder_climbing: Option<Gd<Area3D>>,
 
     // Movement state
     #[export]
@@ -108,6 +110,7 @@ impl ICharacterBody3D for Player {
             look_sensitivity: 0.006,
             was_on_floor: true,
             is_leaning: false,
+            cur_ladder_climbing: None,
         }
     }
 
@@ -141,12 +144,15 @@ impl ICharacterBody3D for Player {
             self.last_frame_grounded = Engine::singleton().get_physics_frames();
         }
 
+        self.calc_cam_aligned_wish_dir();
         self.wish_dir = self.calc_wish_dir();
 
-        self.handle_crouch(delta);
-        self.handle_lean(delta);
+        if !self.handle_noclip(delta) && !self.handle_ladder_physics() {
+            self.handle_crouch(delta);
+            self.handle_lean(delta);
 
-        self.handle_movement(delta);
+            self.handle_movement(delta);
+        }
         if !self.snap_up_stairs(delta) {
             self.base_mut().move_and_slide();
             self.snap_down_stairs();
@@ -354,6 +360,14 @@ impl Player {
         }
     }
 
+    #[func]
+    pub fn calc_cam_aligned_wish_dir(&mut self) {
+        if let Some(cam) = &self.camera {
+            self.cam_aligned_wish_dir = cam.get_global_transform().basis
+                * Vector3::new(self.calc_input_dir().x, 0.0, -self.calc_input_dir().y);
+        }
+    }
+
     // Physics handling functions
     fn handle_movement(&mut self, delta: f64) {
         if self.ground_settings.is_none() || self.air_settings.is_none() {
@@ -459,7 +473,6 @@ impl Player {
         // Get the gravity value from project settings
         let gravity_variant =
             ProjectSettings::singleton().get_setting("physics/3d/default_gravity");
-
         // Use try_to to convert the Variant to f32
         let gravity: f32 = match gravity_variant.try_to::<f32>() {
             Ok(value) => value,
@@ -469,43 +482,81 @@ impl Player {
         // Apply gravity
         velocity.y -= gravity * delta as f32;
 
+        // Calculate speed in wish direction
         let cur_speed_in_wish_dir: f32 = velocity.dot(self.wish_dir);
+
+        // Calculate capped speed
         let capped_speed: f32 = f32::min(
             (air_settings.bind().speed * self.wish_dir).length(),
             air_settings.bind().airCap,
         );
 
         let air_speed_til_cap: f32 = capped_speed - cur_speed_in_wish_dir;
+
+        // Only add speed if we're under the cap
         if air_speed_til_cap > 0.0 {
             let mut accel_speed: f32 =
                 (air_settings.bind().acceleration * air_settings.bind().speed) * (delta as f32);
             accel_speed = f32::min(accel_speed, air_speed_til_cap);
             velocity += accel_speed * self.wish_dir;
         }
+
+        // Set velocity before checking walls
+        self.update_player_velocity(velocity);
+
+        // Handle wall interaction
         if self.base().is_on_wall() {
-            if self.is_surface_too_steep(self.base().get_wall_normal()) {
+            // Get the wall normal for calculations
+            let wall_normal = self.base().get_wall_normal();
+
+            // Debug - print wall normal
+            godot_print!("Wall normal: {:?}", wall_normal);
+
+            // Check if wall is vertical (normal is nearly perpendicular to UP)
+            let is_wall_vertical = (wall_normal.dot(Vector3::new(0.0, 1.0, 0.0))).abs() < 0.1;
+
+            // Check if the surface is steep and NOT a flat wall
+            if self.is_surface_too_steep(wall_normal) && !is_wall_vertical {
                 self.base_mut().set_motion_mode(MotionMode::FLOATING);
             } else {
                 self.base_mut().set_motion_mode(MotionMode::GROUNDED);
             }
+
+            // Clip velocity against the wall
+            self.clip_velocity(wall_normal, 1.0, delta);
+        }
+    }
+
+    fn clip_velocity(&mut self, normal: Vector3, overbounce: f32, _delta: f64) {
+        // Project velocity onto the normal and apply overbounce
+        let backoff = self.base().get_velocity().dot(normal) * overbounce;
+
+        // If backoff is positive or zero, we're already moving away from or along the surface
+        // so no need to adjust velocity
+        if backoff >= 0.0 {
+            return;
         }
 
-        // Update the velocity
+        // Calculate the change vector
+        let change = normal * backoff;
+
+        // Apply the change to velocity
+        let mut velocity = self.base().get_velocity();
+        velocity -= change;
+
+        // Second iteration to ensure no movement through the plane
+        let adjust = velocity.dot(normal);
+        if adjust < 0.0 {
+            velocity -= normal * adjust;
+        }
+
+        // Update player velocity
         self.update_player_velocity(velocity);
     }
 
     fn is_surface_too_steep(&mut self, normal: Vector3) -> bool {
-        let max_slope_angle_dot: f32 = Vector3::new(0.0, 1.0, 0.0)
-            .rotated(
-                Vector3::new(1.0, 0.0, 0.0),
-                self.base().get_floor_max_angle(),
-            )
-            .dot(Vector3::new(0.0, 1.0, 0.0));
-
-        if normal.dot(Vector3::new(0.0, 1.0, 0.0)) < max_slope_angle_dot {
-            return true;
-        }
-        false
+        let out = normal.angle_to(Vector3::UP) > self.base().get_floor_max_angle();
+        out
     }
 
     fn apply_gravity(&mut self) {
@@ -976,5 +1027,196 @@ impl Player {
                 }
             }
         }
+    }
+
+    fn handle_ladder_physics(&mut self) -> bool {
+        // Keep track of whether already on ladde
+        let ground_settings = self.ground_settings.as_ref().unwrap().clone();
+
+        let mut was_climbing_ladder = false;
+        if let Some(ladder) = &self.cur_ladder_climbing {
+            // Cast to Node first - this works in many godot-rust versions
+            was_climbing_ladder = ladder.overlaps_body(&*self.base());
+        }
+
+        if !was_climbing_ladder {
+            self.cur_ladder_climbing = None;
+
+            // Get all nodes in the "ladder_area3d" group
+            let mut scene_tree = self.base().get_tree().expect("Failed to get scene tree");
+            let ladder_nodes = scene_tree.get_nodes_in_group("ladder_area3d");
+
+            for i in 0..ladder_nodes.len() {
+                let ladder = ladder_nodes.get(i).unwrap().try_cast::<Area3D>();
+                if let Ok(ladder) = ladder {
+                    // Check if this ladder overlaps with the player
+                    if ladder.overlaps_body(&*self.base()) {
+                        godot_print!("Found overlapping ladder!");
+                        self.cur_ladder_climbing = Some(ladder);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // If not on a ladder, return false
+        if self.cur_ladder_climbing.is_none() {
+            return false;
+        }
+
+        let ladder = self.cur_ladder_climbing.as_ref().unwrap();
+
+        godot_print!("Was on ladder: {}", was_climbing_ladder);
+        // Set up variables for ladder climbing
+        let ladder_gtransform = ladder.get_global_transform();
+        let ladder_inverse_transform = ladder_gtransform.affine_inverse();
+        let pos_rel_to_ladder = ladder_inverse_transform * self.base().get_global_position();
+
+        // Get input values
+        let forward_move = Input::singleton().get_action_strength("Forward")
+            - Input::singleton().get_action_strength("Backward");
+        let side_move = Input::singleton().get_action_strength("Right")
+            - Input::singleton().get_action_strength("Left");
+
+        // Get active camera
+        if let Some(active_camera) = &mut self.camera {
+            // Calculate ladder movement vectors
+            let ladder_forward_move = ladder_inverse_transform.basis
+                * active_camera.get_global_transform().basis
+                * Vector3::new(0.0, 0.0, -forward_move);
+            let ladder_side_move = ladder_inverse_transform.basis
+                * active_camera.get_global_transform().basis
+                * Vector3::new(side_move, 0.0, 0.0);
+
+            // Calculate strafe and climb velocities
+            let ladder_strafe_vel =
+                ground_settings.bind().climb_speed * (ladder_side_move.x + ladder_forward_move.x);
+            let mut ladder_climb_vel = ground_settings.bind().climb_speed * -ladder_side_move.z;
+
+            // Adjust climb velocity based on looking direction
+            let up_wish = Vector3::UP
+                .rotated(Vector3::RIGHT, (-45.0_f32).to_radians())
+                .dot(ladder_forward_move);
+            ladder_climb_vel += ground_settings.bind().climb_speed * up_wish;
+
+            // Handle dismounting logic
+            let mut should_dismount = false;
+
+            if !was_climbing_ladder {
+                // Get top of ladder position
+                let top_of_ladder = {
+                    // First get the node path
+                    let node_path = NodePath::from("TopOfLadder");
+
+                    // Try to get the node at that path
+                    if ladder.has_node(&node_path) {
+                        let node = ladder.get_node_or_null(&node_path);
+
+                        if let Some(node) = node {
+                            match node.try_cast::<Node3D>() {
+                                Ok(node_3d) => node_3d.get_position(),
+                                Err(_) => Vector3::ZERO,
+                            }
+                        } else {
+                            Vector3::ZERO
+                        }
+                    } else {
+                        Vector3::ZERO
+                    }
+                };
+                let mounting_from_top = pos_rel_to_ladder.y > top_of_ladder.y;
+
+                if mounting_from_top {
+                    // They could be trying to get on from the top of the ladder, or trying to leave the ladder
+                    if ladder_climb_vel > 0.0 {
+                        should_dismount = true;
+                    }
+                } else {
+                    // If not mounting from top, only stick to ladder if intentionally moving towards
+                    if (ladder_inverse_transform.basis * self.wish_dir).z >= 0.0 {
+                        should_dismount = true;
+                    }
+                }
+
+                // Only stick to ladder if very close
+                if pos_rel_to_ladder.z.abs() > 0.1 {
+                    should_dismount = true;
+                }
+            }
+
+            // Let player step off onto floor
+            if self.base().is_on_floor() && ladder_climb_vel <= 0.0 {
+                should_dismount = true;
+            }
+
+            if should_dismount {
+                self.cur_ladder_climbing = None;
+                return false;
+            }
+
+            // Allow jump off ladder mid climb
+            if was_climbing_ladder && Input::singleton().is_action_just_pressed("Jump") {
+                // Access the third column of the basis matrix (the z-axis)
+                let z_column = Vector3::new(
+                    ladder_gtransform.basis.rows[0].z,
+                    ladder_gtransform.basis.rows[1].z,
+                    ladder_gtransform.basis.rows[2].z,
+                );
+
+                let velocity = z_column * ground_settings.bind().jump_velocity * 1.5;
+                self.base_mut().set_velocity(velocity);
+                self.cur_ladder_climbing = None;
+                return false;
+            }
+
+            // Set velocity and update position
+            let velocity =
+                ladder_gtransform.basis * Vector3::new(ladder_strafe_vel, ladder_climb_vel, 0.0);
+            self.base_mut().set_velocity(velocity);
+        }
+        // Snap player onto ladder
+        let mut new_pos_rel = pos_rel_to_ladder;
+        new_pos_rel.z = 0.0;
+        self.base_mut()
+            .set_global_position(ladder_gtransform * new_pos_rel);
+
+        self.base_mut().move_and_slide();
+        true
+    }
+
+    fn handle_noclip(&mut self, delta: f64) -> bool {
+        // Toggle noclip with debug key
+        let ground_settings = self.ground_settings.as_ref().unwrap().clone();
+        let has_debug = godot::classes::Os::singleton().has_feature("debug");
+        if Input::singleton().is_action_just_pressed("_noclip") && has_debug {
+            self.noclip = !self.noclip;
+            self.noclip_speed_mult = 3.0;
+        }
+
+        // Disable collision shape in noclip mode
+        self.collision.as_mut().unwrap().set_disabled(self.noclip);
+
+        if !self.noclip {
+            return false;
+        }
+
+        // Handle noclip movement
+        let mut speed = ground_settings.bind().get_walk_speed() * self.noclip_speed_mult;
+
+        if Input::singleton().is_action_pressed("Sprint") {
+            speed *= 3.0;
+        }
+
+        // Set velocity and update position
+        let velocity = self.cam_aligned_wish_dir * speed;
+        godot_print!("cam_aligned_wish_dir: {}", self.cam_aligned_wish_dir);
+        self.update_player_velocity(velocity);
+
+        // Directly update position (bypassing physics)
+        let mut pos = self.base().get_global_position();
+        pos += velocity * delta as f32;
+        self.base_mut().set_global_position(pos);
+
+        true
     }
 }

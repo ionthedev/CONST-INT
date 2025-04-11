@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=14 format=3 uid="uid://dok8vdq46fmbk"]
 
 [ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DebugMenu.gd" id="1_l4713"]
 [ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://Grid.gdshader" id="1_umdxf"]
 [ext_resource type="JuiceSettings" uid="uid://ckpt2jaxjlmr0" path="res://JuiceSettings.tres" id="2_0miaj"]
 [ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://Demo.VoxelGI_data.res" id="3_0miaj"]
+[ext_resource type="PackedScene" path="res://ladder.tscn" id="5_wppxa"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udokr"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -79,7 +80,6 @@ shader_parameter/albedo_alpha = 0.5
 [sub_resource type="GroundMovementSettings" id="GroundMovementSettings_udokr"]
 
 [sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
-speed = 4.0
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_64soo")
@@ -120,6 +120,12 @@ material = SubResource("ShaderMaterial_0miaj")
 transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.86895, 0.298857, -3.19309)
 use_collision = true
 size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0109706, 0.327318, 0, -0.0272764, 0.131647, 6.57734, 2.06666, 11.349)
+use_collision = true
+size = Vector3(54, 16, 16)
 material = SubResource("ShaderMaterial_0miaj")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="."]
@@ -228,3 +234,6 @@ air_settings = SubResource("AirMovementSettings_l4713")
 juice_settings = ExtResource("2_0miaj")
 gravity = 9.75
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
+
+[node name="Ladder" parent="." instance=ExtResource("5_wppxa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.6572, 7.5, -1.77833)
