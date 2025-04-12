@@ -5,6 +5,7 @@ stages:
 
 variables:
   RUST_BACKTRACE: 1
+  GIT_STRATEGY: clone  # Force a full clone instead of fetch
 
 # Cache just the target directory for faster builds
 cache:
@@ -16,10 +17,16 @@ build:
   stage: build
   tags:
     - linux
-  script:
+  before_script:
+    # Debug: Show current directory and list files
+    - pwd
+    - ls -la
     # Verify Rust is available
     - rustc --version
     - cargo --version
+  script:
+    # Debug: Make sure Cargo.toml exists
+    - if [ ! -f "Cargo.toml" ]; then echo "ERROR: Cargo.toml not found"; exit 1; fi
     # Build
     - cargo build --release
   artifacts:
