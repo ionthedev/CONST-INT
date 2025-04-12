@@ -22,6 +22,9 @@ build:
     # Debug: Show current directory and list files
     - pwd
     - ls -la
+    # Install build tools
+    - sudo apt-get update -y
+    - sudo apt-get install -y build-essential pkg-config libssl-dev
     # Install Rust if not available
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
@@ -44,6 +47,9 @@ test:
     - linux
   needs: [build]
   before_script:
+    # Install build tools
+    - sudo apt-get update -y
+    - sudo apt-get install -y build-essential pkg-config libssl-dev
     # Install Rust if not available
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
@@ -57,6 +63,9 @@ linux:
   tags:
     - linux
   before_script:
+    # Install build tools
+    - sudo apt-get update -y
+    - sudo apt-get install -y build-essential pkg-config libssl-dev
     # Install Rust if not available
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
@@ -77,6 +86,8 @@ macos:
     # Install Rust if not available
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
+    # Ensure XCode command line tools are installed
+    - xcode-select --install || true
   script:
     - cd rust
     - cargo build --release
@@ -94,6 +105,8 @@ windows:
     # Install Rust if not available
     - where rustc >nul 2>&1 || (curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y)
     - $env:Path += ";$HOME\.cargo\bin"
+    # Ensure Build Tools are installed - this is more complex on Windows
+    # You might need to install Visual Studio Build Tools manually
   script:
     - cd rust
     - cargo build --release
