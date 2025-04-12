@@ -10,7 +10,7 @@ variables:
 # Cache just the target directory for faster builds
 cache:
   paths:
-    - target/
+    - rust/target/
 
 # Main build job
 build:
@@ -21,17 +21,17 @@ build:
     # Debug: Show current directory and list files
     - pwd
     - ls -la
+    # Change to the rust directory
+    - cd rust
     # Verify Rust is available
     - rustc --version
     - cargo --version
   script:
-    # Debug: Make sure Cargo.toml exists
-    - if [ ! -f "Cargo.toml" ]; then echo "ERROR: Cargo.toml not found"; exit 1; fi
     # Build
     - cargo build --release
   artifacts:
     paths:
-      - target/release/
+      - rust/target/release/
 
 # Run tests
 test:
@@ -40,6 +40,7 @@ test:
     - linux
   needs: [build]
   script:
+    - cd rust
     - cargo test
 
 # Linux build
@@ -48,10 +49,11 @@ linux:
   tags:
     - linux
   script:
+    - cd rust
     - cargo build --release
   artifacts:
     paths:
-      - target/release/*.so
+      - rust/target/release/*.so
     expire_in: 1 week
 
 # macOS build
@@ -60,10 +62,11 @@ macos:
   tags:
     - macos
   script:
+    - cd rust
     - cargo build --release
   artifacts:
     paths:
-      - target/release/*.dylib
+      - rust/target/release/*.dylib
     expire_in: 1 week
 
 # Windows build
@@ -72,8 +75,9 @@ windows:
   tags:
     - windows
   script:
+    - cd rust
     - cargo build --release
   artifacts:
     paths:
-      - target/release/*.dll
+      - rust/target/release/*.dll
     expire_in: 1 week
