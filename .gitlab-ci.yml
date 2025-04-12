@@ -55,7 +55,6 @@ macos_build:
     - cd rust
     - cargo build --release --verbose
   artifacts:
-    # Only include the dylib files to reduce artifact size
     paths:
       - rust/target/release/*.dylib
     expire_in: 1 week
@@ -66,13 +65,10 @@ windows_build:
   tags:
     - windows
   variables:
-    # Force Windows to use cmd instead of pwsh
     GIT_SHELL: "cmd"
   script:
-    # Windows-specific commands
     - echo Running in %CD%
     - dir
-    # Install Rust using cmd syntax
     - curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe
     - rustup-init.exe -y --default-toolchain stable --profile minimal
     - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
@@ -85,12 +81,13 @@ windows_build:
       - rust\target\release\*.dll
     expire_in: 1 week
 
-# Test jobs - will run after builds are fixed
+# Test jobs
 linux_test:
   stage: test
   tags:
     - linux
-  needs: [linux_build]
+  needs: 
+    - linux_build
   script:
     - apt-get update -y
     - apt-get install -y build-essential pkg-config libssl-dev
@@ -99,45 +96,40 @@ linux_test:
     - export PATH="$HOME/.cargo/bin:$PATH"
     - cd rust
     - cargo test --verbose
-  dependencies:
-    - linux_build
-  when: on_success
 
 macos_test:
   stage: test
   tags:
     - macos
-  needs: [macos_build]
+  needs:
+    - macos_build
   script:
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
     - cd rust
     - cargo test --verbose
-  dependencies:
-    - macos_build
-  when: on_success
 
 windows_test:
   stage: test
   tags:
     - windows
-  needs: [windows_build]
+  needs:
+    - windows_build
   variables:
     GIT_SHELL: "cmd"
   script:
     - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
     - cd rust
     - cargo test --verbose
-  dependencies:
-    - windows_build
-  when: on_success
 
 # Package jobs
 linux_package:
   stage: package
   tags:
     - linux
-  needs: [linux_test]
+  needs: 
+    - linux_build
+    - linux_test
   script:
     - mkdir -p artifacts/linux
     - cp rust/target/release/*.so artifacts/linux/ || echo "No .so files found"
@@ -145,15 +137,14 @@ linux_package:
     paths:
       - artifacts/linux/
     expire_in: 1 week
-  dependencies:
-    - linux_build
-  when: on_success
 
 macos_package:
   stage: package
   tags:
     - macos
-  needs: [macos_test]
+  needs:
+    - macos_build
+    - macos_test
   script:
     - mkdir -p artifacts/macos
     - cp rust/target/release/*.dylib artifacts/macos/ || echo "No .dylib files found"
@@ -161,15 +152,14 @@ macos_package:
     paths:
       - artifacts/macos/
     expire_in: 1 week
-  dependencies:
-    - macos_build
-  when: on_success
 
 windows_package:
   stage: package
   tags:
     - windows
-  needs: [windows_test]
+  needs:
+    - windows_build
+    - windows_test
   variables:
     GIT_SHELL: "cmd"
   script:
@@ -179,6 +169,3 @@ windows_package:
     paths:
       - artifacts\windows\
     expire_in: 1 week
-  dependencies:
-    - windows_build
-  when: on_success
