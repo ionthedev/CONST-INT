@@ -4,13 +4,11 @@ stages:
   - package
 
 variables:
-  CARGO_HOME: $HOME/.cargo  # Changed to use HOME instead of project dir
   RUST_BACKTRACE: 1
 
-# Cache dependencies between jobs
+# Cache just the target directory for faster builds
 cache:
   paths:
-    - $HOME/.cargo/
     - target/
 
 # Main build job
@@ -19,12 +17,8 @@ build:
   tags:
     - linux
   script:
-    # Install Rust if not available
-    - which rustup > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-    # Add cargo to PATH explicitly
-    - export PATH="$HOME/.cargo/bin:$PATH"
-    # Verify installation
-    - rustup --version
+    # Verify Rust is available
+    - rustc --version
     - cargo --version
     # Build
     - cargo build --release
@@ -39,7 +33,6 @@ test:
     - linux
   needs: [build]
   script:
-    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo test
 
 # Linux build
@@ -48,7 +41,6 @@ linux:
   tags:
     - linux
   script:
-    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo build --release
   artifacts:
     paths:
@@ -61,7 +53,6 @@ macos:
   tags:
     - macos
   script:
-    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo build --release
   artifacts:
     paths:
@@ -74,8 +65,6 @@ windows:
   tags:
     - windows
   script:
-    - $env:Path += ";$HOME\.cargo\bin"
-    - rustup default stable || (Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile rustup-init.exe; .\rustup-init.exe -y --no-modify-path)
     - cargo build --release
   artifacts:
     paths:
