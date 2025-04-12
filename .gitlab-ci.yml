@@ -5,112 +5,169 @@ stages:
 
 variables:
   RUST_BACKTRACE: 1
-  GIT_STRATEGY: clone  # Force a full clone instead of fetch
+  GIT_STRATEGY: clone
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
 
-# Cache just the target directory for faster builds
+# Cache shared across all jobs
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
+    - .cargo/
     - rust/target/
-    - $HOME/.cargo/
 
-# Main build job
-build:
+# Template for common Rust setup (using YAML anchors)
+.rust_setup:
+  before_script: &rust_setup
+    - echo "Running in $(pwd)"
+    - ls -la
+    - echo "Setting up Rust environment..."
+
+# Linux build
+linux_build:
   stage: build
   tags:
     - linux
   before_script:
-    # Debug: Show current directory and list files
-    - pwd
-    - ls -la
-    # Install build tools
+    - *rust_setup
     - sudo apt-get update -y
     - sudo apt-get install -y build-essential pkg-config libssl-dev
-    # Install Rust if not available
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
-    # Change to the rust directory
-    - cd rust
-    # Verify Rust is available
     - rustc --version
     - cargo --version
   script:
-    # Build
-    - cargo build --release
+    - cd rust || { echo "rust directory not found"; exit 1; }
+    - cargo build --release --verbose
   artifacts:
     paths:
       - rust/target/release/
-
-# Run tests
-test:
-  stage: test
-  tags:
-    - linux
-  needs: [build]
-  before_script:
-    # Install build tools
-    - sudo apt-get update -y
-    - sudo apt-get install -y build-essential pkg-config libssl-dev
-    # Install Rust if not available
-    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - export PATH="$HOME/.cargo/bin:$PATH"
-  script:
-    - cd rust
-    - cargo test
-
-# Linux build
-linux:
-  stage: package
-  tags:
-    - linux
-  before_script:
-    # Install build tools
-    - sudo apt-get update -y
-    - sudo apt-get install -y build-essential pkg-config libssl-dev
-    # Install Rust if not available
-    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - export PATH="$HOME/.cargo/bin:$PATH"
-  script:
-    - cd rust
-    - cargo build --release
-  artifacts:
-    paths:
-      - rust/target/release/*.so
     expire_in: 1 week
 
 # macOS build
-macos:
-  stage: package
+macos_build:
+  stage: build
   tags:
     - macos
   before_script:
-    # Install Rust if not available
+    - *rust_setup
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
-    # Ensure XCode command line tools are installed
     - xcode-select --install || true
+    - rustc --version
+    - cargo --version
   script:
-    - cd rust
-    - cargo build --release
+    - cd rust || { echo "rust directory not found"; exit 1; }
+    - cargo build --release --verbose
   artifacts:
     paths:
+      - rust/target/release/
       - rust/target/release/*.dylib
     expire_in: 1 week
 
 # Windows build
-windows:
-  stage: package
+windows_build:
+  stage: build
   tags:
     - windows
   before_script:
-    # Install Rust if not available
+    - *rust_setup
     - where rustc >nul 2>&1 || (curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y)
     - $env:Path += ";$HOME\.cargo\bin"
-    # Ensure Build Tools are installed - this is more complex on Windows
-    # You might need to install Visual Studio Build Tools manually
+    - rustc --version
+    - cargo --version
   script:
-    - cd rust
-    - cargo build --release
+    - cd rust || (echo "rust directory not found" && exit 1)
+    - cargo build --release --verbose
   artifacts:
     paths:
+      - rust/target/release/
       - rust/target/release/*.dll
+    expire_in: 1 week
+
+# Run tests on each platform
+linux_test:
+  stage: test
+  tags:
+    - linux
+  needs: [linux_build]
+  before_script:
+    - *rust_setup
+    - sudo apt-get update -y
+    - sudo apt-get install -y build-essential pkg-config libssl-dev
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
+  script:
+    - cd rust
+    - cargo test --verbose
+
+macos_test:
+  stage: test
+  tags:
+    - macos
+  needs: [macos_build]
+  before_script:
+    - *rust_setup
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
+  script:
+    - cd rust
+    - cargo test --verbose
+
+windows_test:
+  stage: test
+  tags:
+    - windows
+  needs: [windows_build]
+  before_script:
+    - *rust_setup
+    - where rustc >nul 2>&1 || (curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y)
+    - $env:Path += ";$HOME\.cargo\bin"
+  script:
+    - cd rust
+    - cargo test --verbose
+
+# Package stage jobs
+linux_package:
+  stage: package
+  tags:
+    - linux
+  needs: [linux_test]
+  script:
+    - cd rust
+    - echo "Packaging Linux artifacts..."
+    - mkdir -p ../artifacts/linux
+    - cp target/release/*.so ../artifacts/linux/ || echo "No .so files found"
+  artifacts:
+    paths:
+      - artifacts/linux/
+    expire_in: 1 week
+
+macos_package:
+  stage: package
+  tags:
+    - macos
+  needs: [macos_test]
+  script:
+    - cd rust
+    - echo "Packaging macOS artifacts..."
+    - mkdir -p ../artifacts/macos
+    - cp target/release/*.dylib ../artifacts/macos/ || echo "No .dylib files found"
+  artifacts:
+    paths:
+      - artifacts/macos/
+    expire_in: 1 week
+
+windows_package:
+  stage: package
+  tags:
+    - windows
+  needs: [windows_test]
+  script:
+    - cd rust
+    - echo "Packaging Windows artifacts..."
+    - mkdir -p ../artifacts/windows
+    - cp target/release/*.dll ../artifacts/windows/ || echo "No .dll files found"
+  artifacts:
+    paths:
+      - artifacts/windows/
     expire_in: 1 week
