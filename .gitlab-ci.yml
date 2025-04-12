@@ -23,15 +23,17 @@ linux_build:
   script:
     - echo "Running in $(pwd)"
     - ls -la
-    # Install C compiler and build tools
-    - apt-get update -y
-    - apt-get install -y build-essential pkg-config libssl-dev
-    # Setup Rust
-    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - source $HOME/.cargo/env
+    # Clear .profile reference to non-existent cargo env file
+    - cp ~/.profile ~/.profile.bak
+    - grep -v ".cargo/env" ~/.profile.bak > ~/.profile || true
+    # Install Rust without sudo
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
     - export PATH="$HOME/.cargo/bin:$PATH"
-    - rustc --version
-    - cargo --version
+    # Check for cc compiler - it should be installed on system, not using apt-get
+    - which cc || echo "ERROR: C compiler not found - please install build-essential on the runner"
+    - which gcc || echo "ERROR: GCC not found - please install build-essential on the runner"
+    - rustc --version || echo "Rust not installed correctly"
+    - cargo --version || echo "Cargo not installed correctly"
     - cd rust
     - cargo build --release --verbose
   artifacts:
@@ -86,13 +88,13 @@ linux_test:
   stage: test
   tags:
     - linux
-  needs: 
+  needs:
     - linux_build
   script:
-    - apt-get update -y
-    - apt-get install -y build-essential pkg-config libssl-dev
-    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - source $HOME/.cargo/env
+    # Fix .profile issue
+    - cp ~/.profile ~/.profile.bak
+    - grep -v ".cargo/env" ~/.profile.bak > ~/.profile || true
+    # Use the already installed Rust
     - export PATH="$HOME/.cargo/bin:$PATH"
     - cd rust
     - cargo test --verbose
@@ -126,7 +128,7 @@ linux_package:
   stage: package
   tags:
     - linux
-  needs: 
+  needs:
     - linux_build
     - linux_test
   script:
