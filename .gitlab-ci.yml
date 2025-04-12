@@ -11,6 +11,7 @@ variables:
 cache:
   paths:
     - rust/target/
+    - $HOME/.cargo/
 
 # Main build job
 build:
@@ -21,14 +22,15 @@ build:
     # Debug: Show current directory and list files
     - pwd
     - ls -la
+    # Install Rust if not available
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
     # Change to the rust directory
     - cd rust
     # Verify Rust is available
     - rustc --version
     - cargo --version
   script:
-    # adding godot
-    - cargo add godot
     # Build
     - cargo build --release
   artifacts:
@@ -41,6 +43,10 @@ test:
   tags:
     - linux
   needs: [build]
+  before_script:
+    # Install Rust if not available
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
   script:
     - cd rust
     - cargo test
@@ -50,6 +56,10 @@ linux:
   stage: package
   tags:
     - linux
+  before_script:
+    # Install Rust if not available
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
   script:
     - cd rust
     - cargo build --release
@@ -63,6 +73,10 @@ macos:
   stage: package
   tags:
     - macos
+  before_script:
+    # Install Rust if not available
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
   script:
     - cd rust
     - cargo build --release
@@ -76,6 +90,10 @@ windows:
   stage: package
   tags:
     - windows
+  before_script:
+    # Install Rust if not available
+    - where rustc >nul 2>&1 || (curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y)
+    - $env:Path += ";$HOME\.cargo\bin"
   script:
     - cd rust
     - cargo build --release
