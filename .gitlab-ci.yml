@@ -70,8 +70,8 @@ windows_build:
     # Download using PowerShell syntax
     - Invoke-WebRequest -Uri 'https://win.rustup.rs/x86_64' -OutFile 'rustup-init.exe'
     - Start-Process -FilePath .\rustup-init.exe -ArgumentList '-y', '--default-toolchain', 'stable', '--profile', 'minimal' -NoNewWindow -Wait
-    # Update PATH in PowerShell
-    - $env:Path += ";$env:USERPROFILE\.cargo\bin"
+    # Update PATH to use the .cargo in the project directory
+    - $env:Path += ";$PWD\.cargo\bin"
     - rustc --version
     - cargo --version
     - cd rust
@@ -116,9 +116,10 @@ windows_test:
   needs:
     - windows_build
   script:
-    - $env:Path += ";$env:USERPROFILE\.cargo\bin"
+    - $env:Path += ";$PWD\.cargo\bin"
     - cd rust
     - cargo test --verbose
+
 
 # Package jobs
 linux_package:
