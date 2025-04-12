@@ -4,13 +4,13 @@ stages:
   - package
 
 variables:
-  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+  CARGO_HOME: $HOME/.cargo  # Changed to use HOME instead of project dir
   RUST_BACKTRACE: 1
 
 # Cache dependencies between jobs
 cache:
   paths:
-    - .cargo/
+    - $HOME/.cargo/
     - target/
 
 # Main build job
@@ -19,8 +19,14 @@ build:
   tags:
     - linux
   script:
-    - rustup default stable || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - source $HOME/.cargo/env || true
+    # Install Rust if not available
+    - which rustup > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    # Add cargo to PATH explicitly
+    - export PATH="$HOME/.cargo/bin:$PATH"
+    # Verify installation
+    - rustup --version
+    - cargo --version
+    # Build
     - cargo build --release
   artifacts:
     paths:
@@ -29,9 +35,11 @@ build:
 # Run tests
 test:
   stage: test
+  tags:
+    - linux
   needs: [build]
   script:
-    - source $HOME/.cargo/env || true
+    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo test
 
 # Linux build
@@ -40,7 +48,7 @@ linux:
   tags:
     - linux
   script:
-    - source $HOME/.cargo/env || true
+    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo build --release
   artifacts:
     paths:
@@ -53,7 +61,7 @@ macos:
   tags:
     - macos
   script:
-    - source $HOME/.cargo/env || true
+    - export PATH="$HOME/.cargo/bin:$PATH"
     - cargo build --release
   artifacts:
     paths:
@@ -66,8 +74,8 @@ windows:
   tags:
     - windows
   script:
-    - rustup default stable || curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y
-    - refreshenv || $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    - $env:Path += ";$HOME\.cargo\bin"
+    - rustup default stable || (Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile rustup-init.exe; .\rustup-init.exe -y --no-modify-path)
     - cargo build --release
   artifacts:
     paths:
