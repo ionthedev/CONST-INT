@@ -171,17 +171,17 @@ combined_package:
     - macos_package
     - windows_package
   script:
-    # Create addon directory structure
-    - mkdir -p addons/const_int/bin/{linux,macos,windows}
+    # Create project directory structure using the godot folder from repo
+    - mkdir -p godot/addons/const_int/bin/{linux,macos,windows}
     
     # Copy platform-specific libraries
-    - cp artifacts/linux/*.so addons/const_int/bin/linux/
-    - cp artifacts/macos/*.dylib addons/const_int/bin/macos/
-    - cp artifacts/windows/*.dll addons/const_int/bin/windows/
+    - cp artifacts/linux/*.so godot/addons/const_int/bin/linux/
+    - cp artifacts/macos/*.dylib godot/addons/const_int/bin/macos/
+    - cp artifacts/windows/*.dll godot/addons/const_int/bin/windows/
     
     # Create updated .gdextension file
     - |
-      cat > addons/const_int/const_int.gdextension << EOF
+      cat > godot/addons/const_int/const_int.gdextension << EOF
       [configuration]
       entry_symbol = "gdext_rust_init"
       compatibility_minimum = 4.4
@@ -198,10 +198,17 @@ combined_package:
       macos.release.arm64 =    "res://addons/const_int/bin/macos/libCONST_INT.dylib"
       EOF
     
-    # Create tar.gz file instead of zip
-    - tar -czvf const_int_addon.tar.gz addons/
+    # Copy any existing files from the godot directory in the repo
+    - if [ -d "./godot-original" ]; then rm -rf ./godot-original; fi
+    - mv ./godot ./godot-original
+    - mkdir -p ./godot
+    - cp -R ./godot-original/* ./godot/ || true
+    - cp -R ./godot-original/.* ./godot/ 2>/dev/null || true
+    
+    # Create tar.gz file
+    - tar -czvf const_int_godot_project.tar.gz godot/
     
   artifacts:
     paths:
-      - const_int_addon.tar.gz
+      - const_int_godot_project.tar.gz
     expire_in: 1 month
