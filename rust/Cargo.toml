@@ -1,0 +1,11 @@
+
+[package]
+name = "CONST-INT" # Part of dynamic library name; we use {YourCrate} placeholder.
+version = "0.1.0"     # You can leave version and edition as-is for now.
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
+
+[dependencies]
+godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["experimental-threads"] }

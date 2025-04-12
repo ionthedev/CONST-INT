@@ -1,0 +1,4 @@
+[gd_resource type="GroundMovementSettings" format=3 uid="uid://dpslk30t1vurv"]
+
+[resource]
+lean_amount = 0.15

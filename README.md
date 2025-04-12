@@ -1,93 +1,70 @@
 # CONST-INT
+A GDExtension planning to make game development easier. If you clone this project, please do not hesitate to watch or star the repo to stay up to data with it's changes.
+
+CURRENT CLASSES MAY BE A WORK IN PROGRESS.
+
+## CURRENT STATE: LANGUAGE PORTING
+Check the [Projects](https://github.com/users/ionthedev/projects/2) page to view the currently active aspects being ported.
+
+External contributions are locked until the language port is complete.
+
+Converting the project from C# to rust, check the rust branch to keep up to date.. The C# version has been made legacy.
+https://ionthedev.itch.io/constint
+
+If you would like to support the project as it develops, feel free to click the sponsor button on the top or visit https://ko-fi.com/ionthedev
+
+The current features of the legecy version (0.5.2 on [Itch.io]([url](https://ionthedev.itch.io/constint))) https://ionthedev.itch.io/constint
 
 
+- [FPS Controller (Sprinting, Crouching, Stair Handling Jumping and Walking)](https://github.com/ionthedev/CONST-INT/issues/4)
+- Inventory Component
+- Enemy with simple EXTREMELY simple follow AI
+- Custom State Machine - used for FPS controller
+- Doors - Rotational and Translational
+- Display Box Message System
+- Event System (resource based)
+- Custom PSX Shader
+- Custom Post Processing Shader
+- Health System
+- Custom GDpsx with helper functions for people wanting to expand the system with their own code.
 
-## Getting started
+# Why //CONST //INT
+Godot leverages Entity-Component Patterns, Flyweight Patterns and Observer Patterns masterfully. This probably makes NO sense if you are not a programmer, which is why YOU are the type of person I am making this for.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+//CONST //INT is aimed to act as your technical artist and systems engineer, allowing you to just hop in and make 3D games.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+If you are a programmer, //CONST //INT aims to fill in the gaps of systems you don't want to keep writing time and time again; allowing you to just make the tings that are fun for you.
 
-## Add your files
+//CONST //INT is inspired greatly by the way Valve and Source engine games feel, and a huge aspect of that is strong toolset that they've unleashed onto their audience allowing them to make amazing games and experiences.
+That is what I aim for this project to be for Godot.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+# How can I help //CONST //INT
+Look [Projects](https://github.com/users/ionthedev/projects/2) page and pick and issue a task that isn't already an active issue. Once you feel it's ready, make it a PR and it will go through the process. The project should follow the [Contributing Guidelines set by Godot](https://docs.godotengine.org/en/stable/contributing/ways_to_contribute.html) as close as possible and the project will be built upon to further reflect those guidelines for a solid foundation of mutual understanding.
 
-```
-cd existing_repo
-git remote add origin http://lab.nullvectorlabs.com/nullvector/const-int.git
-git branch -M main
-git push -uf origin main
-```
+Also join the discord and hop in the chat if you are interested in joining in on the project.
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](http://lab.nullvectorlabs.com/nullvector/const-int/-/settings/integrations)
+# Community
+We currently only have a discord, so [feel free to join! ](https://discord.com/servers/friendly-studios-745380942167670785)
+# gdextension
 
-## Collaborate with your team
+GDExtension template that automatically builds into a self-contained addon for the Godot Asset Library.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### Getting started:
+PROJECT CURRENTLY IN DEVELOPMENT
 
-## Test and Deploy
+### Repository structure:
+- `godot' - Godot project boilerplate
+- 'rust' - Rust project for building the GDExtension
 
-Use the built-in continuous integration in GitLab.
+### Make it your own:
+1. Rename `project/addons/example/` and `project/addons/example/example.gdextension`.
+2. Replace `LICENSE`, `README.md`, and your code in `src/`.
+3. Not required, but consider leaving a note about this template if you found it helpful!
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### Distributing your extension on the Godot Asset Library with GitHub Actions:
+1. Go to Repository→Actions and download the latest artifact.
+2. Test the artifact by extracting the addon into a project.
+3. Create a new release on GitHub, uploading the artifact as an asset.
+4. On the asset, Right Click→Copy Link to get a direct file URL. Don't use the artifacts directly from GitHub Actions, as they expire.
+5. When submitting/updating on the Godot Asset Library, Change "Repository host" to `Custom` and "Download URL" to the one you copied.

@@ -1,0 +1,239 @@
+[gd_scene load_steps=14 format=3 uid="uid://dok8vdq46fmbk"]
+
+[ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DebugMenu.gd" id="1_l4713"]
+[ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://Grid.gdshader" id="1_umdxf"]
+[ext_resource type="JuiceSettings" uid="uid://ckpt2jaxjlmr0" path="res://JuiceSettings.tres" id="2_0miaj"]
+[ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://Demo.VoxelGI_data.res" id="3_0miaj"]
+[ext_resource type="PackedScene" path="res://ladder.tscn" id="5_wppxa"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udokr"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_l4713"]
+sky_material = SubResource("ProceduralSkyMaterial_udokr")
+
+[sub_resource type="Environment" id="Environment_64soo"]
+background_mode = 2
+sky = SubResource("Sky_l4713")
+tonemap_mode = 4
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+fog_enabled = true
+fog_density = 0.0044
+fog_sky_affect = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_udokr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wppxa"]
+render_priority = 0
+shader = ExtResource("1_umdxf")
+shader_parameter/world_uv = false
+shader_parameter/object_uv = false
+shader_parameter/object_uv_scale = Vector2(1, 1)
+shader_parameter/preset_color = 0
+shader_parameter/base_color = Color(0.262745, 0.266667, 0.262745, 1)
+shader_parameter/metalic = 0.25
+shader_parameter/roughness = 0.75
+shader_parameter/grid_scale = 1.0
+shader_parameter/grid_width = 0.01
+shader_parameter/grid_color = Color(0.8, 0.8, 0.8, 1)
+shader_parameter/inside_scale = 1.0
+shader_parameter/inside_width = 0.01
+shader_parameter/inside_color = Color(0.8, 0.8, 0.8, 0.8)
+shader_parameter/checkered = true
+shader_parameter/sub_checkered_grid = false
+shader_parameter/checkered_color = Color(0.25, 0.25, 0.25, 1)
+shader_parameter/checkered_blend_color = 0.1
+shader_parameter/use_inside_uv = false
+shader_parameter/use_albedo_color = false
+shader_parameter/albedo_alpha = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0miaj"]
+render_priority = 0
+shader = ExtResource("1_umdxf")
+shader_parameter/world_uv = false
+shader_parameter/object_uv = false
+shader_parameter/object_uv_scale = Vector2(1, 1)
+shader_parameter/preset_color = 0
+shader_parameter/base_color = Color(0.74902, 0.266667, 0.0509804, 1)
+shader_parameter/metalic = 0.25
+shader_parameter/roughness = 0.75
+shader_parameter/grid_scale = 1.0
+shader_parameter/grid_width = 0.01
+shader_parameter/grid_color = Color(0.8, 0.8, 0.8, 1)
+shader_parameter/inside_scale = 1.0
+shader_parameter/inside_width = 0.01
+shader_parameter/inside_color = Color(0.8, 0.8, 0.8, 0.8)
+shader_parameter/checkered = true
+shader_parameter/sub_checkered_grid = false
+shader_parameter/checkered_color = Color(0.25, 0.25, 0.25, 1)
+shader_parameter/checkered_blend_color = 0.1
+shader_parameter/use_inside_uv = false
+shader_parameter/use_albedo_color = false
+shader_parameter/albedo_alpha = 0.5
+
+[sub_resource type="GroundMovementSettings" id="GroundMovementSettings_udokr"]
+
+[sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_64soo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Node3D" type="Node3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.074, -3.22782)
+mesh = SubResource("SphereMesh_udokr")
+skeleton = NodePath("")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.424, -0.5, -78.0685)
+use_collision = true
+size = Vector3(211.372, 1, 256.389)
+material = SubResource("ShaderMaterial_wppxa")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5058, 1.52585, -3.19309)
+use_collision = true
+size = Vector3(18.311, 0.536621, 10.525)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.10564, 0.0671664, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 6.86895, 0.298857, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0109706, 0.327318, 0, -0.0272764, 0.131647, 6.57734, 2.06666, 11.349)
+use_collision = true
+size = Vector3(54, 16, 16)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 7.67998, 0.530295, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.35684, 0.747279, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 8.992, 0.959203, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 9.75532, 1.1909, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 10.5663, 1.42234, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.2432, 1.63932, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 11.9254, 1.85742, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 12.6888, 2.08911, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 13.4998, 2.32055, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="."]
+transform = Transform3D(3.40049, 0, 0, 0, 1, 0, 0, 0, 1, 14.1766, 2.53753, -3.19309)
+use_collision = true
+size = Vector3(0.25, 0.25, 4)
+material = SubResource("ShaderMaterial_0miaj")
+
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("InputDir", "WishDir", "currSpeed", "velocity", "_Player")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_l4713")
+InputDir = NodePath("InputDir")
+WishDir = NodePath("WishDir")
+currSpeed = NodePath("CurrSpeed")
+velocity = NodePath("Velocity")
+_Player = NodePath("../Player")
+
+[node name="InputDir" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="WishDir" type="Label" parent="Control"]
+layout_mode = 0
+offset_top = 24.0
+offset_right = 79.0
+offset_bottom = 47.0
+
+[node name="Velocity" type="Label" parent="Control"]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 79.0
+offset_bottom = 71.0
+
+[node name="CurrSpeed" type="Label" parent="Control"]
+layout_mode = 0
+offset_top = 82.0
+offset_right = 79.0
+offset_bottom = 105.0
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.76843, 23.8948, -83.7094)
+size = Vector3(199.802, 67.7896, 259.746)
+data = ExtResource("3_0miaj")
+
+[node name="Player" type="Player" parent="."]
+ground_settings = SubResource("GroundMovementSettings_udokr")
+air_settings = SubResource("AirMovementSettings_l4713")
+juice_settings = ExtResource("2_0miaj")
+gravity = 9.75
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
+
+[node name="Ladder" parent="." instance=ExtResource("5_wppxa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.6572, 7.5, -1.77833)
