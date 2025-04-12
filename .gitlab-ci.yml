@@ -171,17 +171,26 @@ combined_package:
     - macos_package
     - windows_package
   script:
-    # Create project directory structure using the godot folder from repo
-    - mkdir -p godot/addons/const_int/bin/{linux,macos,windows}
+    # Create a minimal project structure
+    - mkdir -p godot_minimal/addons/const_int/bin/{linux,macos,windows}
+    
+    # Copy only essential project files from the godot directory
+    - |
+      if [ -d "./godot" ]; then
+        # Copy only essential Godot project files, not all content
+        cp -r ./godot/project.godot ./godot_minimal/ 2>/dev/null || true
+        cp -r ./godot/icon.svg ./godot_minimal/ 2>/dev/null || true
+        # Add any other specific essential files you need
+      fi
     
     # Copy platform-specific libraries
-    - cp artifacts/linux/*.so godot/addons/const_int/bin/linux/
-    - cp artifacts/macos/*.dylib godot/addons/const_int/bin/macos/
-    - cp artifacts/windows/*.dll godot/addons/const_int/bin/windows/
+    - cp artifacts/linux/*.so godot_minimal/addons/const_int/bin/linux/
+    - cp artifacts/macos/*.dylib godot_minimal/addons/const_int/bin/macos/
+    - cp artifacts/windows/*.dll godot_minimal/addons/const_int/bin/windows/
     
     # Create updated .gdextension file
     - |
-      cat > godot/addons/const_int/const_int.gdextension << EOF
+      cat > godot_minimal/addons/const_int/const_int.gdextension << EOF
       [configuration]
       entry_symbol = "gdext_rust_init"
       compatibility_minimum = 4.4
@@ -198,17 +207,13 @@ combined_package:
       macos.release.arm64 =    "res://addons/const_int/bin/macos/libCONST_INT.dylib"
       EOF
     
-    # Copy any existing files from the godot directory in the repo
-    - if [ -d "./godot-original" ]; then rm -rf ./godot-original; fi
-    - mv ./godot ./godot-original
-    - mkdir -p ./godot
-    - cp -R ./godot-original/* ./godot/ || true
-    - cp -R ./godot-original/.* ./godot/ 2>/dev/null || true
+    # Create tar.gz file with maximum compression
+    - tar -czvf const_int_addon.tar.gz godot_minimal/
     
-    # Create tar.gz file
-    - tar -czvf const_int_godot_project.tar.gz godot/
+    # Show the size of the resulting file
+    - ls -lh const_int_addon.tar.gz
     
   artifacts:
     paths:
-      - const_int_godot_project.tar.gz
+      - const_int_addon.tar.gz
     expire_in: 1 month
