@@ -23,15 +23,11 @@ linux_build:
   script:
     - echo "Running in $(pwd)"
     - ls -la
-    # Clear .profile reference to non-existent cargo env file
-    - cp ~/.profile ~/.profile.bak
+    - cp ~/.profile ~/.profile.bak || true
     - grep -v ".cargo/env" ~/.profile.bak > ~/.profile || true
-    # Install Rust without sudo
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
     - export PATH="$HOME/.cargo/bin:$PATH"
-    # Check for cc compiler - it should be installed on system, not using apt-get
-    - which cc || echo "ERROR: C compiler not found - please install build-essential on the runner"
-    - which gcc || echo "ERROR: GCC not found - please install build-essential on the runner"
+    - which cc || echo "ERROR C compiler not found - please install build-essential on the runner"
     - rustc --version || echo "Rust not installed correctly"
     - cargo --version || echo "Cargo not installed correctly"
     - cd rust
@@ -91,10 +87,6 @@ linux_test:
   needs:
     - linux_build
   script:
-    # Fix .profile issue
-    - cp ~/.profile ~/.profile.bak
-    - grep -v ".cargo/env" ~/.profile.bak > ~/.profile || true
-    # Use the already installed Rust
     - export PATH="$HOME/.cargo/bin:$PATH"
     - cd rust
     - cargo test --verbose
