@@ -27,6 +27,8 @@ build:
     - rustc --version
     - cargo --version
   script:
+    # adding godot
+    - cargo add godot
     # Build
     - cargo build --release
   artifacts:
