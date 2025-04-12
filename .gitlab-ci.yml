@@ -1,0 +1,73 @@
+stages:
+  - build
+  - test
+  - package
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+  RUST_BACKTRACE: 1
+
+# Cache dependencies between jobs
+cache:
+  paths:
+    - .cargo/
+    - target/
+
+# Main build job
+build:
+  stage: build
+  script:
+    - rustup default stable || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - source $HOME/.cargo/env || true
+    - cargo build --release
+  artifacts:
+    paths:
+      - target/release/
+
+# Run tests
+test:
+  stage: test
+  needs: [build]
+  script:
+    - source $HOME/.cargo/env || true
+    - cargo test
+
+# Linux build
+linux:
+  stage: package
+  tags:
+    - linux
+  script:
+    - source $HOME/.cargo/env || true
+    - cargo build --release
+  artifacts:
+    paths:
+      - target/release/*.so
+    expire_in: 1 week
+
+# macOS build
+macos:
+  stage: package
+  tags:
+    - macos
+  script:
+    - source $HOME/.cargo/env || true
+    - cargo build --release
+  artifacts:
+    paths:
+      - target/release/*.dylib
+    expire_in: 1 week
+
+# Windows build
+windows:
+  stage: package
+  tags:
+    - windows
+  script:
+    - rustup default stable || curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && .\rustup-init.exe -y
+    - refreshenv || $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    - cargo build --release
+  artifacts:
+    paths:
+      - target/release/*.dll
+    expire_in: 1 week
