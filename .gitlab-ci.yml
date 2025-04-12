@@ -165,7 +165,7 @@ windows_package:
 combined_package:
   stage: package
   tags:
-    - linux  # Use any runner that has zip utilities
+    - linux
   needs:
     - linux_package
     - macos_package
@@ -198,11 +198,10 @@ combined_package:
       macos.release.arm64 =    "res://addons/const_int/bin/macos/libCONST_INT.dylib"
       EOF
     
-    # Create zip file
-    - apt-get update && apt-get install -y zip || true
-    - zip -r const_int_addon.zip addons/ 
+    # Create tar.gz file instead of zip
+    - tar -czvf const_int_addon.tar.gz addons/
     
   artifacts:
     paths:
-      - const_int_addon.zip
+      - const_int_addon.tar.gz
     expire_in: 1 month
