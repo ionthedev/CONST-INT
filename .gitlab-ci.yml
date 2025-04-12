@@ -64,14 +64,14 @@ windows_build:
   stage: build
   tags:
     - windows
-  variables:
-    GIT_SHELL: "cmd"
   script:
-    - echo Running in %CD%
+    - Write-Host "Running in $PWD"
     - dir
-    - curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe
-    - rustup-init.exe -y --default-toolchain stable --profile minimal
-    - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
+    # Download using PowerShell syntax
+    - Invoke-WebRequest -Uri 'https://win.rustup.rs/x86_64' -OutFile 'rustup-init.exe'
+    - Start-Process -FilePath .\rustup-init.exe -ArgumentList '-y', '--default-toolchain', 'stable', '--profile', 'minimal' -NoNewWindow -Wait
+    # Update PATH in PowerShell
+    - $env:Path += ";$env:USERPROFILE\.cargo\bin"
     - rustc --version
     - cargo --version
     - cd rust
@@ -115,10 +115,8 @@ windows_test:
     - windows
   needs:
     - windows_build
-  variables:
-    GIT_SHELL: "cmd"
   script:
-    - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
+    - $env:Path += ";$env:USERPROFILE\.cargo\bin"
     - cd rust
     - cargo test --verbose
 
@@ -160,11 +158,10 @@ windows_package:
   needs:
     - windows_build
     - windows_test
-  variables:
-    GIT_SHELL: "cmd"
   script:
-    - mkdir artifacts\windows
-    - copy rust\target\release\*.dll artifacts\windows\ || echo "No .dll files found"
+    - New-Item -ItemType Directory -Path artifacts\windows -Force
+    - Copy-Item -Path rust\target\release\*.dll -Destination artifacts\windows\ -ErrorAction SilentlyContinue
+    - if (-not (Test-Path artifacts\windows\*.dll)) { Write-Host "No .dll files found" }
   artifacts:
     paths:
       - artifacts\windows\
