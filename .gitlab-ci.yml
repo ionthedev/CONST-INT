@@ -161,3 +161,48 @@ windows_package:
     paths:
       - artifacts\windows\
     expire_in: 1 week
+
+combined_package:
+  stage: package
+  tags:
+    - linux  # Use any runner that has zip utilities
+  needs:
+    - linux_package
+    - macos_package
+    - windows_package
+  script:
+    # Create addon directory structure
+    - mkdir -p addons/const_int/bin/{linux,macos,windows}
+    
+    # Copy platform-specific libraries
+    - cp artifacts/linux/*.so addons/const_int/bin/linux/
+    - cp artifacts/macos/*.dylib addons/const_int/bin/macos/
+    - cp artifacts/windows/*.dll addons/const_int/bin/windows/
+    
+    # Create updated .gdextension file
+    - |
+      cat > addons/const_int/const_int.gdextension << EOF
+      [configuration]
+      entry_symbol = "gdext_rust_init"
+      compatibility_minimum = 4.4
+      reloadable = true
+
+      [libraries]
+      linux.debug.x86_64 =     "res://addons/const_int/bin/linux/libCONST_INT.so"
+      linux.release.x86_64 =   "res://addons/const_int/bin/linux/libCONST_INT.so"
+      windows.debug.x86_64 =   "res://addons/const_int/bin/windows/libCONST_INT.dll"
+      windows.release.x86_64 = "res://addons/const_int/bin/windows/libCONST_INT.dll"
+      macos.debug =            "res://addons/const_int/bin/macos/libCONST_INT.dylib"
+      macos.release =          "res://addons/const_int/bin/macos/libCONST_INT.dylib"
+      macos.debug.arm64 =      "res://addons/const_int/bin/macos/libCONST_INT.dylib"
+      macos.release.arm64 =    "res://addons/const_int/bin/macos/libCONST_INT.dylib"
+      EOF
+    
+    # Create zip file
+    - apt-get update && apt-get install -y zip || true
+    - zip -r const_int_addon.zip addons/ 
+    
+  artifacts:
+    paths:
+      - const_int_addon.zip
+    expire_in: 1 month
