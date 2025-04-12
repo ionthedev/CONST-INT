@@ -6,10 +6,9 @@ stages:
 variables:
   RUST_BACKTRACE: 1
   GIT_STRATEGY: clone
-  # Don't use $HOME/.cargo as it's causing environment issues
   CARGO_HOME: $CI_PROJECT_DIR/.cargo
 
-# Cache shared across all jobs
+# Cache configuration
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
@@ -24,21 +23,23 @@ linux_build:
   script:
     - echo "Running in $(pwd)"
     - ls -la
-    - echo "Setting up Rust environment..."
-    # Install Rust without requiring sudo
-    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    - source $HOME/.cargo/env || true
+    # Install C compiler and build tools
+    - apt-get update -y
+    - apt-get install -y build-essential pkg-config libssl-dev
+    # Setup Rust
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - source $HOME/.cargo/env
     - export PATH="$HOME/.cargo/bin:$PATH"
-    - rustc --version || echo "Rust not available, continuing with install"
-    - cargo --version || echo "Cargo not available, continuing with install"
-    - cd rust || { echo "rust directory not found"; exit 1; }
+    - rustc --version
+    - cargo --version
+    - cd rust
     - cargo build --release --verbose
   artifacts:
     paths:
-      - rust/target/release/
+      - rust/target/release/*.so
     expire_in: 1 week
 
-# macOS build - this seems to be working, keeping as is
+# macOS build
 macos_build:
   stage: build
   tags:
@@ -46,34 +47,34 @@ macos_build:
   script:
     - echo "Running in $(pwd)"
     - ls -la
-    - echo "Setting up Rust environment..."
     - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     - export PATH="$HOME/.cargo/bin:$PATH"
     - xcode-select --install || true
     - rustc --version
     - cargo --version
-    - cd rust || { echo "rust directory not found"; exit 1; }
+    - cd rust
     - cargo build --release --verbose
   artifacts:
+    # Only include the dylib files to reduce artifact size
     paths:
-      - rust/target/release/
       - rust/target/release/*.dylib
     expire_in: 1 week
 
-# Windows build - fixing PowerShell issues
+# Windows build
 windows_build:
   stage: build
   tags:
     - windows
   variables:
     # Force Windows to use cmd instead of pwsh
-    GIT_BASH: "0" 
+    GIT_SHELL: "cmd"
   script:
-    - echo "Running in %CD%"
+    # Windows-specific commands
+    - echo Running in %CD%
     - dir
-    - echo "Setting up Rust environment..."
-    # Use curl.exe for Windows
-    - where rustc >nul 2>&1 || (curl.exe -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe && rustup-init.exe -y --default-toolchain stable --profile minimal)
+    # Install Rust using cmd syntax
+    - curl -sSf https://win.rustup.rs/x86_64 -o rustup-init.exe
+    - rustup-init.exe -y --default-toolchain stable --profile minimal
     - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
     - rustc --version
     - cargo --version
@@ -81,10 +82,103 @@ windows_build:
     - cargo build --release --verbose
   artifacts:
     paths:
-      - rust/target/release/
-      - rust/target/release/*.dll
+      - rust\target\release\*.dll
     expire_in: 1 week
 
-# Test jobs would go here but commenting out for now to focus on fixing build issues
+# Test jobs - will run after builds are fixed
+linux_test:
+  stage: test
+  tags:
+    - linux
+  needs: [linux_build]
+  script:
+    - apt-get update -y
+    - apt-get install -y build-essential pkg-config libssl-dev
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - source $HOME/.cargo/env
+    - export PATH="$HOME/.cargo/bin:$PATH"
+    - cd rust
+    - cargo test --verbose
+  dependencies:
+    - linux_build
+  when: on_success
 
-# Package jobs would go here but commenting out for now to focus on fixing build issues
+macos_test:
+  stage: test
+  tags:
+    - macos
+  needs: [macos_build]
+  script:
+    - which rustc > /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
+    - cd rust
+    - cargo test --verbose
+  dependencies:
+    - macos_build
+  when: on_success
+
+windows_test:
+  stage: test
+  tags:
+    - windows
+  needs: [windows_build]
+  variables:
+    GIT_SHELL: "cmd"
+  script:
+    - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
+    - cd rust
+    - cargo test --verbose
+  dependencies:
+    - windows_build
+  when: on_success
+
+# Package jobs
+linux_package:
+  stage: package
+  tags:
+    - linux
+  needs: [linux_test]
+  script:
+    - mkdir -p artifacts/linux
+    - cp rust/target/release/*.so artifacts/linux/ || echo "No .so files found"
+  artifacts:
+    paths:
+      - artifacts/linux/
+    expire_in: 1 week
+  dependencies:
+    - linux_build
+  when: on_success
+
+macos_package:
+  stage: package
+  tags:
+    - macos
+  needs: [macos_test]
+  script:
+    - mkdir -p artifacts/macos
+    - cp rust/target/release/*.dylib artifacts/macos/ || echo "No .dylib files found"
+  artifacts:
+    paths:
+      - artifacts/macos/
+    expire_in: 1 week
+  dependencies:
+    - macos_build
+  when: on_success
+
+windows_package:
+  stage: package
+  tags:
+    - windows
+  needs: [windows_test]
+  variables:
+    GIT_SHELL: "cmd"
+  script:
+    - mkdir artifacts\windows
+    - copy rust\target\release\*.dll artifacts\windows\ || echo "No .dll files found"
+  artifacts:
+    paths:
+      - artifacts\windows\
+    expire_in: 1 week
+  dependencies:
+    - windows_build
+  when: on_success
