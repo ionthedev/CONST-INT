@@ -8,7 +8,7 @@ Check the [Projects](https://github.com/users/ionthedev/projects/2) page to view
 
 External contributions are locked until the language port is complete.
 
-Converting the project from C# to rust, check the rust branch to keep up to date.. The C# version has been made legacy.
+Converting the project from C# to rust. The C# version has been made legacy.
 https://ionthedev.itch.io/constint
 
 If you would like to support the project as it develops, feel free to click the sponsor button on the top or visit https://ko-fi.com/ionthedev
