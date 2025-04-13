@@ -245,4 +245,4 @@ itch:
     BUTLER_API_KEY: ${BUTLER_API_KEY}
     ITCHIO_USERNAME: ${ITCHIO_USERNAME}
   only:
-    - master
+    - main
