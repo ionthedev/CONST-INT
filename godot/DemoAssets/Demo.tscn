@@ -1,10 +1,12 @@
 [gd_scene load_steps=14 format=3 uid="uid://dok8vdq46fmbk"]
 
-[ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DebugMenu.gd" id="1_l4713"]
-[ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://Grid.gdshader" id="1_umdxf"]
-[ext_resource type="JuiceSettings" uid="uid://ckpt2jaxjlmr0" path="res://JuiceSettings.tres" id="2_0miaj"]
-[ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://Demo.VoxelGI_data.res" id="3_0miaj"]
-[ext_resource type="PackedScene" path="res://ladder.tscn" id="5_wppxa"]
+[ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://DemoAssets/Shaders/Grid.gdshader" id="1_2dw6h"]
+[ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DemoAssets/PlayerDefaults/DebugMenu.gd" id="2_t5ahw"]
+[ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://DemoAssets/Demo.VoxelGI_data.res" id="3_lgvl2"]
+[ext_resource type="GroundMovementSettings" uid="uid://li87es40gltk" path="res://DemoAssets/PlayerDefaults/GroundMoveSettings.tres" id="4_u3by0"]
+[ext_resource type="AirMovementSettings" uid="uid://drmjbx40t0jyk" path="res://DemoAssets/PlayerDefaults/AirMoveSettings.tres" id="5_n5ajc"]
+[ext_resource type="JuiceSettings" uid="uid://bqppm1parrot6" path="res://DemoAssets/PlayerDefaults/JuiceSettings.tres" id="6_n651b"]
+[ext_resource type="PackedScene" uid="uid://b1ovqgjwms7u4" path="res://DemoAssets/ladder.tscn" id="7_ivoa2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udokr"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -31,7 +33,7 @@ fog_sky_affect = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wppxa"]
 render_priority = 0
-shader = ExtResource("1_umdxf")
+shader = ExtResource("1_2dw6h")
 shader_parameter/world_uv = false
 shader_parameter/object_uv = false
 shader_parameter/object_uv_scale = Vector2(1, 1)
@@ -55,7 +57,7 @@ shader_parameter/albedo_alpha = 0.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0miaj"]
 render_priority = 0
-shader = ExtResource("1_umdxf")
+shader = ExtResource("1_2dw6h")
 shader_parameter/world_uv = false
 shader_parameter/object_uv = false
 shader_parameter/object_uv_scale = Vector2(1, 1)
@@ -76,10 +78,6 @@ shader_parameter/checkered_blend_color = 0.1
 shader_parameter/use_inside_uv = false
 shader_parameter/use_albedo_color = false
 shader_parameter/albedo_alpha = 0.5
-
-[sub_resource type="GroundMovementSettings" id="GroundMovementSettings_udokr"]
-
-[sub_resource type="AirMovementSettings" id="AirMovementSettings_l4713"]
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_64soo")
@@ -193,7 +191,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_l4713")
+script = ExtResource("2_t5ahw")
 InputDir = NodePath("InputDir")
 WishDir = NodePath("WishDir")
 currSpeed = NodePath("CurrSpeed")
@@ -226,14 +224,14 @@ offset_bottom = 105.0
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.76843, 23.8948, -83.7094)
 size = Vector3(199.802, 67.7896, 259.746)
-data = ExtResource("3_0miaj")
+data = ExtResource("3_lgvl2")
+
+[node name="Ladder" parent="." instance=ExtResource("7_ivoa2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.6572, 7.5, -1.77833)
 
 [node name="Player" type="Player" parent="."]
-ground_settings = SubResource("GroundMovementSettings_udokr")
-air_settings = SubResource("AirMovementSettings_l4713")
-juice_settings = ExtResource("2_0miaj")
+ground_settings = ExtResource("4_u3by0")
+air_settings = ExtResource("5_n5ajc")
+juice_settings = ExtResource("6_n651b")
 gravity = 9.75
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
-
-[node name="Ladder" parent="." instance=ExtResource("5_wppxa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.6572, 7.5, -1.77833)

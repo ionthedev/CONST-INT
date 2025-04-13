@@ -1,0 +1,9 @@
+[gd_resource type="JuiceSettings" load_steps=3 format=3 uid="uid://bqppm1parrot6"]
+
+[ext_resource type="Texture2D" uid="uid://5pl3f70fibwp" path="res://DemoAssets/PlayerDefaults/BreathPosCurve.tres" id="1_ah3p4"]
+[ext_resource type="Texture2D" uid="uid://cx8lv1hieh82y" path="res://DemoAssets/PlayerDefaults/BreathRotCurve.tres" id="2_k65e4"]
+
+[resource]
+breath_pos_curve = ExtResource("1_ah3p4")
+breath_rot_curve = ExtResource("2_k65e4")
+breath_duration = 4.0

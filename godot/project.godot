@@ -11,9 +11,8 @@ config_version=5
 [application]
 
 config/name="CONST-INT"
-run/main_scene="res://Demo.tscn"
+run/main_scene="uid://dok8vdq46fmbk"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
 
 [input]
 
