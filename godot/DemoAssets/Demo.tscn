@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=17 format=3 uid="uid://dok8vdq46fmbk"]
 
 [ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://DemoAssets/Shaders/Grid.gdshader" id="1_2dw6h"]
+[ext_resource type="Script" uid="uid://pfulvuyr0fhx" path="res://Resources/Compositor/PSX/psx.gd" id="1_t5ahw"]
 [ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DemoAssets/PlayerDefaults/DebugMenu.gd" id="2_t5ahw"]
 [ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://DemoAssets/Demo.VoxelGI_data.res" id="3_lgvl2"]
 [ext_resource type="GroundMovementSettings" uid="uid://li87es40gltk" path="res://DemoAssets/PlayerDefaults/GroundMoveSettings.tres" id="4_u3by0"]
@@ -28,6 +29,24 @@ glow_enabled = true
 fog_enabled = true
 fog_density = 0.0044
 fog_sky_affect = 0.0
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_lgvl2"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_t5ahw")
+pixel_size = 4
+enable_dithering = true
+dither_amount = 1.0
+dither_scale = 4.0
+dither_amount = 1.0
+metadata/_custom_type_script = "uid://pfulvuyr0fhx"
+
+[sub_resource type="Compositor" id="Compositor_u3by0"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_lgvl2"), null])
 
 [sub_resource type="SphereMesh" id="SphereMesh_udokr"]
 
@@ -81,6 +100,7 @@ shader_parameter/albedo_alpha = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_64soo")
+compositor = SubResource("Compositor_u3by0")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

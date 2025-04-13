@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://bdkocmh1qvk5e"
+path="res://.godot/imported/CI_PP_ColorDepth.glsl-562f20ee9bca8369c5a75f1671bc0682.res"
+
+[deps]
+
+source_file="res://Resources/Compositor/Color Depth/CI_PP_ColorDepth.glsl"
+dest_files=["res://.godot/imported/CI_PP_ColorDepth.glsl-562f20ee9bca8369c5a75f1671bc0682.res"]
+
+[params]
+

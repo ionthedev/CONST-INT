@@ -189,10 +189,14 @@ combined_package:
           else
             echo "DemoAssets folder not found"
           fi
-          
-          # Copy individual scene files
-          cp -r ./godot/Demo.tscn ./CONST_INT/ 2>/dev/null || true
-          cp -r ./godot/ladder.tscn ./CONST_INT/ 2>/dev/null || true
+
+                # Copy the entire DemoAssets folder
+          if [ -d "./godot/Resources" ]; then
+            cp -r ./godot/Resources./CONST_INT/ 2>/dev/null || true
+            echo "Recources folder copied successfully"
+          else
+            echo "Resources folder not found"
+          fi
         fi
     
     # Copy platform-specific libraries
