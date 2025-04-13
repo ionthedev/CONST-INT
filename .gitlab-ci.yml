@@ -173,34 +173,36 @@ combined_package:
     - windows_package
   script:
     # Create a minimal project structure
-    - mkdir -p godot_minimal/addons/const_int/bin/{linux,macos,windows}
+    - mkdir -p CONST_INT/addons/const_int/bin/{linux,macos,windows}
     
     # Copy essential project files from the godot directory
     - |
       if [ -d "./godot" ]; then
-        # Copy basic project files
-        cp -r ./godot/project.godot ./godot_minimal/ 2>/dev/null || true
-        cp -r ./godot/icon.svg ./godot_minimal/ 2>/dev/null || true
-        
-        # Copy the scene files you need
-        mkdir -p ./godot_minimal/scenes
-        cp -r ./godot/Demo.tscn ./godot_minimal/ 2>/dev/null || true
-        cp -r ./godot/ladder.tscn ./godot_minimal/ 2>/dev/null || true
-        
-        # Copy any other dependencies these scenes might need
-        # If the scenes are in subdirectories, make sure to create those first:
-        # mkdir -p ./godot_minimal/scenes/path/to/scene
-        # cp -r ./godot/scenes/path/to/scene/YourScene.tscn ./godot_minimal/scenes/path/to/scene/ 2>/dev/null || true
-      fi
+            # Copy basic project files
+          cp -r ./godot/project.godot ./CONST_INT/ 2>/dev/null || true
+          cp -r ./godot/icon.svg ./CONST_INT/ 2>/dev/null || true
+          
+          # Copy the entire DemoAssets folder
+          if [ -d "./godot/DemoAssets" ]; then
+            cp -r ./godot/DemoAssets ./CONST_INT/ 2>/dev/null || true
+            echo "DemoAssets folder copied successfully"
+          else
+            echo "DemoAssets folder not found"
+          fi
+          
+          # Copy individual scene files
+          cp -r ./godot/Demo.tscn ./CONST_INT/ 2>/dev/null || true
+          cp -r ./godot/ladder.tscn ./CONST_INT/ 2>/dev/null || true
+        fi
     
     # Copy platform-specific libraries
-    - cp artifacts/linux/*.so godot_minimal/addons/const_int/bin/linux/
-    - cp artifacts/macos/*.dylib godot_minimal/addons/const_int/bin/macos/
-    - cp artifacts/windows/*.dll godot_minimal/addons/const_int/bin/windows/
+    - cp artifacts/linux/*.so CONST_INT/addons/const_int/bin/linux/
+    - cp artifacts/macos/*.dylib CONST_INT/addons/const_int/bin/macos/
+    - cp artifacts/windows/*.dll CONST_INT/addons/const_int/bin/windows/
     
     # Create updated .gdextension file
     - |
-      cat > godot_minimal/addons/const_int/const_int.gdextension << EOF
+      cat > CONST_INT/addons/const_int/const_int.gdextension << EOF
       [configuration]
       entry_symbol = "gdext_rust_init"
       compatibility_minimum = 4.4
@@ -218,7 +220,7 @@ combined_package:
       EOF
     
     # Create tar.gz file with maximum compression
-    - tar -czvf const_int_addon.tar.gz godot_minimal/
+    - tar -czvf const_int_addon.tar.gz CONST_INT/
     
     # Show the size of the resulting file
     - ls -lh const_int_addon.tar.gz
