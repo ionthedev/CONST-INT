@@ -226,7 +226,20 @@ itch:
   needs:
     - combined_package
   script:
-    - butler push godot_minimal $ITCHIO_USERNAME/const-int:addon
+      # Download and install butler if not already installed
+      - curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+      - unzip butler.zip
+      - chmod +x butler
+      - ./butler -V
+      
+      # Login to butler (API key should be set as CI/CD variable)
+      - ./butler login
+      
+      # Push your addon package to itch.io
+      - ./butler push const_int_addon.tar.gz ionthedev/constint:addon
+      
+      # Optional - add a version number based on CI pipeline
+      # - ./butler push const_int_addon.tar.gz ionthedev/constint:addon --userversion $CI_PIPELINE_IID
   variables:
     # Add necessary variables (these should be defined as CI/CD variables in GitLab)
     BUTLER_API_KEY: ${BUTLER_API_KEY}
