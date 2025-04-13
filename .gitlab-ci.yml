@@ -217,3 +217,15 @@ combined_package:
     paths:
       - const_int_addon.tar.gz
     expire_in: 1 month
+
+itch:
+  stage: deploy
+  needs:
+    - combined_package
+  script:
+    - butler push build/linux $ITCHIO_NAME:linux-stable
+    - butler push build/macosx $ITCHIO_NAME:macosx-stable
+    - butler push build/windows $ITCHIO_NAME:windows-stable
+  only:
+   - master
+
