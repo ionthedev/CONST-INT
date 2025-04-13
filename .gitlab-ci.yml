@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - package
+  - deploy
 
 variables:
   RUST_BACKTRACE: 1
@@ -220,12 +221,15 @@ combined_package:
 
 itch:
   stage: deploy
+  tags:
+   - linux
   needs:
     - combined_package
   script:
-    - butler push build/linux $ITCHIO_NAME:linux-stable
-    - butler push build/macosx $ITCHIO_NAME:macosx-stable
-    - butler push build/windows $ITCHIO_NAME:windows-stable
+    - butler push godot_minimal $ITCHIO_USERNAME/const-int:addon
+  variables:
+    # Add necessary variables (these should be defined as CI/CD variables in GitLab)
+    BUTLER_API_KEY: ${BUTLER_API_KEY}
+    ITCHIO_USERNAME: ${ITCHIO_USERNAME}
   only:
-   - master
-
+    - master
