@@ -175,13 +175,22 @@ combined_package:
     # Create a minimal project structure
     - mkdir -p godot_minimal/addons/const_int/bin/{linux,macos,windows}
     
-    # Copy only essential project files from the godot directory
+    # Copy essential project files from the godot directory
     - |
       if [ -d "./godot" ]; then
-        # Copy only essential Godot project files, not all content
+        # Copy basic project files
         cp -r ./godot/project.godot ./godot_minimal/ 2>/dev/null || true
         cp -r ./godot/icon.svg ./godot_minimal/ 2>/dev/null || true
-        # Add any other specific essential files you need
+        
+        # Copy the scene files you need
+        mkdir -p ./godot_minimal/scenes
+        cp -r ./godot/Demo.tscn ./godot_minimal/ 2>/dev/null || true
+        cp -r ./godot/ladder.tscn ./godot_minimal/ 2>/dev/null || true
+        
+        # Copy any other dependencies these scenes might need
+        # If the scenes are in subdirectories, make sure to create those first:
+        # mkdir -p ./godot_minimal/scenes/path/to/scene
+        # cp -r ./godot/scenes/path/to/scene/YourScene.tscn ./godot_minimal/scenes/path/to/scene/ 2>/dev/null || true
       fi
     
     # Copy platform-specific libraries
