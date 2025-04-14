@@ -1,10 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=24 format=3 uid="uid://dok8vdq46fmbk"]
 
 [ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://DemoAssets/Shaders/Grid.gdshader" id="1_2dw6h"]
 [ext_resource type="Script" uid="uid://pfulvuyr0fhx" path="res://Resources/Compositor/PSX/psx.gd" id="1_t5ahw"]
 [ext_resource type="Script" uid="uid://cwcmdlkuw4jig" path="res://DemoAssets/ExampleScripts/InteractionTest.gd" id="2_lgvl2"]
 [ext_resource type="Script" uid="uid://b862tve1o0x8h" path="res://DemoAssets/PlayerDefaults/DebugMenu.gd" id="2_t5ahw"]
 [ext_resource type="VoxelGIData" uid="uid://cg1xxesk6c8vc" path="res://DemoAssets/Demo.VoxelGI_data.res" id="3_lgvl2"]
+[ext_resource type="Script" uid="uid://c6jevq2q4udro" path="res://DemoAssets/HealthTrigger.gd" id="4_n5ajc"]
 [ext_resource type="GroundMovementSettings" uid="uid://li87es40gltk" path="res://DemoAssets/PlayerDefaults/GroundMoveSettings.tres" id="4_u3by0"]
 [ext_resource type="AirMovementSettings" uid="uid://drmjbx40t0jyk" path="res://DemoAssets/PlayerDefaults/AirMoveSettings.tres" id="5_n5ajc"]
 [ext_resource type="JuiceSettings" uid="uid://bqppm1parrot6" path="res://DemoAssets/PlayerDefaults/JuiceSettings.tres" id="6_n651b"]
@@ -103,6 +104,20 @@ shader_parameter/checkered_blend_color = 0.1
 shader_parameter/use_inside_uv = false
 shader_parameter/use_albedo_color = false
 shader_parameter/albedo_alpha = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n651b"]
+size = Vector3(1, 1.37793, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u3by0"]
+size = Vector3(1, 1.37793, 1)
+
+[sub_resource type="StatSettings" id="StatSettings_lgvl2"]
+stat_name = "Health"
+
+[sub_resource type="StatSettings" id="StatSettings_u3by0"]
+stat_name = "Mana"
+max_value = 500.0
+current_value = 250.0
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_64soo")
@@ -220,7 +235,29 @@ use_collision = true
 size = Vector3(0.25, 0.25, 4)
 material = SubResource("ShaderMaterial_0miaj")
 
-[node name="Control" type="Control" parent="." node_paths=PackedStringArray("InputDir", "WishDir", "currSpeed", "velocity", "_Player")]
+[node name="Area3D" type="Area3D" parent="." node_paths=PackedStringArray("stats")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7799, 0.734366, 0)
+script = ExtResource("4_n5ajc")
+stats = NodePath("../Player/StatComponent")
+change_value = -25.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.188965, 0)
+shape = SubResource("BoxShape3D_n651b")
+debug_color = Color(0.94902, 0.231373, 0, 1)
+
+[node name="Area3D2" type="Area3D" parent="." node_paths=PackedStringArray("stats")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7799, 0.734366, 3.9508)
+script = ExtResource("4_n5ajc")
+stats = NodePath("../Player/StatComponent")
+change_value = 25.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.188965, 0)
+shape = SubResource("BoxShape3D_u3by0")
+debug_color = Color(5.92008e-06, 0.643644, 0.317716, 1)
+
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("InputDir", "WishDir", "currSpeed", "velocity", "_Player", "_healthBar", "stats")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -231,6 +268,8 @@ WishDir = NodePath("WishDir")
 currSpeed = NodePath("CurrSpeed")
 velocity = NodePath("Velocity")
 _Player = NodePath("../Player")
+_healthBar = NodePath("Health")
+stats = NodePath("../Player/StatComponent")
 
 [node name="InputDir" type="Label" parent="Control"]
 layout_mode = 0
@@ -255,6 +294,18 @@ offset_top = 82.0
 offset_right = 79.0
 offset_bottom = 105.0
 
+[node name="Health" type="ProgressBar" parent="Control"]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 1116.0
+offset_top = 525.0
+offset_right = 1136.0
+offset_bottom = 623.0
+value = 33.0
+rounded = true
+fill_mode = 3
+show_percentage = false
+
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.76843, 23.8948, -83.7094)
 size = Vector3(199.802, 67.7896, 259.746)
@@ -270,5 +321,11 @@ juice_settings = ExtResource("6_n651b")
 gravity = 9.75
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42393, 0)
 
-[node name="InteractionCaster" type="InteractionCaster" parent="Player"]
+[node name="InteractionCaster" type="RayCast3D" parent="Player"]
 target_position = Vector3(0, 0, 2)
+
+[node name="StatComponent" type="StatComponent" parent="Player"]
+stats = Array[StatSettings]([SubResource("StatSettings_lgvl2"), SubResource("StatSettings_u3by0")])
+
+[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="Area3D2" to="Area3D2" method="_on_area_3d_body_entered"]

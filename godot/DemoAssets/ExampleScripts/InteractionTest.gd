@@ -16,6 +16,7 @@ func _ready():
 	# Debug output
 	print("Setting up interactable: ", name)
 	print("Signals available: ", get_signal_list())
+	
 
 # These methods will be called by your InteractionComponent
 func OnLookedAt():

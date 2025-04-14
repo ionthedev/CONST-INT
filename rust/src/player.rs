@@ -8,10 +8,12 @@ use godot::classes::character_body_3d::MotionMode;
 use godot::classes::input::MouseMode;
 use godot::classes::physics_server_3d::ExBodyTestMotion;
 use godot::classes::{
-    Area3D, Camera3D, CapsuleMesh, CapsuleShape3D, CharacterBody3D, CollisionShape3D, Curve,
-    Engine, ICharacterBody3D, Input, InputEvent, InputEventMouseButton, InputEventMouseMotion,
-    KinematicCollision3D, MeshInstance3D, PhysicsRayQueryParameters3D, PhysicsServer3D,
-    PhysicsTestMotionParameters3D, PhysicsTestMotionResult3D, ProjectSettings, RayCast3D, World3D,
+    Area3D, AudioStream, AudioStreamPlayer3D, Camera3D, CapsuleMesh, CapsuleShape3D,
+    CharacterBody3D, CollisionShape3D, Curve, Engine, ICharacterBody3D, Input, InputEvent,
+    InputEventMouseButton, InputEventMouseMotion, KinematicCollision3D, MeshInstance3D,
+    PhysicsRayQueryParameters3D, PhysicsServer3D, PhysicsTestMotionParameters3D,
+    PhysicsTestMotionResult3D, ProjectSettings, RandomNumberGenerator, RayCast3D, ResourceLoader,
+    World3D,
 };
 use godot::global::deg_to_rad;
 use godot::prelude::*;
@@ -70,6 +72,7 @@ pub struct Player {
     collision: Option<Gd<CollisionShape3D>>,
     skin: Option<Gd<MeshInstance3D>>,
     interact_cast_result: Option<Gd<Object>>,
+    sfx_player: Option<Gd<AudioStreamPlayer3D>>,
 }
 
 fn call_body_test_motion(varargs: &[Variant]) -> bool {
@@ -113,6 +116,7 @@ impl ICharacterBody3D for Player {
             is_leaning: false,
             cur_ladder_climbing: None,
             interact_cast_result: None,
+            sfx_player: None,
         }
     }
 
@@ -330,6 +334,12 @@ impl Player {
             z: 0.0,
         });
 
+        // Make SFX Player
+        let mut _sfx_p = AudioStreamPlayer3D::new_alloc();
+        _sfx_p.set_max_polyphony(3);
+        self.base_mut().add_child(&_sfx_p);
+        self.sfx_player = Some(_sfx_p);
+
         // Make collision
         let mut _col = CollisionShape3D::new_alloc();
         let mut _col_shape = CapsuleShape3D::new_gd();
@@ -391,7 +401,9 @@ impl Player {
 
         if self.base().is_on_floor() || self.snapped_stair_last_frame {
             // When on ground, explicitly set current speed to ground values
-            if Input::singleton().is_action_pressed("Sprint") {
+            if self.crouched {
+                self.curr_speed = ground_settings.bind().get_crouch_speed();
+            } else if Input::singleton().is_action_pressed("Sprint") {
                 self.curr_speed = ground_settings.bind().get_sprint_speed();
             } else {
                 self.curr_speed = ground_settings.bind().get_walk_speed();
@@ -587,21 +599,18 @@ impl Player {
     fn headbob_effect(&mut self, delta: f64) {
         let mut juice_settings = self.juice_settings.as_ref().unwrap().clone();
         let v = self.base().get_velocity().clone();
+        let velocity_length = v.length();
 
-        // Only apply headbob if we're moving and on the floor
-        if v.length() < 0.1 || !self.base().is_on_floor() {
+        // Early return if not moving or not on floor
+        if velocity_length < 0.1 || !self.base().is_on_floor() {
+            // Reset the step timer when stopping
+            juice_settings.bind_mut().step_timer = 0.0;
             return;
         }
 
-        let cam = self.camera.clone();
-        let previous_y: f32 = f32::sin(
-            (juice_settings.bind().headbob_time
-                - (delta as f32) * juice_settings.bind().get_headbob_move_amount()),
-        );
-
-        juice_settings.bind_mut().headbob_time += (delta as f32) * v.length();
-
-        let current_y: f32 = f32::sin(
+        // Update headbob visuals
+        juice_settings.bind_mut().headbob_time += (delta as f32) * velocity_length;
+        let current_y = f32::sin(
             juice_settings.bind().headbob_time * juice_settings.bind().get_headbob_move_freq(),
         ) * juice_settings.bind().get_headbob_move_amount();
 
@@ -612,6 +621,7 @@ impl Player {
                 lean_amount / f32::atan(self.ground_settings.as_ref().unwrap().bind().lean_amount),
             );
 
+        // Apply camera position
         let cam_pos: Vector3 = Vector3::new(
             f32::cos(
                 juice_settings.bind().headbob_time
@@ -623,12 +633,37 @@ impl Player {
             0.0,
         );
 
-        if let Some(mut camera) = cam {
+        if let Some(mut camera) = self.camera.clone() {
             camera.set_position(cam_pos);
         }
 
-        if previous_y < 0.0 && current_y > 0.0 {
-            // play footstep sound
+        // Handle footstep sounds based on movement distance/time
+        // You'll need to add step_timer to your JuiceSettings struct
+        juice_settings.bind_mut().step_timer += (delta as f32) * velocity_length;
+
+        // Calculate step interval based on movement speed
+        // Faster movement = more frequent steps
+        let step_interval = 10.0 / f32::max(1.0, velocity_length / 2.0);
+
+        // Play sound at regular intervals based on distance traveled
+        if juice_settings.bind().step_timer > step_interval {
+            // Reset timer and play sound
+            juice_settings.bind_mut().step_timer = 0.0;
+
+            // Play footstep sound
+            let mut rng = RandomNumberGenerator::new_gd();
+            let pitch = rng.randf_range(0.85, 1.2);
+            let step_sound_resource =
+                ResourceLoader::singleton().load("res://Resources/Audio/Step_Concrete.wav");
+
+            if let Some(mut player) = self.sfx_player.clone() {
+                if let Some(sound) = step_sound_resource.clone() {
+                    let step_sound = sound.try_cast::<AudioStream>();
+                    player.set_pitch_scale(pitch);
+                    player.set_stream(&step_sound.unwrap());
+                    player.play()
+                };
+            }
         }
     }
 
@@ -959,6 +994,7 @@ impl Player {
         // Handle crouch input
         if Input::singleton().is_action_pressed("Crouch") {
             self.crouched = true;
+            self.curr_speed = ground_settings.bind().get_crouch_speed();
         } else if self.crouched {
             // Get the transform BEFORE calling test_move
             let global_transform = self.base().get_global_transform();
