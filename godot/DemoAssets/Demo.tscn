@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dok8vdq46fmbk"]
+[gd_scene load_steps=27 format=3 uid="uid://dok8vdq46fmbk"]
 
 [ext_resource type="Shader" uid="uid://cmqye22soly6y" path="res://DemoAssets/Shaders/Grid.gdshader" id="1_2dw6h"]
 [ext_resource type="Script" uid="uid://pfulvuyr0fhx" path="res://Resources/Compositor/PSX/psx.gd" id="1_t5ahw"]
@@ -108,8 +108,19 @@ shader_parameter/albedo_alpha = 0.5
 [sub_resource type="BoxShape3D" id="BoxShape3D_n651b"]
 size = Vector3(1, 1.37793, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_u3by0"]
+flip_faces = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n5ajc"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 0.27451)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_u3by0"]
 size = Vector3(1, 1.37793, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n651b"]
+transparency = 1
+albedo_color = Color(0, 1, 0, 0.27451)
 
 [sub_resource type="StatSettings" id="StatSettings_lgvl2"]
 stat_name = "Health"
@@ -246,6 +257,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.188965, 0)
 shape = SubResource("BoxShape3D_n651b")
 debug_color = Color(0.94902, 0.231373, 0, 1)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1.34599, 0, 0, 0, 1, 0, -0.1541, 0)
+mesh = SubResource("BoxMesh_u3by0")
+surface_material_override/0 = SubResource("StandardMaterial3D_n5ajc")
+
 [node name="Area3D2" type="Area3D" parent="." node_paths=PackedStringArray("stats")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7799, 0.734366, 3.9508)
 script = ExtResource("4_n5ajc")
@@ -256,6 +272,11 @@ change_value = 25.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.188965, 0)
 shape = SubResource("BoxShape3D_u3by0")
 debug_color = Color(5.92008e-06, 0.643644, 0.317716, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D2"]
+transform = Transform3D(1, 0, 0, 0, 1.34599, 0, 0, 0, 1, 0, -0.1541, 0)
+mesh = SubResource("BoxMesh_u3by0")
+surface_material_override/0 = SubResource("StandardMaterial3D_n651b")
 
 [node name="Control" type="Control" parent="." node_paths=PackedStringArray("InputDir", "WishDir", "currSpeed", "velocity", "_Player", "_healthBar", "stats")]
 layout_mode = 3
