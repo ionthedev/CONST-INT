@@ -12,6 +12,8 @@ pub struct GroundMovementSettings {
     #[export]
     pub sprint_speed: f32,
     #[export]
+    pub crouch_speed: f32,
+    #[export]
     pub acceleration: f32,
     #[export]
     pub deceleration: f32,
@@ -69,6 +71,7 @@ impl IResource for GroundMovementSettings {
             base,
             walk_speed: 7.0,
             sprint_speed: 8.5,
+            crouch_speed: 4.0,
             acceleration: 11.0,
             deceleration: 7.0,
             friction: 6.0,

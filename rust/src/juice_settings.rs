@@ -27,6 +27,8 @@ pub struct JuiceSettings {
 
     #[export]
     pub breath_velocity_magnitude: f32,
+
+    pub step_timer: f32,
 }
 
 #[godot_api]
@@ -37,6 +39,7 @@ impl IResource for JuiceSettings {
             headbob_move_amount: 0.06,
             headbob_move_freq: 2.46,
             headbob_time: 0.0,
+            step_timer: 0.0,
             breath_pos_curve: OnEditor::default(),
             breath_rot_curve: OnEditor::default(),
             breath_time: 0.0,

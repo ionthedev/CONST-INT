@@ -13,3 +13,12 @@ macos.release =          "res://../rust/target/release/libCONST_INT.dylib"
 macos.debug.arm64 =      "res://../rust/target/debug/libCONST_INT.dylib"
 macos.release.arm64 =    "res://../rust/target/release/libCONST_INT.dylib"
 
+[icons]
+Player= "res://Resources/NodeIcons/Player.svg"
+InteractionComponent= "res://Resources/NodeIcons/InteractionComponent.svg"
+StatComponent= "res://Resources/NodeIcons/StatComponent.svg"
+StatSetting= "res://Resources/NodeIcons/Setting.svg"
+JuiceSettings= "res://Resources/NodeIcons/Setting.svg"
+GroundMovementSetting= "res://Resources/NodeIcons/Setting.svg"
+AirMovementSetting= "res://Resources/NodeIcons/Setting.svg"
+
