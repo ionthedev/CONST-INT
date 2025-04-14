@@ -10,8 +10,8 @@ use godot::classes::physics_server_3d::ExBodyTestMotion;
 use godot::classes::{
     Area3D, Camera3D, CapsuleMesh, CapsuleShape3D, CharacterBody3D, CollisionShape3D, Curve,
     Engine, ICharacterBody3D, Input, InputEvent, InputEventMouseButton, InputEventMouseMotion,
-    KinematicCollision3D, MeshInstance3D, PhysicsServer3D, PhysicsTestMotionParameters3D,
-    PhysicsTestMotionResult3D, ProjectSettings, RayCast3D,
+    KinematicCollision3D, MeshInstance3D, PhysicsRayQueryParameters3D, PhysicsServer3D,
+    PhysicsTestMotionParameters3D, PhysicsTestMotionResult3D, ProjectSettings, RayCast3D, World3D,
 };
 use godot::global::deg_to_rad;
 use godot::prelude::*;
@@ -69,6 +69,7 @@ pub struct Player {
     camera: Option<Gd<Camera3D>>,
     collision: Option<Gd<CollisionShape3D>>,
     skin: Option<Gd<MeshInstance3D>>,
+    interact_cast_result: Option<Gd<Object>>,
 }
 
 fn call_body_test_motion(varargs: &[Variant]) -> bool {
@@ -111,6 +112,7 @@ impl ICharacterBody3D for Player {
             was_on_floor: true,
             is_leaning: false,
             cur_ladder_climbing: None,
+            interact_cast_result: None,
         }
     }
 
@@ -132,6 +134,7 @@ impl ICharacterBody3D for Player {
             self.make_step_below_ray();
         }
         self.make_children();
+        self.declare_group();
         self.was_on_floor = false;
     }
 
@@ -146,6 +149,10 @@ impl ICharacterBody3D for Player {
 
         self.calc_cam_aligned_wish_dir();
         self.wish_dir = self.calc_wish_dir();
+        self.interaction_cast();
+        if Input::singleton().is_action_pressed("Interact") {
+            self.interact();
+        }
 
         if !self.handle_noclip(delta) && !self.handle_ladder_physics() {
             self.handle_crouch(delta);
@@ -210,6 +217,11 @@ fn move_toward(from: f32, to: f32, delta: f32) -> f32 {
 
 #[godot_api]
 impl Player {
+    #[func]
+    fn declare_group(&mut self) {
+        self.base_mut().add_to_group("Player");
+    }
+
     // Node setup functions
     #[func]
     fn make_step_ahead_ray(&mut self) {
@@ -1218,5 +1230,98 @@ impl Player {
         self.base_mut().set_global_position(pos);
 
         true
+    }
+
+    #[func]
+    fn interaction_cast(&mut self) {
+        if let Some(camera) = &self.camera {
+            let space_state = camera
+                .get_world_3d()
+                .unwrap()
+                .get_direct_space_state()
+                .clone();
+            let screen_center = self.base().get_viewport().unwrap().get_visible_rect().size / 2.0;
+            let origin = camera.project_ray_origin(screen_center);
+            let end = origin + camera.project_ray_normal(screen_center) * 2.0;
+
+            if let Some(mut query) = PhysicsRayQueryParameters3D::create(origin, end) {
+                query.set_collide_with_bodies(true);
+                let result = space_state.unwrap().intersect_ray(&query);
+
+                if result.contains_key("collider") {
+                    let current_cast_result: Gd<Object> = result.get("collider").unwrap().to();
+
+                    // Check if current result is different from previous result
+                    let current_ptr = current_cast_result.instance_id();
+                    let previous_ptr = self
+                        .interact_cast_result
+                        .as_ref()
+                        .map(|obj| obj.instance_id());
+
+                    if previous_ptr != Some(current_ptr) {
+                        // Check previous object signals individually
+                        if let Some(prev_obj) = &self.interact_cast_result {
+                            // Check and emit "looked_away" signal
+                            if prev_obj.has_user_signal("looked_away") {
+                                let mut prev_clone = prev_obj.clone();
+                                prev_clone.emit_signal("looked_away", &[]);
+                            }
+
+                            // Check and emit "OutFocus" signal
+                            if prev_obj.has_user_signal("OutFocus") {
+                                let mut prev_clone = prev_obj.clone();
+                                prev_clone.emit_signal("OutFocus", &[]);
+                            }
+                        }
+
+                        // Update to new result
+                        self.interact_cast_result = Some(current_cast_result);
+
+                        // Check new object signals individually
+                        if let Some(obj) = &self.interact_cast_result {
+                            // Check and emit "looked_at" signal
+                            if obj.has_user_signal("looked_at") {
+                                let mut obj_clone = obj.clone();
+                                obj_clone.emit_signal("looked_at", &[]);
+                            }
+
+                            // Check and emit "InFocus" signal
+                            if obj.has_user_signal("InFocus") {
+                                let mut obj_clone = obj.clone();
+                                obj_clone.emit_signal("InFocus", &[]);
+                            }
+                        }
+                    }
+                } else {
+                    // Clear previous interaction
+                    if let Some(prev_obj) = &self.interact_cast_result {
+                        // Check and emit "looked_away" signal
+                        if prev_obj.has_user_signal("looked_away") {
+                            let mut prev_clone = prev_obj.clone();
+                            prev_clone.emit_signal("looked_away", &[]);
+                        }
+
+                        // Check and emit "OutFocus" signal
+                        if prev_obj.has_user_signal("OutFocus") {
+                            let mut prev_clone = prev_obj.clone();
+                            prev_clone.emit_signal("OutFocus", &[]);
+                        }
+                    }
+
+                    self.interact_cast_result = None;
+                }
+            }
+        }
+    }
+
+    #[func]
+    fn interact(&mut self) {
+        if let Some(object) = &self.interact_cast_result {
+            // Check "Interacted" signal
+            if object.has_user_signal("Interacted") {
+                let mut object_clone = object.clone();
+                object_clone.emit_signal("Interacted", &[]);
+            }
+        }
     }
 }
